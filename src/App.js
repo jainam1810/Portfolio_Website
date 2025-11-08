@@ -175,7 +175,7 @@ export default function Portfolio() {
                             className="p-3 bg-purple-600/20 rounded-full hover:bg-purple-600/40 transition-all hover:scale-110">
                             <Linkedin size={24} />
                         </a>
-                        <a href="https://github.com/jainamvaria" target="_blank" rel="noopener noreferrer"
+                        <a href="https://github.com/jainam1810" target="_blank" rel="noopener noreferrer"
                             className="p-3 bg-purple-600/20 rounded-full hover:bg-purple-600/40 transition-all hover:scale-110">
                             <Github size={24} />
                         </a>
