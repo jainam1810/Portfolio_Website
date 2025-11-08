@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Github, Linkedin, Mail, MessageCircle, Video, Instagram, Download, ExternalLink, Code, Briefcase, GraduationCap, Award, ChevronDown } from 'lucide-react';
+import { Github, Linkedin, Mail, MessageCircle, Video, Instagram, Download, Code, GraduationCap, Award, ChevronDown } from 'lucide-react';
 
 
 export default function Portfolio() {
@@ -90,8 +90,8 @@ export default function Portfolio() {
                     <h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent animate-pulse">
                         Jainam Varia
                     </h1>
-                    <p className="text-2xl text-purple-300 mb-2">Financial Technology Enthusiast</p>
-                    <p className="text-xl text-gray-400 mb-8">Computer Engineer | MSc FinTech @ University of Exeter</p>
+                    <p className="text-2xl text-purple-300 mb-2">AI/ML & Blockchain Enthusiast</p>
+                    <p className="text-xl text-gray-400 mb-8">B.Tech Computer Engineer | MSc Financial Technology @ University of Exeter</p>
 
                     <div className="flex gap-4 justify-center mb-8">
                         <a href="https://drive.google.com/file/d/1dK8Y9fE3lZKAspmf7n5YVlES4c-9znax/view?usp=sharing" download
@@ -140,9 +140,9 @@ export default function Portfolio() {
                     <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 border border-purple-500/20">
                         <p className="text-lg text-gray-300 leading-relaxed mb-6">
                             I'm a 21-year-old tech enthusiast passionate about the intersection of finance and technology.
-                            Currently living in Exeter, United Kingdom, pursuing my Master's in Financial Technology at
-                            the University of Exeter, I bring a strong foundation in computer engineering from my BTech at
-                            KJ Somaiya Institute of Technology.
+                            Currently living in Exeter, United Kingdom, pursuing my Master of Science in Financial Technology at
+                            the University of Exeter, I bring a strong foundation in computer engineering from my B.Tech at
+                            K.J. Somaiya Institute of Technology.
                         </p>
                         <p className="text-lg text-gray-300 leading-relaxed mb-6">
                             My journey combines technical expertise with financial acumen, positioning me to drive innovation
