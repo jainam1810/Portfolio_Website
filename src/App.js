@@ -110,7 +110,7 @@ export default function Portfolio() {
                             className="p-3 bg-purple-600/20 rounded-full hover:bg-purple-600/40 transition-all hover:scale-110">
                             <Github size={24} />
                         </a>
-                        <a href="mailto:jainam@example.com"
+                        <a href="mailto:jainamvaria1010@gmail.com"
                             className="p-3 bg-purple-600/20 rounded-full hover:bg-purple-600/40 transition-all hover:scale-110">
                             <Mail size={24} />
                         </a>
