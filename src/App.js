@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Github, Linkedin, Mail, MessageCircle, Video, Instagram, Download, Code, GraduationCap, Award, ChevronDown } from 'lucide-react';
-
+import { Github, Linkedin, Mail, Play, MessageCircle, User, Send, Languages, Video, Instagram, Building2, Calendar, MapPin, Download, Code, GraduationCap, Award, ChevronDown, Pause } from 'lucide-react';
+import emailjs from '@emailjs/browser'
 
 export default function Portfolio() {
     const [activeSection, setActiveSection] = useState('home');
     const [scrolled, setScrolled] = useState(false);
     const [imgError, setImgError] = useState(false);
-
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        message: ''
+    });
+    const [formStatus, setFormStatus] = useState('');
+    const [isPlaying, setIsPlaying] = useState(false);
     useEffect(() => {
         const handleScroll = () => {
             setScrolled(window.scrollY > 50);
@@ -15,6 +21,60 @@ export default function Portfolio() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
+    const playAudio = () => {
+        const audio = document.getElementById('captainAudio');
+        if (audio) {
+            if (isPlaying) {
+                audio.pause();
+                audio.currentTime = 0;
+                setIsPlaying(false);
+            } else {
+                audio.play();
+                setIsPlaying(true);
+                audio.onended = () => setIsPlaying(false);
+            }
+        }
+    };
+
+    const handleInputChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        setFormStatus('Sending...');
+
+        //EmailJS Configuration - REPLACE THESE WITH YOUR ACTUAL IDs
+        const serviceId = 'service_wvng7kc';
+        const templateId = 'template_033ifqk';
+        const publicKey = '4OnjEDlHEmzam9O6m';
+
+        // Prepare template parameters
+        const templateParams = {
+            from_name: formData.name,
+            from_email: formData.email,
+            message: formData.message,
+            to_email: 'jainamvaria1010@gmail.com' // Your email
+        };
+
+        // Send email using EmailJS
+        emailjs.send(serviceId, templateId, templateParams, publicKey)
+            .then((response) => {
+                console.log('SUCCESS!', response.status, response.text);
+                setFormStatus('✅ Message sent successfully! I\'ll get back to you soon.');
+                setFormData({ name: '', email: '', message: '' });
+                setTimeout(() => setFormStatus(''), 5000);
+            })
+            .catch((error) => {
+                console.error('FAILED...', error);
+                setFormStatus('❌ Failed to send message. Please try email directly.');
+                setTimeout(() => setFormStatus(''), 5000);
+            });
+    };
+
     const skills = {
         'Programming': ['Python', 'R', 'Java', 'HTML', 'CSS', 'JavaScript', 'C++', 'SQL'],
         'Tools & Frameworks': ['React', 'Node.js', 'Express.js', 'AWS (S3, DynamoDB)', 'TensorFlow', 'Pandas', 'NumPy', 'Matplotlib', 'PyTorch', 'Sci-kit learn', 'Streamlit', 'Git', 'Docker', 'Figma', 'Notion', 'Scrum', 'Agile', 'PowerBI', 'Tableau',],
@@ -22,6 +82,15 @@ export default function Portfolio() {
             'RNNs', 'LSTMs', 'LLMs', 'NLP'],
         'Blockchain Development': ['Solidity', 'Hardhat', 'Ethereum', 'Smart Contracts', 'DApps', 'ECDSA', 'Web3.js']
     };
+
+    const languages = [
+        { name: 'English', proficiency: 'Fluent', level: 100 },
+        { name: 'Hindi', proficiency: 'Native', level: 100 },
+        { name: 'Gujarati', proficiency: 'Native', level: 100 },
+        { name: 'Marathi', proficiency: 'Fluent', level: 100 },
+        { name: 'Punjabi', proficiency: 'Intermediate', level: 75 },
+        { name: 'French', proficiency: 'Basic', level: 30 }
+    ];
 
     const education = [
         {
@@ -97,7 +166,7 @@ export default function Portfolio() {
                         <a href="https://drive.google.com/file/d/1dK8Y9fE3lZKAspmf7n5YVlES4c-9znax/view?usp=sharing" download
                             className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full hover:from-blue-500 hover:to-purple-500 transition-all hover:scale-105 font-semibold shadow-lg">
                             <Download size={20} />
-                            Download CV
+                            Jainam CV
                         </a>
                     </div>
 
@@ -185,6 +254,252 @@ export default function Portfolio() {
                 </div>
             </section>
 
+            {/* Experience Section */}
+            <section id="experience" className="py-20 px-6">
+                <div className="max-w-6xl mx-auto">
+                    <h2 className="text-4xl font-bold mb-12 text-center bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                        Professional Experience
+                    </h2>
+                    <div className="space-y-8">
+                        {/* Experience 1 - Amazon */}
+                        <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 border border-purple-500/20 hover:border-purple-500/40 transition-all">
+                            <div className="flex items-start gap-6">
+                                {/* Company Logo */}
+                                <div className="w-20 h-20 bg-white rounded-xl flex items-center justify-center flex-shrink-0 p-3">
+                                    <img
+                                        src="/amazon-logo.png"
+                                        alt="Oron Trade Ltd Logo"
+                                        className="w-full h-full object-contain"
+                                        onError={(e) => {
+                                            e.target.style.display = 'none';
+                                            e.target.parentElement.innerHTML = '<div class="text-purple-600 font-bold text-xl">OT</div>';
+                                        }}
+                                    />
+                                </div>
+                                {/* Experience Details */}
+                                <div className="flex-1">
+                                    <div className="flex justify-between items-start mb-3">
+                                        <div>
+                                            <h3 className="text-2xl font-bold text-purple-300 mb-1">Sortation Associate (Part-time)</h3>
+                                            <p className="text-xl text-gray-300 flex items-center gap-2">
+                                                <Building2 size={18} className="text-purple-400" />
+                                                Amazon Warehouse
+                                            </p>
+                                        </div>
+                                        <div className="text-right">
+                                            <p className="text-purple-400 flex items-center gap-2 justify-end">
+                                                <Calendar size={16} />
+                                                Nov 2025 - Present
+                                            </p>
+                                            <p className="text-gray-400 flex items-center gap-2 justify-end mt-1">
+                                                <MapPin size={16} />
+                                                Exeter, United Kingdom
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <ul className="space-y-2 text-gray-300">
+                                        <li className="flex items-start gap-2">
+                                            <span className="text-purple-400 mt-1">•</span>
+                                            <span>Sort, scan, and divert packages to their final destinations using RF scanners and conveyor systems, consistently meeting productivity and accuracy targets.</span>
+                                        </li>
+                                        <li className="flex items-start gap-2">
+                                            <span className="text-purple-400 mt-1">•</span>
+                                            <span>Handle physical tasks such as unloading, lifting, and relocating goods up to 23 kg across multiple shifts while following safety and quality standards.</span>
+                                        </li>
+                                        <li className="flex items-start gap-2">
+                                            <span className="text-purple-400 mt-1">•</span>
+                                            <span>Collaborate with team members to resolve sorting bottlenecks and improve workflow efficiency, maintaining flexibility and a positive attitude toward new tasks</span>
+                                        </li>
+                                    </ul>
+                                    <div className="flex flex-wrap gap-2 mt-4">
+                                        <span className="px-3 py-1 bg-purple-600/20 rounded-full text-sm">Operational & Technical Skills</span>
+                                        <span className="px-3 py-1 bg-purple-600/20 rounded-full text-sm">Teamwork & Collaboration</span>
+                                        <span className="px-3 py-1 bg-purple-600/20 rounded-full text-sm">Productivity & Efficiency</span>
+                                        <span className="px-3 py-1 bg-purple-600/20 rounded-full text-sm">Attention-to-Detail & Accuracy</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Experience 2 - KIFS */}
+                        <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 border border-purple-500/20 hover:border-purple-500/40 transition-all">
+                            <div className="flex items-start gap-6">
+                                <div className="w-20 h-20 bg-white rounded-xl flex items-center justify-center flex-shrink-0 p-3">
+                                    <img
+                                        src="/Kifs-logo.PNG"
+                                        alt="Company Logo"
+                                        className="w-full h-full object-contain"
+                                        onError={(e) => {
+                                            e.target.style.display = 'none';
+                                            e.target.parentElement.innerHTML = '<div class="text-purple-600 font-bold text-xl">C2</div>';
+                                        }}
+                                    />
+                                </div>
+                                <div className="flex-1">
+                                    <div className="flex justify-between items-start mb-3">
+                                        <div>
+                                            <h3 className="text-2xl font-bold text-purple-300 mb-1">Blockchain Research Intern (Operational Risk)</h3>
+                                            <p className="text-xl text-gray-300 flex items-center gap-2">
+                                                <Building2 size={18} className="text-purple-400" />
+                                                KIFS Housing Finance Ltd
+                                            </p>
+                                        </div>
+                                        <div className="text-right">
+                                            <p className="text-purple-400 flex items-center gap-2 justify-end">
+                                                <Calendar size={16} />
+                                                Jun 2025 - Jul 2025
+                                            </p>
+                                            <p className="text-gray-400 flex items-center gap-2 justify-end mt-1">
+                                                <MapPin size={16} />
+                                                Mumbai, India
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <ul className="space-y-2 text-gray-300">
+                                        <li className="flex items-start gap-2">
+                                            <span className="text-purple-400 mt-1">•</span>
+                                            <span>Researched and proposed an AI + Blockchain-based ledger for loan risk and fraud detection, improving processing speed by 30–40% and reducing manual intervention by 50%.</span>
+                                        </li>
+                                        <li className="flex items-start gap-2">
+                                            <span className="text-purple-400 mt-1">•</span>
+                                            <span>Designed a strategic implementation plan inspired by Figure Technologies (USA) to enhance system efficiency.</span>
+                                        </li>
+                                        <li className="flex items-start gap-2">
+                                            <span className="text-purple-400 mt-1">•</span>
+                                            <span>Projected improvements included 20% higher fraud detection accuracy and 15–20% cost savings, demonstrating measurable impact.</span>
+                                        </li>
+                                    </ul>
+                                    <div className="flex flex-wrap gap-2 mt-4">
+                                        <span className="px-3 py-1 bg-purple-600/20 rounded-full text-sm">XG Boost & Autoencoders</span>
+                                        <span className="px-3 py-1 bg-purple-600/20 rounded-full text-sm">Python & Golang</span>
+                                        <span className="px-3 py-1 bg-purple-600/20 rounded-full text-sm">Scikit-learn & PyTorch</span>
+                                        <span className="px-3 py-1 bg-purple-600/20 rounded-full text-sm">Hyperledger Fabric & Corda</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Experience 3 - Template */}
+                        <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 border border-purple-500/20 hover:border-purple-500/40 transition-all">
+                            <div className="flex items-start gap-6">
+                                <div className="w-20 h-20 bg-white rounded-xl flex items-center justify-center flex-shrink-0 p-3">
+                                    <img
+                                        src="/Sorneshia-Logo.jpg"
+                                        alt="Company Logo"
+                                        className="w-full h-full object-contain"
+                                        onError={(e) => {
+                                            e.target.style.display = 'none';
+                                            e.target.parentElement.innerHTML = '<div class="text-purple-600 font-bold text-xl">C3</div>';
+                                        }}
+                                    />
+                                </div>
+                                <div className="flex-1">
+                                    <div className="flex justify-between items-start mb-3">
+                                        <div>
+                                            <h3 className="text-2xl font-bold text-purple-300 mb-1">Founder</h3>
+                                            <p className="text-xl text-gray-300 flex items-center gap-2">
+                                                <Building2 size={18} className="text-purple-400" />
+                                                Sorneshia
+                                            </p>
+                                        </div>
+                                        <div className="text-right">
+                                            <p className="text-purple-400 flex items-center gap-2 justify-end">
+                                                <Calendar size={16} />
+                                                Jun 2024 - May 2025
+                                            </p>
+                                            <p className="text-gray-400 flex items-center gap-2 justify-end mt-1">
+                                                <MapPin size={16} />
+                                                Mumbai, India (Remote)
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <ul className="space-y-2 text-gray-300">
+                                        <li className="flex items-start gap-2">
+                                            <span className="text-purple-400 mt-1">•</span>
+                                            <span>Founded Sorneshia - a print-on-demand clothing brand, achieving 80+ sales, £830 revenue, £10 average order value, and a 23% profit margin within 8 months.</span>
+                                        </li>
+                                        <li className="flex items-start gap-2">
+                                            <span className="text-purple-400 mt-1">•</span>
+                                            <span>Designed and managed a Shopify e-commerce store, ensuring efficient 2–7 day delivery across India and enhancing customer satisfaction.</span>
+                                        </li>
+                                        <li className="flex items-start gap-2">
+                                            <span className="text-purple-400 mt-1">•</span>
+                                            <span>Executed targeted marketing campaigns by collaborating with influencer and social media agencies, while managing self-run Meta and influencer campaigns to reduce costs, increase visibility, and drive sales growth</span>
+                                        </li>
+                                    </ul>
+                                    <div className="flex flex-wrap gap-2 mt-4">
+                                        <span className="px-3 py-1 bg-purple-600/20 rounded-full text-sm">HTML</span>
+                                        <span className="px-3 py-1 bg-purple-600/20 rounded-full text-sm">CSS</span>
+                                        <span className="px-3 py-1 bg-purple-600/20 rounded-full text-sm">JavaScript</span>
+                                        <span className="px-3 py-1 bg-purple-600/20 rounded-full text-sm">Excel & PowerBI</span>
+                                        <span className="px-3 py-1 bg-purple-600/20 rounded-full text-sm">Google Analytics</span>
+                                        <span className="px-3 py-1 bg-purple-600/20 rounded-full text-sm">Meta & Google Ads</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Experience 4 - Template */}
+                        <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 border border-purple-500/20 hover:border-purple-500/40 transition-all">
+                            <div className="flex items-start gap-6">
+                                <div className="w-20 h-20 bg-white rounded-xl flex items-center justify-center flex-shrink-0 p-3">
+                                    <img
+                                        src="/Oron_logo.png"
+                                        alt="Company Logo"
+                                        className="w-full h-full object-contain"
+                                        onError={(e) => {
+                                            e.target.style.display = 'none';
+                                            e.target.parentElement.innerHTML = '<div class="text-purple-600 font-bold text-xl">C4</div>';
+                                        }}
+                                    />
+                                </div>
+                                <div className="flex-1">
+                                    <div className="flex justify-between items-start mb-3">
+                                        <div>
+                                            <h3 className="text-2xl font-bold text-purple-300 mb-1">Introducing Broker & Trader</h3>
+                                            <p className="text-xl text-gray-300 flex items-center gap-2">
+                                                <Building2 size={18} className="text-purple-400" />
+                                                Oron Trade Ltd
+                                            </p>
+                                        </div>
+                                        <div className="text-right">
+                                            <p className="text-purple-400 flex items-center gap-2 justify-end">
+                                                <Calendar size={16} />
+                                                Aug 2023 - May 2025
+                                            </p>
+                                            <p className="text-gray-400 flex items-center gap-2 justify-end mt-1">
+                                                <MapPin size={16} />
+                                                Mumbai, India
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <ul className="space-y-2 text-gray-300">
+                                        <li className="flex items-start gap-2">
+                                            <span className="text-purple-400 mt-1">•</span>
+                                            <span>Engaged with 120+ clients and delivered seminars to over 1,000 attendees, explaining the global foreign exchange market and guiding them on investment and trading opportunities.</span>
+                                        </li>
+                                        <li className="flex items-start gap-2">
+                                            <span className="text-purple-400 mt-1">•</span>
+                                            <span>Conducted in-depth market analysis across forex, equities, and cryptocurrency, developing algorithmic trading strategies based on order blocks, liquidity sweeps, and market structure — achieving a 65% win ratio</span>
+                                        </li>
+                                        <li className="flex items-start gap-2">
+                                            <span className="text-purple-400 mt-1">•</span>
+                                            <span>Applied institutional trading insights, risk management techniques, and strong communication skills to deliver actionable trading signals and build lasting client relationships.</span>
+                                        </li>
+                                    </ul>
+                                    <div className="flex flex-wrap gap-2 mt-4">
+                                        <span className="px-3 py-1 bg-purple-600/20 rounded-full text-sm">Quantitative & Analytical Thinking</span>
+                                        <span className="px-3 py-1 bg-purple-600/20 rounded-full text-sm">Statistical & Market Analysis</span>
+                                        <span className="px-3 py-1 bg-purple-600/20 rounded-full text-sm">Risk Management & Forex</span>
+                                        <span className="px-3 py-1 bg-purple-600/20 rounded-full text-sm">Financial Modeling & Technical Communication</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             {/* Skills Section */}
             <section id="skills" className="py-20 px-6">
                 <div className="max-w-6xl mx-auto">
@@ -212,9 +527,9 @@ export default function Portfolio() {
             </section>
 
             {/* Projects Section */}
-            <section id="projects" className="py-20 px-6 bg-slate-900/30">
+            <section id="Projects" className="py-20 px-8 bg-slate-900/30">
                 <div className="max-w-6xl mx-auto">
-                    <h2 className="text-4xl font-bold mb-12 text-center bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                    <h2 className="text-4xl font-bold mb-12 text-center leading-relaxed bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
                         Projects
                     </h2>
                     <div className="grid md:grid-cols-2 gap-8">
@@ -333,14 +648,44 @@ export default function Portfolio() {
                 </div>
             </section>
 
+            {/* Languages Section */}
+            <section className="py-20 px-6">
+                <div className="max-w-4xl mx-auto">
+                    <h2 className="text-4xl font-bold mb-12 pb-3 text-center bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                        Languages
+                    </h2>
+                    <div className="grid md:grid-cols-2 gap-6">
+                        {languages.map((lang, index) => (
+                            <div key={index} className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-6 border border-purple-500/20 hover:border-purple-500/40 transition-all">
+                                <div className="flex justify-between items-center mb-3">
+                                    <div className="flex items-center gap-3">
+                                        <Languages size={20} className="text-purple-400" />
+                                        <h3 className="text-xl font-bold text-purple-300">{lang.name}</h3>
+                                    </div>
+                                    <span className="text-gray-400 text-sm">{lang.proficiency}</span>
+                                </div>
+                                <div className="w-full bg-slate-700 rounded-full h-2">
+                                    <div
+                                        className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full transition-all duration-1000"
+                                        style={{ width: `${lang.level}%` }}
+                                    ></div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+
+
             {/* Contact Section */}
-            <section id="contact" className="py-20 px-6">
-                <div className="max-w-4xl mx-auto text-center">
-                    <h2 className="text-4xl font-bold mb-8 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+            <section id="contact" className="py-20 px-6 bg-slate-900/30">
+                <div className="max-w-6xl mx-auto">
+                    <h2 className="text-4xl font-bold mb-8 text-center bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
                         Get In Touch
                     </h2>
-                    <p className="text-xl text-gray-300 mb-8">
-                        I'm always open to discussing new opportunities, collaborations, or just having a chat about FinTech!
+                    <p className="text-xl text-gray-300 mb-12 text-center max-w-2xl mx-auto">
+                        I'm always open to discussing new opportunities, collaborations, or just having a chat about AI/ML & Blockchain.
                     </p>
                     <div className="flex gap-6 justify-center">
                         <a href="https://www.linkedin.com/in/jainamvaria/" target="_blank" rel="noopener noreferrer"
@@ -370,9 +715,98 @@ export default function Portfolio() {
                         </a>
 
                     </div>
+                    <div className="flex justify-center items-center px-30 py-12">
+                        <div className="max-w-6xl mx-auto">
+                            {/* Contact Form */}
+                            <div className="bg-slate-900/50 backdrop-blur-sm rounded-2xl p-8 border border-purple-500/20">
+                                <h3 className="text-3xl font-bold text-purple-300 mb-6">Send Me a Message</h3>
+                                <form onSubmit={handleSubmit} className="space-y-6">
+                                    {/* Name Input */}
+                                    <div>
+                                        <div className="relative">
+                                            <User className="absolute left-4 top-4 text-cyan-400" size={20} />
+                                            <input
+                                                type="text"
+                                                name="name"
+                                                value={formData.name}
+                                                onChange={handleInputChange}
+                                                placeholder="Your Name"
+                                                required
+                                                className="w-full bg-slate-900/50 border border-slate-700 rounded-xl pl-12 pr-4 py-4 text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none transition-colors"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Email Input */}
+                                    <div>
+                                        <div className="relative">
+                                            <Mail className="absolute left-4 top-4 text-cyan-400" size={20} />
+                                            <input
+                                                type="email"
+                                                name="email"
+                                                value={formData.email}
+                                                onChange={handleInputChange}
+                                                placeholder="Your Email"
+                                                required
+                                                className="w-full bg-slate-900/50 border border-slate-700 rounded-xl pl-12 pr-4 py-4 text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none transition-colors"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Message Input */}
+                                    <div>
+                                        <div className="relative">
+                                            <MessageCircle className="absolute left-4 top-4 text-cyan-400" size={20} />
+                                            <textarea
+                                                name="message"
+                                                value={formData.message}
+                                                onChange={handleInputChange}
+                                                placeholder="Your Message"
+                                                required
+                                                rows="5"
+                                                className="w-full bg-slate-900/50 border border-slate-700 rounded-xl pl-12 pr-4 py-4 text-white placeholder-gray-500 focus:border-purple-500 focus:outline-none transition-colors resize-none"
+                                            ></textarea>
+                                        </div>
+                                    </div>
+
+                                    {/* Submit Button */}
+                                    <button
+                                        type="submit"
+                                        className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white font-semibold py-4 rounded-xl transition-all hover:scale-105 flex items-center justify-center gap-2 shadow-lg"
+                                    >
+                                        <Send size={20} />
+                                        Send Message
+                                    </button>
+
+                                    {/* Status Message */}
+                                    {formStatus && (
+                                        <div className="text-center text-green-400 font-semibold">
+                                            {formStatus}
+                                        </div>
+                                    )}
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="flex flex-col text-center justify-center items-center px-4">
+                        <p className="text-3xl font-bold mb-4 italic leading relaxed bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent pb-2">
+                            "So no matter what, I promise you, If you need us, if you need me, I'll be there"
+                        </p>
+
+                        {/* Play/Pause Button */}
+                        <button
+                            onClick={playAudio}
+                            className="p-1 mb-4 bg-blue-600 hover:bg-blue-500 rounded-full text-white shadow-md"
+                            aria-label="Play quote"
+                        >
+                            {isPlaying ? <Pause size={20} /> : <Play size={20} />}
+                        </button>
+
+                        {/* Hidden Audio Element */}
+                        <audio id="captainAudio" src="/Captain_audio.mp3" preload="auto" />
+                    </div>
                 </div>
             </section >
-
             {/* Footer */}
             < footer className="py-8 text-center border-t border-purple-500/20" >
                 <p className="text-gray-400">© 2025 Jainam Varia. All Rights Reserved.</p>
