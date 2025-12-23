@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Github, Linkedin, Mail, Play, MessageCircle, User, Send, Languages, Video, Instagram, Building2, Calendar, MapPin, Download, Code, GraduationCap, Award, ChevronDown, Pause } from 'lucide-react';
+import { Github, Linkedin, Mail, MessageCircle, User, Send, Languages, Video, Volume2, Instagram, Building2, Calendar, MapPin, Download, Code, GraduationCap, Award, ChevronDown } from 'lucide-react';
 import emailjs from '@emailjs/browser'
 
 export default function Portfolio() {
@@ -13,6 +13,8 @@ export default function Portfolio() {
     });
     const [formStatus, setFormStatus] = useState('');
     const [isPlaying, setIsPlaying] = useState(false);
+
+
     useEffect(() => {
         const handleScroll = () => {
             setScrolled(window.scrollY > 50);
@@ -122,7 +124,7 @@ export default function Portfolio() {
                 <div className="max-w-7xl mx-auto px-6 py-4">
                     <div className="flex justify-between items-center">
                         <div className="flex gap-8">
-                            {['home', 'about', 'education', 'skills', 'projects', 'contact'].map((section) => (
+                            {['home', 'about', 'education', 'skills', 'Projects', 'Extra-Curricular', 'Languages', 'contact'].map((section) => (
                                 <button
                                     key={section}
                                     onClick={() => scrollToSection(section)}
@@ -159,14 +161,19 @@ export default function Portfolio() {
                     <h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent animate-pulse">
                         Jainam Varia
                     </h1>
-                    <p className="text-2xl text-purple-300 mb-2">AI/ML & Blockchain Enthusiast</p>
-                    <p className="text-xl text-gray-400 mb-8">B.Tech Computer Engineer | MSc Financial Technology @ University of Exeter</p>
+                    <p className="text-2xl text-purple-300 mb-2">Quant, AI/ML & Blockchain Enthusiast</p>
+                    <p className="text-xl text-gray-400 mb-8">B.Tech Computer Engineer | MSc Financial Technology at University of Exeter</p>
 
                     <div className="flex gap-4 justify-center mb-8">
-                        <a href="https://drive.google.com/file/d/1dK8Y9fE3lZKAspmf7n5YVlES4c-9znax/view?usp=sharing" download
+                        <a href="https://drive.google.com/file/d/1TGMMmbqGeAIvbUeOrV2bkFW9pgfFRW-m/view?usp=sharing" download
                             className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full hover:from-blue-500 hover:to-purple-500 transition-all hover:scale-105 font-semibold shadow-lg">
                             <Download size={20} />
-                            Jainam CV
+                            AI/ML & Blockchain CV
+                        </a>
+                        <a href="https://drive.google.com/file/d/1vlra2-Jtd9jA4rPce2-1d9DCgo5DFZkp/view?usp=sharing" download
+                            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full hover:from-blue-500 hover:to-purple-500 transition-all hover:scale-105 font-semibold shadow-lg">
+                            <Download size={20} />
+                            Quant CV
                         </a>
                     </div>
 
@@ -648,8 +655,161 @@ export default function Portfolio() {
                 </div>
             </section>
 
+            {/* Extra-curricular & Volunteer Experience Section */}
+            <section id="Extra-Curricular" className="py-20 px-6 bg-slate-900/30">
+                <div className="max-w-6xl mx-auto">
+                    <h2 className="text-4xl font-bold mb-12 text-center bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                        Extra-curricular & Volunteer Experience
+                    </h2>
+
+                    {/* Vertical Cards with Animation */}
+                    <div className="flex flex-col gap-8">
+                        {/* Card 1 - Cricket Captain */}
+                        <div className="bg-gradient-to-r from-slate-800/50 to-green-900/20 backdrop-blur-sm rounded-2xl p-8 border border-green-500/20 hover:border-green-500/60 transition-all hover:shadow-2xl hover:shadow-green-500/20 hover:-translate-y-2 duration-500 group">
+                            <div className="flex flex-col md:flex-row items-start gap-6">
+                                {/* Icon */}
+                                <div className="p-4 bg-green-600/20 rounded-2xl group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 flex-shrink-0">
+                                    <Award size={40} className="text-green-400" />
+                                </div>
+
+                                {/* Content */}
+                                <div className="flex-1">
+                                    <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-4">
+                                        <div>
+                                            <h3 className="text-3xl font-bold text-green-300 mb-2 group-hover:text-green-200 transition-colors">
+                                                Captain
+                                            </h3>
+                                            <p className="text-xl text-gray-300 mb-2">KJSIT Official Cricket Team</p>
+                                            <p className="text-green-400 text-sm flex items-center gap-2">
+                                                <Calendar size={14} />
+                                                March 2023 - May 2024
+                                            </p>
+                                        </div>
+                                        <div className="mt-4 md:mt-0 p-3 bg-green-500/10 rounded-xl border border-green-500/30">
+                                            <span className="text-green-300 font-bold">🏏 Sports Leadership</span>
+                                        </div>
+                                    </div>
+
+                                    <ul className="space-y-3 mb-6">
+                                        <li className="flex items-start gap-3 text-gray-300 group-hover:text-gray-200 transition-colors">
+                                            <span className="text-green-400 text-xl mt-0.5">✓</span>
+                                            <span>Captain of KJSIT Cricket Team, leading the side to Runner-Up at Inter-College ICT Sportsaga and securing the institute's first-ever inter-college cricket trophy.</span>
+                                        </li>
+                                        <li className="flex items-start gap-3 text-gray-300 group-hover:text-gray-200 transition-colors">
+                                            <span className="text-green-400 text-xl mt-0.5">✓</span>
+                                            <span>Winning Captain of the Intra-College Box Cricket Tournament 2022, demonstrating leadership, strategy, and team coordination.</span>
+                                        </li>
+                                    </ul>
+
+                                    <div className="flex flex-wrap gap-2">
+                                        <span className="px-4 py-2 bg-green-600/20 border border-green-500/30 rounded-full text-sm text-green-300 hover:bg-green-600/30 transition-colors">Leadership</span>
+                                        <span className="px-4 py-2 bg-green-600/20 border border-green-500/30 rounded-full text-sm text-green-300 hover:bg-green-600/30 transition-colors">Discipline</span>
+                                        <span className="px-4 py-2 bg-green-600/20 border border-green-500/30 rounded-full text-sm text-green-300 hover:bg-green-600/30 transition-colors">Teamwork</span>
+                                        <span className="px-4 py-2 bg-green-600/20 border border-green-500/30 rounded-full text-sm text-green-300 hover:bg-green-600/30 transition-colors">Communication</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Card 2 - BAPS Volunteer */}
+                        <div className="bg-gradient-to-r from-slate-800/50 to-blue-900/20 backdrop-blur-sm rounded-2xl p-8 border border-blue-500/20 hover:border-blue-500/60 transition-all hover:shadow-2xl hover:shadow-blue-500/20 hover:-translate-y-2 duration-500 group">
+                            <div className="flex flex-col md:flex-row items-start gap-6">
+                                {/* Icon */}
+                                <div className="p-4 bg-blue-600/20 rounded-2xl group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 flex-shrink-0">
+                                    <Award size={40} className="text-blue-400" />
+                                </div>
+
+                                {/* Content */}
+                                <div className="flex-1">
+                                    <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-4">
+                                        <div>
+                                            <h3 className="text-3xl font-bold text-blue-300 mb-2 group-hover:text-blue-200 transition-colors">
+                                                Volunteer
+                                            </h3>
+                                            <p className="text-xl text-gray-300 mb-2">BAPS Swaminarayan Sanstha</p>
+                                            <p className="text-blue-400 text-sm flex items-center gap-2">
+                                                <Calendar size={14} />
+                                                2017 - Present
+                                            </p>
+                                        </div>
+                                        <div className="mt-4 md:mt-0 p-3 bg-blue-500/10 rounded-xl border border-blue-500/30">
+                                            <span className="text-blue-300 font-bold">🙏 Community Service</span>
+                                        </div>
+                                    </div>
+
+                                    <ul className="space-y-3 mb-6">
+                                        <li className="flex items-start gap-3 text-gray-300 group-hover:text-gray-200 transition-colors">
+                                            <span className="text-blue-400 text-xl mt-0.5">✓</span>
+                                            <span>Mentored children and teenagers on spirituality, discipline, and academic excellence, guiding them towards personal growth and positive life habits.</span>
+                                        </li>
+                                        <li className="flex items-start gap-3 text-gray-300 group-hover:text-gray-200 transition-colors">
+                                            <span className="text-blue-400 text-xl mt-0.5">✓</span>
+                                            <span>Organised and led sports and spiritual events, promoting teamwork, healthy lifestyles, and avoidance of harmful addictions through guided sessions.</span>
+                                        </li>
+                                    </ul>
+
+                                    <div className="flex flex-wrap gap-2">
+                                        <span className="px-4 py-2 bg-blue-600/20 border border-blue-500/30 rounded-full text-sm text-blue-300 hover:bg-blue-600/30 transition-colors">Event Planning</span>
+                                        <span className="px-4 py-2 bg-blue-600/20 border border-blue-500/30 rounded-full text-sm text-blue-300 hover:bg-blue-600/30 transition-colors">Public Speaking</span>
+                                        <span className="px-4 py-2 bg-blue-600/20 border border-blue-500/30 rounded-full text-sm text-blue-300 hover:bg-blue-600/30 transition-colors">Mentorship</span>
+                                        <span className="px-4 py-2 bg-blue-600/20 border border-blue-500/30 rounded-full text-sm text-blue-300 hover:bg-blue-600/30 transition-colors">Collaboration</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Card 3 - Business & Finance Society */}
+                        <div className="bg-gradient-to-r from-slate-800/50 to-purple-900/20 backdrop-blur-sm rounded-2xl p-8 border border-purple-500/20 hover:border-purple-500/60 transition-all hover:shadow-2xl hover:shadow-purple-500/20 hover:-translate-y-2 duration-500 group">
+                            <div className="flex flex-col md:flex-row items-start gap-6">
+                                {/* Icon */}
+                                <div className="p-4 bg-purple-600/20 rounded-2xl group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 flex-shrink-0">
+                                    <Award size={40} className="text-purple-400" />
+                                </div>
+
+                                {/* Content */}
+                                <div className="flex-1">
+                                    <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-4">
+                                        <div>
+                                            <h3 className="text-3xl font-bold text-purple-300 mb-2 group-hover:text-purple-200 transition-colors">
+                                                Member
+                                            </h3>
+                                            <p className="text-xl text-gray-300 mb-2">Business & Finance Society</p>
+                                            <p className="text-purple-400 text-sm flex items-center gap-2">
+                                                <Calendar size={14} />
+                                                Oct 2025 - Present
+                                            </p>
+                                        </div>
+                                        <div className="mt-4 md:mt-0 p-3 bg-purple-500/10 rounded-xl border border-purple-500/30">
+                                            <span className="text-purple-300 font-bold">💼 Professional Development</span>
+                                        </div>
+                                    </div>
+
+                                    <ul className="space-y-3 mb-6">
+                                        <li className="flex items-start gap-3 text-gray-300 group-hover:text-gray-200 transition-colors">
+                                            <span className="text-purple-400 text-xl mt-0.5">✓</span>
+                                            <span>Member, Business & Finance Society (University of Exeter) — attended and contributed to multiple society-led academic, technical, and finance-focused events.</span>
+                                        </li>
+                                        <li className="flex items-start gap-3 text-gray-300 group-hover:text-gray-200 transition-colors">
+                                            <span className="text-purple-400 text-xl mt-0.5">✓</span>
+                                            <span>Assisted in organising guest lectures, seminars, technical events, and sports fest, supporting event logistics and smooth execution.</span>
+                                        </li>
+                                    </ul>
+
+                                    <div className="flex flex-wrap gap-2">
+                                        <span className="px-4 py-2 bg-purple-600/20 border border-purple-500/30 rounded-full text-sm text-purple-300 hover:bg-purple-600/30 transition-colors">Networking</span>
+                                        <span className="px-4 py-2 bg-purple-600/20 border border-purple-500/30 rounded-full text-sm text-purple-300 hover:bg-purple-600/30 transition-colors">Event Management</span>
+                                        <span className="px-4 py-2 bg-purple-600/20 border border-purple-500/30 rounded-full text-sm text-purple-300 hover:bg-purple-600/30 transition-colors">Finance</span>
+                                        <span className="px-4 py-2 bg-purple-600/20 border border-purple-500/30 rounded-full text-sm text-purple-300 hover:bg-purple-600/30 transition-colors">Collaboration</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             {/* Languages Section */}
-            <section className="py-20 px-6">
+            <section id="Languages" className="py-20 px-6">
                 <div className="max-w-4xl mx-auto">
                     <h2 className="text-4xl font-bold mb-12 pb-3 text-center bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
                         Languages
@@ -788,22 +948,42 @@ export default function Portfolio() {
                             </div>
                         </div>
                     </div>
-                    <div className="flex flex-col text-center justify-center items-center px-4">
-                        <p className="text-3xl font-bold mb-4 italic leading relaxed bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent pb-2">
-                            "So no matter what, I promise you, If you need us, if you need me, I'll be there"
-                        </p>
+                    {/* Shield Background Pattern */}
+                    <div className="absolute inset-0 opacity-5">
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-white rounded-full blur-3xl"></div>
+                        <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500 rounded-full blur-3xl"></div>
+                    </div>
 
-                        {/* Play/Pause Button */}
-                        <button
-                            onClick={playAudio}
-                            className="p-1 mb-4 bg-blue-600 hover:bg-blue-500 rounded-full text-white shadow-md"
-                            aria-label="Play quote"
-                        >
-                            {isPlaying ? <Pause size={20} /> : <Play size={20} />}
-                        </button>
+                    <div className="relative flex items-center gap-6">
+                        {/* Quote Icon */}
+                        <div className="flex-shrink-0">
+                            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-red-500 rounded-full flex items-center justify-center text-4xl">
+                                🛡️
+                            </div>
+                        </div>
 
-                        {/* Hidden Audio Element */}
-                        <audio id="captainAudio" src="/Captain_audio.mp3" preload="auto" />
+                        {/* Quote Text */}
+                        <div className="flex-1">
+                            <p className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-white to-red-400 italic leading-relaxed">
+                                "So no matter what, I promise you, If you need us, if you need me, I'll be there!"
+                            </p>
+                        </div>
+
+                        {/* Audio Play Button */}
+                        <div className="flex-shrink-0">
+                            <button
+                                onClick={playAudio}
+                                className={`p-4 rounded-full transition-all ${isPlaying
+                                    ? 'bg-gradient-to-r from-red-500 to-blue-500 animate-pulse'
+                                    : 'bg-gradient-to-r from-blue-600 to-red-600 hover:from-blue-500 hover:to-red-500'
+                                    } hover:scale-110 shadow-lg`}
+                                title="Play Captain America's voice"
+                            >
+                                <Volume2 size={24} className="text-white" />
+                            </button>
+                            {/* Hidden Audio Element */}
+                            <audio id="captainAudio" src="/Captain_audio.mp3" />
+                        </div>
                     </div>
                 </div>
             </section >
