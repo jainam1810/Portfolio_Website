@@ -165,7 +165,7 @@ export default function Portfolio() {
                     <p className="text-xl text-gray-400 mb-8">B.Tech Computer Engineer | MSc Financial Technology at University of Exeter</p>
 
                     <div className="flex gap-4 justify-center mb-8">
-                        <a href="https://drive.google.com/file/d/1TGMMmbqGeAIvbUeOrV2bkFW9pgfFRW-m/view?usp=sharing" download
+                        <a href="https://drive.google.com/file/d/1warqB-sx-OUkT_qfCYQF7qEgEWx7xak8/view?usp=sharing" download
                             className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full hover:from-blue-500 hover:to-purple-500 transition-all hover:scale-105 font-semibold shadow-lg">
                             <Download size={20} />
                             AI/ML & Blockchain CV
