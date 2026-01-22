@@ -161,19 +161,19 @@ export default function Portfolio() {
                     <h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent animate-pulse">
                         Jainam Varia
                     </h1>
-                    <p className="text-2xl text-purple-300 mb-2">Quant, AI/ML & Blockchain Enthusiast</p>
+                    <p className="text-2xl text-purple-300 mb-2">AI/ML & Blockchain Enthusiast</p>
                     <p className="text-xl text-gray-400 mb-8">B.Tech Computer Engineer | MSc Financial Technology at University of Exeter</p>
 
                     <div className="flex gap-4 justify-center mb-8">
+                        <a href="https://drive.google.com/file/d/1yGlR7KL837Q-Iyi3Igc2dV9nhRr4udC_/view?usp=sharing" download
+                            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full hover:from-blue-500 hover:to-purple-500 transition-all hover:scale-105 font-semibold shadow-lg">
+                            <Download size={20} />
+                            AI/ML CV
+                        </a>
                         <a href="https://drive.google.com/file/d/1warqB-sx-OUkT_qfCYQF7qEgEWx7xak8/view?usp=sharing" download
                             className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full hover:from-blue-500 hover:to-purple-500 transition-all hover:scale-105 font-semibold shadow-lg">
                             <Download size={20} />
-                            AI/ML & Blockchain CV
-                        </a>
-                        <a href="https://drive.google.com/file/d/1vlra2-Jtd9jA4rPce2-1d9DCgo5DFZkp/view?usp=sharing" download
-                            className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full hover:from-blue-500 hover:to-purple-500 transition-all hover:scale-105 font-semibold shadow-lg">
-                            <Download size={20} />
-                            Quant CV
+                            Blockchain CV
                         </a>
                     </div>
 
@@ -227,8 +227,8 @@ export default function Portfolio() {
                         </p>
                         <p className="text-lg text-gray-300 leading-relaxed">
                             With expertise spanning AI/ML, blockchain development, and quantitative analysis, I've developed
-                            projects ranging from fraud detection systems to decentralized applications. I am actively exploring
-                            opportunities in AI/ML, quantitative finance, and blockchain-driven roles across the United Kingdom.
+                            projects ranging from forecasting and fraud detection systems to decentralized applications. I am actively exploring
+                            opportunities in AI/ML and blockchain-driven roles across the United Kingdom.
                         </p>
                     </div>
                 </div>
@@ -296,7 +296,7 @@ export default function Portfolio() {
                                         <div className="text-right">
                                             <p className="text-purple-400 flex items-center gap-2 justify-end">
                                                 <Calendar size={16} />
-                                                Nov 2025 - Present
+                                                Nov 2025 - Jan 2026
                                             </p>
                                             <p className="text-gray-400 flex items-center gap-2 justify-end mt-1">
                                                 <MapPin size={16} />
@@ -503,6 +503,65 @@ export default function Portfolio() {
                                 </div>
                             </div>
                         </div>
+
+                        <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 border border-purple-500/20 hover:border-purple-500/40 transition-all">
+                            <div className="flex items-start gap-6">
+                                <div className="w-20 h-20 bg-white rounded-xl flex items-center justify-center flex-shrink-0 p-3">
+                                    <img
+                                        src="/Prodigy_Logo.jpg"
+                                        alt="Company Logo"
+                                        className="w-full h-full object-contain"
+                                        onError={(e) => {
+                                            e.target.style.display = 'none';
+                                            e.target.parentElement.innerHTML = '<div class="text-purple-600 font-bold text-xl">C3</div>';
+                                        }}
+                                    />
+                                </div>
+                                <div className="flex-1">
+                                    <div className="flex justify-between items-start mb-3">
+                                        <div>
+                                            <h3 className="text-2xl font-bold text-purple-300 mb-1">Web Developer</h3>
+                                            <p className="text-xl text-gray-300 flex items-center gap-2">
+                                                <Building2 size={18} className="text-purple-400" />
+                                                Prodigy InfoTech
+                                            </p>
+                                        </div>
+                                        <div className="text-right">
+                                            <p className="text-purple-400 flex items-center gap-2 justify-end">
+                                                <Calendar size={16} />
+                                                Jun 2024 - Jun 2024
+                                            </p>
+                                            <p className="text-gray-400 flex items-center gap-2 justify-end mt-1">
+                                                <MapPin size={16} />
+                                                Mumbai, India (Remote)
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <ul className="space-y-2 text-gray-300">
+                                        <li className="flex items-start gap-2">
+                                            <span className="text-purple-400 mt-1">•</span>
+                                            <span>Developed interactive web applications using HTML, CSS, JavaScript, and Bootstrap, including a dynamic menu, stopwatch, Tic-Tac-Toe game, and portfolio website.</span>
+                                        </li>
+                                        <li className="flex items-start gap-2">
+                                            <span className="text-purple-400 mt-1">•</span>
+                                            <span>Improved UI responsiveness by 30% and reduced page load times by 25%, leading to higher usability and user engagement.</span>
+                                        </li>
+                                        <li className="flex items-start gap-2">
+                                            <span className="text-purple-400 mt-1">•</span>
+                                            <span>Managed version control with Git and GitHub, ensuring clean code structure, efficient collaboration, and long-term maintainability</span>
+                                        </li>
+                                    </ul>
+                                    <div className="flex flex-wrap gap-2 mt-4">
+                                        <span className="px-3 py-1 bg-purple-600/20 rounded-full text-sm">HTML</span>
+                                        <span className="px-3 py-1 bg-purple-600/20 rounded-full text-sm">CSS</span>
+                                        <span className="px-3 py-1 bg-purple-600/20 rounded-full text-sm">JavaScript</span>
+                                        <span className="px-3 py-1 bg-purple-600/20 rounded-full text-sm">Git</span>
+                                        <span className="px-3 py-1 bg-purple-600/20 rounded-full text-sm">Github</span>
+                                        <span className="px-3 py-1 bg-purple-600/20 rounded-full text-sm">Bootstrap</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -541,6 +600,37 @@ export default function Portfolio() {
                     </h2>
                     <div className="grid md:grid-cols-2 gap-8">
                         {/* Project 1 - Add your first project here */}
+                        <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 border border-purple-500/20 hover:border-purple-500/40 transition-all hover:transform hover:scale-105">
+                            <div className="flex items-start justify-between mb-4">
+                                <h3 className="text-2xl font-bold text-purple-300">AI-Powered Financial Advisor</h3>
+                                <div className="flex gap-3">
+                                    <a href="https://github.com/jainam1810/AI-Powered_Financial_Advisor" target="_blank" rel="noopener noreferrer"
+                                        className="p-2 bg-purple-600/20 rounded-lg hover:bg-purple-600/40 transition-all">
+                                        <Github size={20} />
+                                    </a>
+                                    <a href="https://drive.google.com/file/d/13m88EsBa5mc8n9E_KlV0PIOucQZqB_Rg/view" target="_blank" rel="noopener noreferrer"
+                                        className="p-2 bg-purple-600/20 rounded-lg hover:bg-purple-600/40 transition-all"
+                                        title="Watch Demo Video">
+                                        <Video size={20} />
+                                    </a>
+                                </div>
+                            </div>
+                            <p className="text-gray-300 mb-4">
+                                AI-powered personal finance dashboard inspired by UK Open Banking, built using Streamlit, ML, and time-series forecasting to deliver intelligent financial insights. It is a smart money assistant that looks at your bank transactions and helps you understand where your money goes, what bills are coming next, and whether you are likely to run out of money in the future
+                            </p>
+                            <div className="flex flex-wrap gap-2 mb-4">
+                                <span className="px-3 py-1 bg-purple-600/20 rounded-full text-sm">Logistic Regression</span>
+                                <span className="px-3 py-1 bg-purple-600/20 rounded-full text-sm">TF-IDF</span>
+                                <span className="px-3 py-1 bg-purple-600/20 rounded-full text-sm">Streamlit</span>
+                                <span className="px-3 py-1 bg-purple-600/20 rounded-full text-sm">ARIMA</span>
+                            </div>
+                            <div className="flex items-start gap-2 text-sm text-gray-400">
+                                <Award size={16} className="mt-1 flex-shrink-0" />
+                                <span>FinanceAI - Analysing transactions to forecast cashflow, detect recurring payments with 85+% accuracy and predict low balance risk 30-90 days ahead </span>
+                            </div>
+                        </div>
+
+
                         <div className="bg-slate-800/50 backdrop-blur-sm rounded-2xl p-8 border border-purple-500/20 hover:border-purple-500/40 transition-all hover:transform hover:scale-105">
                             <div className="flex items-start justify-between mb-4">
                                 <h3 className="text-2xl font-bold text-purple-300">Faucet-dapp</h3>
