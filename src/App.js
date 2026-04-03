@@ -77,13 +77,13 @@ export default function Portfolio() {
             } else { pos = 0; }
         };
 
-        // Mobile: 10 taps within 1.5 seconds
+        // Mobile: 7 taps within 1.5 seconds
         let taps = [];
         const handleTap = () => {
             const now = Date.now();
             taps.push(now);
             taps = taps.filter(t => now - t < 1500);
-            if (taps.length >= 8) { taps = []; launchCricketFireworks(); }
+            if (taps.length >= 7) { taps = []; launchCricketFireworks(); }
         }; /* updated */
 
         window.addEventListener('keydown', handleKey);
@@ -401,8 +401,20 @@ export default function Portfolio() {
     const playAudio = () => {
         const audio = document.getElementById('captainAudio');
         if (audio) {
-            if (isPlaying) { audio.pause(); audio.currentTime = 0; setIsPlaying(false); }
-            else { audio.play(); setIsPlaying(true); audio.onended = () => setIsPlaying(false); }
+            if (isPlaying) {
+                audio.pause();
+                audio.currentTime = 0;
+                setIsPlaying(false);
+            } else {
+                audio.muted = true;
+                audio.play().then(() => {
+                    audio.muted = false;
+                    audio.currentTime = 0;
+                    audio.play();
+                    setIsPlaying(true);
+                    audio.onended = () => setIsPlaying(false);
+                }).catch(() => { });
+            }
         }
     };
 
@@ -793,8 +805,8 @@ export default function Portfolio() {
                             {isPlaying ? 'Playing...' : 'Play Voice Note'}
                             {isPlaying && <span className="flex items-center gap-0.5 h-4">{[...Array(5)].map((_, i) => (<span key={i} className="w-[3px] bg-sky-400 rounded-sm animate-pulse" style={{ height: `${Math.random() * 12 + 4}px`, animationDelay: `${i * 100}ms` }} />))}</span>}
                         </button>
-                        <audio id="captainAudio" src="/Captain_audio.mp3" />
-                        <p className="mt-4 text-[11px] text-slate-500">Press ↑ ↑ ↓ ↓ ← → ← → BA (desktop) / tap 5 times on screen in 2 seconds (mobile) </p>
+                        <audio id="captainAudio" src="/Captain_audio.mp3" preload="auto" playsInline />
+                        <p className="mt-4 text-[11px] text-slate-500">Press ↑ ↑ ↓ ↓ ← → ← → BA (desktop) / tap 7 times on screen in 1.5 seconds (mobile) </p>
                     </div>
                 </div>
             </section>
