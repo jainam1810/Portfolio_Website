@@ -82,7 +82,7 @@ export default function Portfolio() {
         const handleTap = () => {
             const now = Date.now();
             taps.push(now);
-            taps = taps.filter(t => now - t < 3000);
+            taps = taps.filter(t => now - t < 1500);
             if (taps.length >= 5) { taps = []; launchCricketFireworks(); }
         };
 
@@ -794,7 +794,7 @@ export default function Portfolio() {
                             {isPlaying && <span className="flex items-center gap-0.5 h-4">{[...Array(5)].map((_, i) => (<span key={i} className="w-[3px] bg-sky-400 rounded-sm animate-pulse" style={{ height: `${Math.random() * 12 + 4}px`, animationDelay: `${i * 100}ms` }} />))}</span>}
                         </button>
                         <audio id="captainAudio" src="/Captain_audio.mp3" />
-                        <p className="mt-4 text-[11px] text-slate-500">Press ↑ ↑ ↓ ↓ ← → ← → BA (desktop) / tap 5 times on screen in 3 seconds (mobile) </p>
+                        <p className="mt-4 text-[11px] text-slate-500">Press ↑ ↑ ↓ ↓ ← → ← → BA (desktop) / tap 5 times on screen in 2 seconds (mobile) </p>
                     </div>
                 </div>
             </section>
