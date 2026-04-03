@@ -77,14 +77,14 @@ export default function Portfolio() {
             } else { pos = 0; }
         };
 
-        // Mobile: 5 taps within 3 seconds
+        // Mobile: 10 taps within 1.5 seconds
         let taps = [];
         const handleTap = () => {
             const now = Date.now();
             taps.push(now);
             taps = taps.filter(t => now - t < 1500);
-            if (taps.length >= 5) { taps = []; launchCricketFireworks(); }
-        };
+            if (taps.length >= 8) { taps = []; launchCricketFireworks(); }
+        }; /* updated */
 
         window.addEventListener('keydown', handleKey);
         window.addEventListener('touchstart', handleTap, { passive: true });
