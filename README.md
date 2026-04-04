@@ -1,4 +1,4 @@
-# Jainam Varia — Portfolio Website
+# Jainam Varia - Portfolio Website
 
 A modern glassmorphism portfolio built with **React**, **Tailwind CSS v4**, and **Lucide Icons**, featuring aurora backgrounds, liquid blob animations, scroll-triggered reveals, a typewriter hero, and a hidden easter egg.
 
@@ -48,7 +48,7 @@ A cricket bat swings, hits a ball, and the screen explodes into a full fireworks
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 Portfolio_Website/
