@@ -8,7 +8,7 @@ A modern glassmorphism portfolio built with **React**, **Tailwind CSS v4**, and 
 
 ## Features
 
-- **Glassmorphism UI** — Frosted glass cards with blur, transparency, and subtle borders throughout
+- **Glassmorphism UI** - Frosted glass cards with blur, transparency, and subtle borders throughout
 - **Aurora Background** — 4 animated gradient blobs that drift and pulse across the viewport
 - **Liquid Morphing Blobs** — Organic shape-shifting blobs with continuous border-radius animation
 - **Typewriter Hero** — Cycles through 5 taglines with realistic typing and deleting speeds
