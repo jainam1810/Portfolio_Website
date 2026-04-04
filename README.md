@@ -9,13 +9,13 @@ A modern glassmorphism portfolio built with **React**, **Tailwind CSS v4**, and 
 ## Features
 
 - **Glassmorphism UI** - Frosted glass cards with blur, transparency, and subtle borders throughout
-- **Aurora Background** — 4 animated gradient blobs that drift and pulse across the viewport
-- **Liquid Morphing Blobs** — Organic shape-shifting blobs with continuous border-radius animation
-- **Typewriter Hero** — Cycles through 5 taglines with realistic typing and deleting speeds
-- **Scroll Reveal Animations** — Sections fade/slide in on scroll using Intersection Observer
-- **Scroll Progress Bar** — Gradient rainbow bar at the top tracks page scroll position
-- **Loading Screen** — Animated "JV" logo with gradient fill bar on initial load
-- **Active Nav Highlighting** — Current section auto-highlights in the navbar while scrolling
+- **Aurora Background** - 4 animated gradient blobs that drift and pulse across the viewport
+- **Liquid Morphing Blobs** - Organic shape-shifting blobs with continuous border-radius animation
+- **Typewriter Hero** - Cycles through 5 taglines with realistic typing and deleting speeds
+- **Scroll Reveal Animations** - Sections fade/slide in on scroll using Intersection Observer
+- **Scroll Progress Bar** - Gradient rainbow bar at the top tracks page scroll position
+- **Loading Screen** Animated "JV" logo with gradient fill bar on initial load
+- **Active Nav Highlighting** Current section auto-highlights in the navbar while scrolling
 - **Back-to-Top Button** — Floating glass button appears after scrolling down
 - **Company Logos** — Real logos for Amazon, KIFS, Sorneshia, Oron Trade, Prodigy InfoTech
 - **Language Proficiency Bars** — Animated fill bars triggered on scroll (English, Hindi, Gujarati, Marathi, Punjabi, French)
