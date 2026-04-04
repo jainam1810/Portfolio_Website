@@ -26,7 +26,7 @@ A modern glassmorphism portfolio built with **React**, **Tailwind CSS v4**, and 
 
 ---
 
-## 🏏 Easter Egg
+## Easter Egg
 
 - **Desktop:** Press `↑ ↑ ↓ ↓ ← → ← → B A` (Konami Code)
 - **Mobile:** Tap the screen 5 times within 3 seconds
@@ -35,7 +35,7 @@ A cricket bat swings, hits a ball, and the screen explodes into a full fireworks
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Category | Technologies |
 |----------|-------------|
@@ -75,7 +75,7 @@ Portfolio_Website/
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -110,7 +110,7 @@ The `build/` folder is ready to deploy.
 
 ---
 
-## 🌐 Deployment (Netlify)
+## Deployment (Netlify)
 
 1. Push your code to GitHub
 2. Go to [netlify.com](https://netlify.com) → **Add new site** → **Import from Git**
@@ -122,7 +122,7 @@ The `build/` folder is ready to deploy.
 
 ---
 
-## 📬 Contact
+## Contact
 
 - **LinkedIn:** [linkedin.com/in/jainamvaria](https://www.linkedin.com/in/jainamvaria/)
 - **GitHub:** [github.com/jainam1810](https://github.com/jainam1810)
@@ -132,6 +132,6 @@ The `build/` folder is ready to deploy.
 
 ---
 
-## 📜 License
+## License
 
 © 2026 Jainam Varia. All Rights Reserved.
