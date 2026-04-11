@@ -3,7 +3,7 @@
 A modern glassmorphism portfolio built with **React**, **Tailwind CSS v4**, and **Lucide Icons**, featuring aurora backgrounds, liquid blob animations, scroll-triggered reveals, a typewriter hero, and a hidden easter egg.
 
 **Live:** [jv-techfolio.netlify.app](https://jv-techfolio.netlify.app/)
-**Live:**
+**Live:** [portfolio-website-xi-three-98.vercel.app](https://portfolio-website-xi-three-98.vercel.app/)
 
 ---
 
