@@ -1,15 +1,329 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/jetbrains-mono";
+@import "@fontsource/anton";
+@import "@fontsource/instrument-serif/400.css";
+@import "@fontsource/instrument-serif/400-italic.css";
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+    --font-sans: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
+    --font-heading: var(--font-sans);
+    --font-display: 'Anton', 'Geist Variable', ui-sans-serif, sans-serif;
+    --font-serif: 'Instrument Serif', ui-serif, Georgia, serif;
+    --font-mono: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, monospace;
+
+    /* Live domain accent - swapped by the domain switcher, transitions globally */
+    --color-domain: var(--domain);
+    --color-ml: var(--ml);
+    --color-chain: var(--chain);
+    --color-sec: var(--sec);
+
+    --color-sidebar-ring: var(--sidebar-ring);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar: var(--sidebar);
+    --color-chart-5: var(--chart-5);
+    --color-chart-4: var(--chart-4);
+    --color-chart-3: var(--chart-3);
+    --color-chart-2: var(--chart-2);
+    --color-chart-1: var(--chart-1);
+    --color-ring: var(--ring);
+    --color-input: var(--input);
+    --color-border: var(--border);
+    --color-destructive: var(--destructive);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-accent: var(--accent);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-muted: var(--muted);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-secondary: var(--secondary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-primary: var(--primary);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-popover: var(--popover);
+    --color-card-foreground: var(--card-foreground);
+    --color-card: var(--card);
+    --color-foreground: var(--foreground);
+    --color-background: var(--background);
+    --radius-sm: calc(var(--radius) * 0.6);
+    --radius-md: calc(var(--radius) * 0.8);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) * 1.4);
+    --radius-2xl: calc(var(--radius) * 1.8);
+    --radius-3xl: calc(var(--radius) * 2.2);
+    --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-html {
-    scroll-behavior: smooth;
+/* The site is dark-only by design; :root and .dark carry the same palette */
+:root,
+.dark {
+    --background: oklch(0.135 0.006 275);
+    --foreground: oklch(0.968 0.004 270);
+    --card: oklch(0.175 0.008 275);
+    --card-foreground: oklch(0.968 0.004 270);
+    --popover: oklch(0.185 0.009 275);
+    --popover-foreground: oklch(0.968 0.004 270);
+    --primary: oklch(0.955 0.004 270);
+    --primary-foreground: oklch(0.16 0.008 275);
+    --secondary: oklch(0.245 0.009 275);
+    --secondary-foreground: oklch(0.955 0.004 270);
+    --muted: oklch(0.235 0.008 275);
+    --muted-foreground: oklch(0.645 0.013 272);
+    --accent: oklch(0.255 0.01 275);
+    --accent-foreground: oklch(0.968 0.004 270);
+    --destructive: oklch(0.68 0.2 22);
+    --border: oklch(1 0 0 / 9%);
+    --input: oklch(1 0 0 / 13%);
+    --ring: var(--domain);
+    --radius: 0.5rem;
+
+    /* Three domains, three signatures */
+    --ml: oklch(0.72 0.185 302);
+    --chain: oklch(0.77 0.135 226);
+    --sec: oklch(0.79 0.155 168);
+
+    --chart-1: var(--ml);
+    --chart-2: var(--chain);
+    --chart-3: var(--sec);
+    --chart-4: oklch(0.72 0.16 45);
+    --chart-5: oklch(0.7 0.15 340);
+
+    --sidebar: oklch(0.175 0.008 275);
+    --sidebar-foreground: oklch(0.968 0.004 270);
+    --sidebar-primary: var(--domain);
+    --sidebar-primary-foreground: oklch(0.16 0.008 275);
+    --sidebar-accent: oklch(0.255 0.01 275);
+    --sidebar-accent-foreground: oklch(0.968 0.004 270);
+    --sidebar-border: oklch(1 0 0 / 9%);
+    --sidebar-ring: var(--domain);
 }
 
-body {
-    -webkit-font-smoothing: antialiased;
+/* Registering --domain as a real colour lets it animate instead of snapping */
+@property --domain {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: rgb(56 189 248);
+}
+
+/* Domain scopes - set data-domain on any element to re-theme its subtree */
+[data-domain="all"] { --domain: var(--chain); }
+[data-domain="ml"] { --domain: var(--ml); }
+[data-domain="chain"] { --domain: var(--chain); }
+[data-domain="sec"] { --domain: var(--sec); }
+
+@layer base {
+    * {
+        @apply border-border outline-ring/50;
+    }
+
+    html {
+        @apply font-sans;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+        /* The whole-site re-theme animates from here, since data-domain is set
+           on <html> and every descendant inherits the animated value. */
+        transition: --domain 700ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    body {
+        @apply bg-background text-foreground;
+        overflow-x: clip;
+    }
+
+    ::selection {
+        background: var(--domain);
+        color: oklch(0.14 0.008 275);
+    }
+
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb {
+        background: color-mix(in oklch, var(--domain) 45%, transparent);
+        border-radius: 999px;
+        border: 3px solid var(--background);
+    }
+    ::-webkit-scrollbar-thumb:hover { background: var(--domain); }
+
+    /* Lenis smooth-scroll requirements */
+    html.lenis, html.lenis body { height: auto; }
+    .lenis.lenis-smooth { scroll-behavior: auto !important; }
+    .lenis.lenis-stopped { overflow: clip; }
+}
+
+@layer utilities {
+    .font-display {
+        font-family: var(--font-display);
+        font-weight: 400;
+        letter-spacing: -0.005em;
+        text-transform: uppercase;
+    }
+
+    .font-editorial {
+        font-family: var(--font-serif);
+        font-style: italic;
+        text-transform: none;
+        letter-spacing: -0.01em;
+    }
+
+    /* Display scale - one ratio, applied everywhere. Deliberately restrained:
+       the hero is the only place that gets to shout. */
+    .display-xl { font-size: clamp(2.1rem, 6.6vw, 5.6rem); line-height: 0.9; }
+    .display-lg { font-size: clamp(1.6rem, 3.6vw, 2.9rem); line-height: 0.98; }
+    .display-md { font-size: clamp(1.25rem, 2.1vw, 1.65rem); line-height: 1.05; }
+    .display-sm { font-size: clamp(1.05rem, 1.5vw, 1.25rem); line-height: 1.15; }
+
+    .eyebrow {
+        font-family: var(--font-mono);
+        font-size: 0.625rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+    }
+
+    /* Film grain over the whole page */
+    .grain-overlay {
+        position: fixed;
+        inset: -50%;
+        z-index: 60;
+        pointer-events: none;
+        opacity: 0.032;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");
+        animation: grainShift 620ms steps(2) infinite;
+        will-change: transform;
+    }
+
+    /* Duotone portrait treatment, tinted by the live domain accent.
+       The tint layers are real elements rather than ::before/::after, so this
+       can be combined with .hud-corner without the pseudo-elements colliding. */
+    .duotone-wrap { position: relative; isolation: isolate; }
+    .duotone-wrap > img { filter: grayscale(1) contrast(1.2) brightness(0.95); }
+
+    .duotone-tint {
+        position: absolute;
+        inset: 0;
+        z-index: 2;
+        mix-blend-mode: color;
+        background: linear-gradient(155deg, var(--domain) 0%, oklch(0.55 0.2 18) 100%);
+        opacity: 0.85;
+        pointer-events: none;
+    }
+
+    .duotone-glow {
+        position: absolute;
+        inset: 0;
+        z-index: 3;
+        mix-blend-mode: screen;
+        background: radial-gradient(115% 75% at 50% 0%, color-mix(in oklch, var(--domain) 28%, transparent), transparent 70%);
+        pointer-events: none;
+    }
+
+    /* Fallback treatment for a rectangular photo: dissolves its edges into the
+       page so it does not read as a pasted-in box. Used until a cut-out exists. */
+    .photo-vignette {
+        -webkit-mask-image: radial-gradient(62% 66% at 46% 38%, #000 40%, transparent 84%);
+        mask-image: radial-gradient(62% 66% at 46% 38%, #000 40%, transparent 84%);
+    }
+
+    /* With a transparent cut-out, the tint layers must be clipped to its alpha
+       or they paint a solid rectangle. Geometry mirrors object-contain/bottom. */
+    .cutout-mask {
+        -webkit-mask-image: var(--cutout);
+        mask-image: var(--cutout);
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-position: bottom center;
+        mask-position: bottom center;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+    }
+
+    /* Technical HUD hairlines */
+    .hud-grid {
+        background-image:
+            linear-gradient(to right, color-mix(in oklch, var(--foreground) 5%, transparent) 1px, transparent 1px),
+            linear-gradient(to bottom, color-mix(in oklch, var(--foreground) 5%, transparent) 1px, transparent 1px);
+        background-size: 74px 74px;
+    }
+
+    .hud-corner { position: relative; }
+    .hud-corner::before,
+    .hud-corner::after {
+        content: '';
+        position: absolute;
+        width: 11px;
+        height: 11px;
+        border-color: var(--domain);
+        opacity: 0.5;
+        transition: opacity 300ms ease;
+        pointer-events: none;
+    }
+    .hud-corner::before { top: -1px; left: -1px; border-top: 1px solid; border-left: 1px solid; }
+    .hud-corner::after { bottom: -1px; right: -1px; border-bottom: 1px solid; border-right: 1px solid; }
+    .hud-corner:hover::before, .hud-corner:hover::after { opacity: 1; }
+
+    .glass {
+        background: color-mix(in oklch, var(--card) 52%, transparent);
+        backdrop-filter: blur(18px) saturate(1.35);
+        -webkit-backdrop-filter: blur(18px) saturate(1.35);
+    }
+
+    .accent-glow {
+        box-shadow:
+            0 0 0 1px color-mix(in oklch, var(--domain) 20%, transparent),
+            0 20px 64px -24px color-mix(in oklch, var(--domain) 55%, transparent);
+    }
+
+    .fade-edges {
+        -webkit-mask-image: linear-gradient(to right, transparent, black 7%, black 93%, transparent);
+        mask-image: linear-gradient(to right, transparent, black 7%, black 93%, transparent);
+    }
+
+    .stroke-text {
+        color: transparent;
+        -webkit-text-stroke: 1px color-mix(in oklch, var(--foreground) 24%, transparent);
+    }
+
+    .writing-vertical {
+        writing-mode: vertical-rl;
+        text-orientation: mixed;
+    }
+
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+}
+
+@keyframes grainShift {
+    0%   { transform: translate(0, 0); }
+    25%  { transform: translate(-2%, 1%); }
+    50%  { transform: translate(1%, -2%); }
+    75%  { transform: translate(-1%, -1%); }
+    100% { transform: translate(2%, 1%); }
+}
+
+@keyframes caret {
+    0%, 49%   { opacity: 1; }
+    50%, 100% { opacity: 0; }
+}
+
+@keyframes tickerScroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+    }
+    .grain-overlay { animation: none; }
 }

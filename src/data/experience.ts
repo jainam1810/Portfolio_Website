@@ -1,0 +1,105 @@
+import type { Role } from './types'
+import prodigyLogo from '@/assets/prodigy.jpg'
+
+export const roles: Role[] = [
+  {
+    title: 'Software Engineer (Part-time)',
+    company: 'Dizzy Otter Ltd',
+    logo: '/dizzy-otter-logo.png',
+    period: 'Feb 2026 — Present',
+    location: 'Exeter, United Kingdom (Hybrid)',
+    domains: ['ml', 'sec'],
+    points: [
+      'Build full-scale software products end-to-end from architecture and development to testing and deployment',
+      'Developing AI-powered categorisation and analysis features across multiple concurrent projects, leveraging Generative AI to accelerate delivery, running security and bug analysis to ensure client-safe and vulnerability-free output.',
+      'Co-ordinating directly with the CTO and clients to gather requirements, present project progress, incorporate feedback, and deliver high-quality solutions within tight timelines.',
+    ],
+    tags: [
+      'Full-Stack Development',
+      'AI orchestration',
+      'Typescript',
+      'Javascript Frameworks',
+      'Client Communication & Agile Delivery',
+    ],
+  },
+  {
+    title: 'Sortation Associate (Part-time)',
+    company: 'Amazon Warehouse',
+    logo: '/amazon-logo.png',
+    period: 'Nov 2025 — Jan 2026',
+    location: 'Exeter, United Kingdom',
+    domains: [],
+    points: [
+      'Sort, scan, and divert packages to final destinations using RF scanners and conveyor systems, consistently meeting productivity and accuracy targets.',
+      'Handle physical tasks such as unloading, lifting, and relocating goods up to 23 kg across multiple shifts while following safety and quality standards.',
+      'Collaborate with team members to resolve sorting bottlenecks and improve workflow efficiency, maintaining flexibility and a positive attitude toward new tasks.',
+    ],
+    tags: ['Teamwork & Collaboration', 'Productivity & Efficiency', 'Attention-to-Detail & Accuracy'],
+  },
+  {
+    title: 'Blockchain Research Intern (Operational Risk)',
+    company: 'KIFS Housing Finance Ltd',
+    logo: '/Kifs-logo.png',
+    period: 'Jun 2025 — Jul 2025',
+    location: 'Mumbai, India',
+    domains: ['chain', 'ml', 'sec'],
+    points: [
+      'Researched and proposed an AI + Blockchain-based ledger for loan risk and fraud detection, improving processing speed by 30–40% and reducing manual intervention by 50%.',
+      'Designed a strategic implementation plan inspired by Figure Technologies (USA) to enhance system efficiency.',
+      'Projected improvements included 20% higher fraud detection accuracy and 15–20% cost savings, demonstrating measurable impact.',
+    ],
+    tags: [
+      'XGBoost & Autoencoders',
+      'Python & Golang',
+      'Scikit-learn & PyTorch',
+      'Hyperledger Fabric & Corda',
+    ],
+  },
+  {
+    title: 'Founder',
+    company: 'Sorneshia',
+    logo: '/Sorneshia-Logo.jpg',
+    period: 'Jun 2024 — May 2025',
+    location: 'Mumbai, India (Remote)',
+    domains: [],
+    points: [
+      'Founded Sorneshia — a print-on-demand clothing brand, achieving 80+ sales, £830 revenue, £10 average order value, and a 23% profit margin within 8 months.',
+      'Designed and managed a Shopify e-commerce store, ensuring efficient 2-7 day delivery across India and enhancing customer satisfaction.',
+      'Executed targeted marketing campaigns by collaborating with influencer and social media agencies, while managing self-run Meta and influencer campaigns to reduce costs and drive sales growth.',
+    ],
+    tags: ['HTML CSS JavaScript', 'Excel & PowerBI', 'Google Analytics', 'Meta & Google Ads'],
+  },
+  {
+    title: 'Introducing Broker & Trader',
+    company: 'Oron Trade Ltd',
+    logo: '/Oron_Logo.png',
+    period: 'Aug 2023 — May 2025',
+    location: 'Mumbai, India',
+    domains: ['ml'],
+    points: [
+      'Engaged with 120+ clients and delivered seminars to over 1,000 attendees, explaining the global foreign exchange market and guiding them on investment and trading opportunities.',
+      'Conducted in-depth market analysis across forex, equities, and cryptocurrency, developing algorithmic trading strategies based on order blocks, liquidity sweeps, and market structure — achieving a 65% win ratio.',
+      'Applied institutional trading insights, risk management techniques, and strong communication skills to deliver actionable trading signals and build lasting client relationships.',
+    ],
+    tags: [
+      'Quantitative & Analytical Thinking',
+      'Risk Management & Forex',
+      'Financial Modeling',
+      'Communication',
+    ],
+  },
+  {
+    title: 'Web Developer',
+    company: 'Prodigy InfoTech',
+    logo: prodigyLogo,
+    period: 'Jun 2024',
+    location: 'Mumbai, India (Remote)',
+    domains: [],
+    points: [
+      'Developed interactive web applications using HTML, CSS, JavaScript, and Bootstrap, including a dynamic menu, stopwatch, Tic-Tac-Toe game, and portfolio website.',
+      'Improved UI responsiveness by 30% and reduced page load times by 25%, leading to higher usability and user engagement.',
+      'Managed version control with Git and GitHub, ensuring clean code structure, efficient collaboration, and long-term maintainability.',
+    ],
+    tags: ['HTML', 'CSS', 'JavaScript', 'Git', 'GitHub', 'Bootstrap'],
+  },
+]
