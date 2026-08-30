@@ -119,13 +119,12 @@ export function useKonami(onTrigger: () => void = launchCricketFireworks) {
   }, [])
 }
 
-/** Smooth-scrolls to a section id, going through Lenis when it is active. */
+/**
+ * Anchor navigation only. Uses the browser's own smooth scroll, so wheel and
+ * trackpad scrolling keep the operating system's native speed and feel.
+ */
 export function useScrollTo() {
   return useCallback((id: string) => {
-    const el = document.getElementById(id)
-    if (!el) return
-    const lenis = (window as unknown as { lenis?: { scrollTo: (t: Element, o?: object) => void } }).lenis
-    if (lenis) lenis.scrollTo(el, { offset: -8 })
-    else el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }, [])
 }

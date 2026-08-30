@@ -27,7 +27,7 @@ export function Section({
   contentClassName?: string
 }) {
   return (
-    <section id={id} className={cn('relative scroll-mt-24 py-20 md:py-24', className)}>
+    <section id={id} className={cn('defer-offscreen relative scroll-mt-24 py-20 md:py-24', className)}>
       <div className="mx-auto w-full max-w-[1440px] px-5 md:px-10 xl:pr-28">
         <header className="mb-10 md:mb-12">
           <Reveal className="flex items-center gap-3">

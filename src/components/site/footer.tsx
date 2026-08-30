@@ -56,8 +56,8 @@ export function Footer() {
         </div>
 
         {/* Oversized wordmark, cropped by the viewport edge */}
-        <div className="fade-edges mt-16 select-none">
-          <p className="stroke-text font-display text-center leading-[0.8] whitespace-nowrap [font-size:clamp(3.5rem,17vw,15rem)]">
+        <div className="fade-edges mt-16 select-none overflow-hidden">
+          <p className="stroke-text font-display text-center leading-[0.8] whitespace-nowrap [font-size:clamp(2.25rem,15vw,15rem)]">
             {site.name}
           </p>
         </div>

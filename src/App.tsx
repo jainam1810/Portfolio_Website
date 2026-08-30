@@ -1,7 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
-import { ReactLenis } from 'lenis/react'
-import type { LenisRef } from 'lenis/react'
 import { Tooltip } from 'radix-ui'
 import { DomainProvider } from '@/components/domain-context'
 import { Nav, ScrollProgress } from '@/components/site/nav'
@@ -22,28 +20,18 @@ import { EASE_OUT } from '@/components/anim'
 
 export default function App() {
   const [loading, setLoading] = useState(true)
-  const lenisRef = useRef<LenisRef>(null)
 
   useKonami()
 
   useEffect(() => {
-    const timer = window.setTimeout(() => setLoading(false), 1500)
+    const timer = window.setTimeout(() => setLoading(false), 900)
     return () => window.clearTimeout(timer)
   }, [])
-
-  // Expose the instance so smooth-scroll navigation can route through Lenis.
-  useEffect(() => {
-    const w = window as unknown as { lenis?: unknown }
-    w.lenis = lenisRef.current?.lenis
-    return () => {
-      delete w.lenis
-    }
-  }, [loading])
 
   return (
     <DomainProvider>
       <Tooltip.Provider delayDuration={200}>
-        <ReactLenis root ref={lenisRef} options={{ lerp: 0.11, wheelMultiplier: 0.9 }}>
+        <>
           <AnimatePresence>{loading && <Loader />}</AnimatePresence>
 
           <div className="grain-overlay" aria-hidden />
@@ -51,7 +39,7 @@ export default function App() {
           <Nav />
 
           <main>
-            <Hero />
+            <Hero ready={!loading} />
             <Ticker />
             <About />
             <DomainsSection />
@@ -64,7 +52,7 @@ export default function App() {
 
           <Footer />
           <BackToTop />
-        </ReactLenis>
+        </>
       </Tooltip.Provider>
     </DomainProvider>
   )
@@ -74,7 +62,7 @@ function Loader() {
   return (
     <motion.div
       exit={{ opacity: 0, filter: 'blur(6px)' }}
-      transition={{ duration: 0.7, ease: EASE_OUT }}
+      transition={{ duration: 0.4, ease: EASE_OUT }}
       className="fixed inset-0 z-[200] grid place-items-center bg-background"
     >
       <div className="flex flex-col items-center">

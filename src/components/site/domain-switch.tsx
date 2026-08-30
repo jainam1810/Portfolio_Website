@@ -29,7 +29,7 @@ export function DomainSwitch({
       role="tablist"
       aria-label="Filter by domain"
       className={cn(
-        'inline-flex items-center gap-0.5 rounded-full border border-border/80 bg-background/60 p-1 backdrop-blur-xl',
+        'inline-flex w-max items-center gap-0.5 rounded-full border border-border/80 bg-background/90 p-1',
         className,
       )}
     >
@@ -43,7 +43,7 @@ export function DomainSwitch({
             data-domain={opt.id}
             onClick={() => setActive(opt.id)}
             className={cn(
-              'relative rounded-full font-mono uppercase tracking-[0.14em] transition-colors duration-300',
+              'relative shrink-0 rounded-full font-mono whitespace-nowrap uppercase tracking-[0.14em] transition-colors duration-300',
               size === 'sm' ? 'px-2.5 py-1 text-[10px]' : 'px-3.5 py-1.5 text-[11px]',
               isActive ? 'text-background' : 'text-muted-foreground hover:text-foreground',
             )}

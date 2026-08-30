@@ -49,15 +49,14 @@ export function Nav() {
       >
         <div
           className={cn(
-            'pointer-events-none absolute inset-0 transition-opacity duration-500',
+            'pointer-events-none absolute inset-x-0 top-0 -bottom-8 transition-opacity duration-500',
             condensed ? 'opacity-100' : 'opacity-0',
           )}
+          // A gradient rather than a backdrop-filter: this bar is fixed, so a
+          // blur here would be recomputed on every single scroll frame.
           style={{
             background:
-              'linear-gradient(to bottom, color-mix(in oklch, var(--background) 88%, transparent), transparent)',
-            backdropFilter: 'blur(14px)',
-            WebkitBackdropFilter: 'blur(14px)',
-            maskImage: 'linear-gradient(to bottom, black 55%, transparent)',
+              'linear-gradient(to bottom, var(--background) 0%, var(--background) 42%, color-mix(in oklch, var(--background) 72%, transparent) 68%, transparent 100%)',
           }}
         />
 
@@ -86,7 +85,7 @@ export function Nav() {
             </span>
             <button
               onClick={() => setOpen(true)}
-              className="group flex items-center gap-2 rounded-full border border-border bg-background/60 px-3.5 py-1.5 font-mono text-[11px] tracking-[0.18em] uppercase backdrop-blur-xl transition-colors hover:border-[var(--domain)] hover:text-[var(--domain)]"
+              className="group flex items-center gap-2 rounded-full border border-border bg-background/60 px-3.5 py-1.5 font-mono text-[11px] tracking-[0.18em] uppercase transition-colors hover:border-[var(--domain)] hover:text-[var(--domain)]"
             >
               Menu
               <span className="flex flex-col gap-[3px]">
@@ -143,12 +142,20 @@ function MenuOverlay({
                 </VisuallyHidden.Root>
 
                 <div className="mx-auto flex w-full max-w-[1440px] flex-1 flex-col px-5 py-5 md:px-10">
-                  <div className="flex items-center justify-between">
-                    <DomainSwitch layoutId="domain-switch-menu" size="sm" />
+                  <div className="flex items-center justify-between gap-3">
+                    {/* The switcher is wider than a phone. Let it scroll inside its
+                        own track rather than pushing the close button off screen. */}
+                    <div className="relative min-w-0 flex-1">
+                      <div className="no-scrollbar -mx-1 overflow-x-auto px-1">
+                        <DomainSwitch layoutId="domain-switch-menu" size="sm" />
+                      </div>
+                      {/* Fade on the trailing edge so it reads as scrollable */}
+                      <div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-background to-transparent sm:hidden" />
+                    </div>
                     <Dialog.Close asChild>
                       <button
                         aria-label="Close menu"
-                        className="grid size-9 place-items-center rounded-full border border-border transition-colors hover:border-[var(--domain)] hover:text-[var(--domain)]"
+                        className="grid size-9 shrink-0 place-items-center rounded-full border border-border transition-colors hover:border-[var(--domain)] hover:text-[var(--domain)]"
                       >
                         <X className="size-4" />
                       </button>

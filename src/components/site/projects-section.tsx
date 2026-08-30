@@ -10,9 +10,6 @@ import { EASE_OUT } from '@/components/anim'
 import { BrandGlyph } from '@/lib/icons'
 import { cn } from '@/lib/utils'
 
-/** Chips shown before collapsing the rest into a "+N" counter. */
-const STACK_LIMIT = 5
-
 export function ProjectsSection() {
   const { active, matches } = useDomainState()
   const visible = projects.filter((p) => matches(p.domains))
@@ -42,9 +39,6 @@ export function ProjectsSection() {
 }
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
-  const shown = project.stack.slice(0, STACK_LIMIT)
-  const overflow = project.stack.length - shown.length
-
   return (
     <motion.article
       layout
@@ -83,13 +77,14 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         </span>
       </div>
 
-      {/* Row 2 - title, clamped to two lines so every card aligns */}
-      <h3 className="relative mt-3 line-clamp-2 min-h-[2.1em] font-display display-sm text-foreground transition-colors duration-500 group-hover:text-[var(--domain)]">
+      {/* Cards stay uniform through the grid, not by truncating content:
+          items in a row stretch to equal height and the links pin to the bottom. */}
+      <h3 className="relative mt-3 font-display display-sm text-foreground transition-colors duration-500 group-hover:text-[var(--domain)]">
         {project.title}
       </h3>
 
       {/* Row 3 - domain tags */}
-      <div className="relative mt-2 flex min-h-[1.5rem] flex-wrap gap-1.5">
+      <div className="relative mt-2 flex flex-wrap gap-1.5">
         {project.domains.map((d) => (
           <span
             key={d}
@@ -102,21 +97,21 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       </div>
 
       {/* Row 4 - summary, fixed at three lines */}
-      <p className="relative mt-3 line-clamp-3 min-h-[3.9em] text-[13px] leading-[1.45] text-muted-foreground">
+      <p className="relative mt-3 text-[13px] leading-[1.45] text-muted-foreground">
         {project.summary}
       </p>
 
       {/* Row 5 - result, fixed at four lines */}
       <div className="relative mt-3 rounded-md border border-[var(--domain)]/15 bg-[var(--domain)]/[0.06] p-3">
         <p className="eyebrow mb-1 text-[9px] text-[var(--domain)]">Result</p>
-        <p className="line-clamp-4 min-h-[5em] text-[12.5px] leading-[1.45] text-foreground/85">
+        <p className="text-[12.5px] leading-[1.45] text-foreground/85">
           {project.impact}
         </p>
       </div>
 
       {/* Row 6 - stack, capped to one row's worth */}
-      <ul className="relative mt-3 flex min-h-[1.75rem] flex-wrap gap-1.5">
-        {shown.map((tech) => (
+      <ul className="relative mt-3 flex flex-wrap gap-1.5">
+        {project.stack.map((tech) => (
           <li
             key={tech}
             className="flex items-center gap-1.5 rounded border border-border/70 px-1.5 py-0.5 font-mono text-[9.5px] text-muted-foreground"
@@ -125,14 +120,6 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             {tech}
           </li>
         ))}
-        {overflow > 0 && (
-          <li
-            title={project.stack.slice(STACK_LIMIT).join(', ')}
-            className="rounded border border-border/70 px-1.5 py-0.5 font-mono text-[9.5px] text-muted-foreground/80"
-          >
-            +{overflow}
-          </li>
-        )}
       </ul>
 
       {/* Row 7 - links, pinned to the bottom of every card */}

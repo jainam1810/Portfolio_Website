@@ -15,7 +15,7 @@ import { cn } from '@/lib/utils'
 const CUTOUT = '/profile-cutout.png'
 const FALLBACK_PHOTO = '/profile.jpg'
 
-export function Hero() {
+export function Hero({ ready = true }: { ready?: boolean }) {
   const ref = useRef<HTMLElement>(null)
   const reduced = useReducedMotion()
   const typed = useTypewriter(site.taglines)
@@ -44,7 +44,7 @@ export function Hero() {
         }}
       />
 
-      <Portrait y={portraitY} />
+      <Portrait y={portraitY} ready={ready} />
 
       {/* Left edge marker */}
       <span className="writing-vertical absolute top-1/2 left-4 hidden -translate-y-1/2 font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase xl:block">
@@ -57,7 +57,7 @@ export function Hero() {
       >
         <motion.p
           initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={ready ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
           transition={{ duration: 0.7, ease: EASE_OUT }}
           className="mb-7 flex items-start gap-2.5 font-mono text-[10px] leading-relaxed tracking-[0.16em] text-muted-foreground uppercase sm:text-[11px] sm:tracking-[0.2em]"
         >
@@ -72,8 +72,14 @@ export function Hero() {
             smart contracts, and the guardrails around them. */}
         <h1 className="font-display display-xl text-foreground">
           <span className="flex flex-wrap items-baseline gap-x-[0.2em]">
-            <Word text={site.heroLead} delay={0.08} />
-            <Word text={`${domainList[0].word}.`} domain={domainList[0].id} delay={0.16} dimmed={active !== 'all' && active !== domainList[0].id} />
+            <Word text={site.heroLead} delay={0.1} ready={ready} />
+            <Word
+              text={`${domainList[0].word}.`}
+              domain={domainList[0].id}
+              delay={0.24}
+              ready={ready}
+              dimmed={active !== 'all' && active !== domainList[0].id}
+            />
           </span>
           <span className="mt-1 flex flex-wrap items-baseline gap-x-[0.2em]">
             {domainList.slice(1).map((d, i) => (
@@ -81,7 +87,8 @@ export function Hero() {
                 key={d.id}
                 text={`${d.word}.`}
                 domain={d.id}
-                delay={0.24 + i * 0.08}
+                delay={0.38 + i * 0.14}
+                ready={ready}
                 dimmed={active !== 'all' && active !== d.id}
               />
             ))}
@@ -90,7 +97,7 @@ export function Hero() {
 
         <motion.div
           initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={ready ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
           transition={{ delay: 0.5, duration: 0.7, ease: EASE_OUT }}
           className="mt-9 max-w-lg"
         >
@@ -102,31 +109,34 @@ export function Hero() {
             {site.intro}
           </p>
 
-          <div className="mt-7 flex flex-wrap items-center gap-2.5">
-            {site.cvs.map((cv, i) => (
-              <a
-                key={cv.label}
-                href={cv.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={cn(
-                  'hud-corner group flex items-center gap-2.5 rounded-md px-4 py-2.5 text-sm font-medium transition-all duration-300',
-                  i === 0
-                    ? 'bg-[var(--domain)] text-background hover:brightness-110'
-                    : 'border border-border bg-background/40 text-foreground backdrop-blur-sm hover:border-[var(--domain)] hover:text-[var(--domain)]',
-                )}
-              >
-                <Download className="size-3.5" />
-                <span className="flex flex-col leading-tight">
-                  {cv.label}
-                  <span className="font-mono text-[9px] tracking-[0.12em] uppercase opacity-60">
-                    {cv.note}
+          <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-2.5">
+            {/* Both CVs share one row on every width; each takes half a phone. */}
+            <div className="flex gap-2.5">
+              {site.cvs.map((cv, i) => (
+                <a
+                  key={cv.label}
+                  href={cv.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={cn(
+                    'hud-corner group flex min-w-0 flex-1 items-center gap-2 rounded-md px-3 py-2.5 text-sm font-medium transition-all duration-300 sm:flex-none sm:gap-2.5 sm:px-4',
+                    i === 0
+                      ? 'bg-[var(--domain)] text-background hover:brightness-110'
+                      : 'border border-border bg-background/60 text-foreground hover:border-[var(--domain)] hover:text-[var(--domain)]',
+                  )}
+                >
+                  <Download className="size-3.5 shrink-0" />
+                  <span className="flex min-w-0 flex-col leading-tight">
+                    <span className="truncate">{cv.label}</span>
+                    <span className="truncate font-mono text-[9px] tracking-[0.12em] uppercase opacity-60">
+                      {cv.note}
+                    </span>
                   </span>
-                </span>
-              </a>
-            ))}
+                </a>
+              ))}
+            </div>
 
-            <div className="ml-1 flex gap-1.5">
+            <div className="flex gap-1.5 sm:ml-1">
               {site.socials.map((s) => (
                 <a
                   key={s.label}
@@ -134,7 +144,7 @@ export function Hero() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={s.label}
-                  className="grid size-9 place-items-center rounded-md border border-border bg-background/40 text-muted-foreground backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--domain)] hover:text-[var(--domain)]"
+                  className="grid size-9 place-items-center rounded-md border border-border bg-background/60 text-muted-foreground transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--domain)] hover:text-[var(--domain)]"
                 >
                   <BrandGlyph name={s.icon} className="size-3.5" />
                 </a>
@@ -142,7 +152,7 @@ export function Hero() {
             </div>
           </div>
 
-          <StatusStrip />
+          <StatusStrip ready={ready} />
         </motion.div>
       </motion.div>
 
@@ -162,34 +172,46 @@ export function Hero() {
   )
 }
 
-/** One masked word of the headline, optionally tinted by its domain. */
+/** One word of the headline: fades and eases up to full size. */
 function Word({
   text,
   domain,
   delay,
+  ready,
   dimmed = false,
 }: {
   text: string
   domain?: string
   delay: number
+  ready: boolean
   dimmed?: boolean
 }) {
+  // Reduced motion still gets a fade - opacity is not motion. Previously this
+  // disabled the entrance outright, which looked like nothing happening at all.
+  const reduced = useReducedMotion()
+  const from = reduced ? { opacity: 0 } : { opacity: 0, scale: 0.96 }
+  const to = reduced ? { opacity: 1 } : { opacity: 1, scale: 1 }
+
   return (
-    <span className="inline-block overflow-hidden pb-[0.06em]">
-      <motion.span
+    // Two layers on purpose: the outer one owns the entrance, the inner one owns
+    // the dimmed state. Nested opacity multiplies, so neither fights the other.
+    <motion.span
+      className="inline-block"
+      initial={from}
+      animate={ready ? to : from}
+      transition={{ duration: 0.85, delay, ease: EASE_OUT }}
+    >
+      <span
         data-domain={domain}
         className={cn(
           'inline-block transition-all duration-500',
           domain ? 'text-[var(--domain)]' : 'text-foreground',
           dimmed && 'opacity-25 blur-[1.5px]',
         )}
-        initial={{ y: '110%' }}
-        animate={{ y: '0%' }}
-        transition={{ duration: 0.95, delay, ease: EASE_OUT }}
       >
         {text}
-      </motion.span>
-    </span>
+      </span>
+    </motion.span>
   )
 }
 
@@ -197,7 +219,7 @@ function Word({
  * The cut-out portrait, anchored bottom-right and sitting behind the headline
  * so the type crosses over it.
  */
-function Portrait({ y }: { y: MotionValue<string> }) {
+function Portrait({ y, ready }: { y: MotionValue<string>; ready: boolean }) {
   // Flips to false if the cut-out is absent, so the hero never shows a broken image.
   const [cutout, setCutout] = useState(true)
 
@@ -205,9 +227,9 @@ function Portrait({ y }: { y: MotionValue<string> }) {
     <motion.div
       style={{ y }}
       initial={{ opacity: 0, scale: 1.04 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 1.3, delay: 0.15, ease: EASE_OUT }}
-      className="pointer-events-none absolute right-0 bottom-0 z-10 h-[68%] w-[86%] origin-bottom-right sm:h-[74%] sm:w-[64%] lg:h-[88%] lg:w-[46%] xl:right-[3%] xl:w-[42%]"
+      animate={ready ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 1.04 }}
+      transition={{ duration: 1.3, delay: 0.2, ease: EASE_OUT }}
+      className="pointer-events-none absolute right-0 bottom-0 z-10 h-[62%] w-[80%] origin-bottom-right opacity-35 sm:h-[74%] sm:w-[64%] sm:opacity-60 lg:h-[88%] lg:w-[46%] lg:opacity-100 xl:right-[3%] xl:w-[42%]"
     >
       <div
         className={cn('duotone-wrap relative size-full', !cutout && 'photo-vignette')}
@@ -231,7 +253,7 @@ function Portrait({ y }: { y: MotionValue<string> }) {
       <div
         className={cn(
           'absolute inset-0 bg-gradient-to-r from-background to-transparent',
-          cutout ? 'via-background/30 lg:via-transparent' : 'via-background/55 lg:via-background/20',
+          cutout ? 'via-background/55 lg:via-transparent' : 'via-background/75 lg:via-background/20',
         )}
       />
       <div className="absolute inset-x-0 bottom-0 h-1/5 bg-gradient-to-t from-background to-transparent" />
@@ -240,7 +262,7 @@ function Portrait({ y }: { y: MotionValue<string> }) {
 }
 
 /** A live readout, in the spirit of an instrument panel. */
-function StatusStrip() {
+function StatusStrip({ ready }: { ready: boolean }) {
   const { active } = useDomainState()
   const focus =
     active === 'all'
@@ -250,11 +272,11 @@ function StatusStrip() {
   return (
     <motion.dl
       initial={{ opacity: 0, y: 14 }}
-      animate={{ opacity: 1, y: 0 }}
+      animate={ready ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }}
       transition={{ delay: 0.68, duration: 0.7, ease: EASE_OUT }}
-      className="hud-corner mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 rounded-md border border-border bg-background/50 px-4 py-3 font-mono text-[10px] backdrop-blur-sm"
+      className="hud-corner mt-8 flex flex-col gap-2 rounded-md border border-border bg-background/70 px-4 py-3 font-mono text-[10px] sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6 sm:gap-y-2"
     >
-      <div className="flex items-center gap-2 text-[var(--domain)]">
+      <div className="flex items-center gap-2 border-b border-border pb-2 text-[var(--domain)] sm:border-0 sm:pb-0">
         <span className="relative flex size-1.5">
           <span className="absolute inline-flex size-full animate-ping rounded-full bg-current opacity-70" />
           <span className="relative inline-flex size-1.5 rounded-full bg-current" />
@@ -266,9 +288,9 @@ function StatusStrip() {
         ['Based', site.location],
         ['Focus', focus ?? ''],
       ].map(([k, v]) => (
-        <div key={k} className="flex items-baseline gap-2">
+        <div key={k} className="flex items-baseline justify-between gap-3 sm:justify-start sm:gap-2">
           <dt className="tracking-[0.14em] text-muted-foreground uppercase">{k}</dt>
-          <dd className="text-foreground/90">{v}</dd>
+          <dd className="text-right text-foreground/90 sm:text-left">{v}</dd>
         </div>
       ))}
     </motion.dl>
