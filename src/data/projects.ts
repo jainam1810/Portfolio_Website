@@ -57,7 +57,7 @@ export const projects: Project[] = [
     ],
     links: [
       { label: 'Live', href: 'https://crossborderx-frontend.vercel.app', kind: 'live' },
-      { label: 'API', href: 'https://github.com/jainam1810/crossborderx-api', kind: 'repo' },
+      { label: 'Backend', href: 'https://github.com/jainam1810/crossborderx-api', kind: 'repo' },
       { label: 'Frontend', href: 'https://github.com/jainam1810/crossborderx-frontend', kind: 'repo' },
     ],
   },
@@ -77,7 +77,7 @@ export const projects: Project[] = [
     links: [
       { label: 'GitHub', href: 'https://github.com/jainam1810/RemitChain', kind: 'repo' },
       {
-        label: 'Demo',
+        label: 'Video',
         href: 'https://drive.google.com/file/d/1DwVyKL0udW9F8XenC861UIqqlZJfwkZV/view?usp=sharing',
         kind: 'demo',
       },
@@ -92,7 +92,7 @@ export const projects: Project[] = [
     status: 'Shipped',
     featured: true,
     summary:
-      'An AI-assisted tool that flags suspicious transactions, built in Go on the Nim SDK with Claude for the Liminal Vibe Banking Hackathon.',
+      'An AI-assisted tool that flags suspicious transactions, built in Go on the Nim SDK for the Liminal Vibe Banking Hackathon.',
     impact:
       'Streams transaction context to an LLM agent over WebSockets with a built-in confirmation flow, so no write operation executes without explicit approval — the human stays in the loop on every state change.',
     stack: ['Go', 'Claude', 'WebSockets', 'Nim Go SDK', 'React'],
@@ -103,7 +103,7 @@ export const projects: Project[] = [
         kind: 'repo',
       },
       {
-        label: 'Demo',
+        label: 'Video',
         href: 'https://drive.google.com/file/d/1KvJ2GQn74eZPzK1ZJr6XbAjoyAwrSWVS/view?usp=sharing',
         kind: 'demo',
       },
@@ -128,7 +128,7 @@ export const projects: Project[] = [
         kind: 'repo',
       },
       {
-        label: 'Demo',
+        label: 'Video',
         href: 'https://drive.google.com/file/d/13m88EsBa5mc8n9E_KlV0PIOucQZqB_Rg/view',
         kind: 'demo',
       },
@@ -183,7 +183,7 @@ export const projects: Project[] = [
     links: [
       { label: 'GitHub', href: 'https://github.com/jainam1810/faucet-dapp', kind: 'repo' },
       {
-        label: 'Demo',
+        label: 'Video',
         href: 'https://drive.google.com/file/d/1Ym9dTf-kELQWafDMGg2qVsjM03RKgblg/view?usp=drive_link',
         kind: 'demo',
       },

@@ -2,8 +2,8 @@ export const site = {
   name: 'Jainam Varia',
   initials: 'JV',
   /** The hero line: "I build systems that LEARN. SETTLE. HOLD." */
-  heroLead: 'I build systems that',
-  badge: 'Creating Something Big — Stay Tuned! 😉',
+  heroLead: 'I build',
+  badge: 'Creating Something Big — Stay Tuned!',
   role: 'B.Tech Computer Engineer · MSc Financial Technology',
   location: 'Exeter, United Kingdom',
   timezone: 'GMT +0',
@@ -59,7 +59,7 @@ export const site = {
 
   /** Real, verifiable figures drawn from the CV */
   stats: [
-    { value: 9, suffix: '', label: 'Projects shipped', note: 'AI/ML, blockchain & security' },
+    { value: 10, suffix: '+', label: 'Projects shipped', note: 'AI/ML, blockchain & security' },
     { value: 6, suffix: '', label: 'Professional roles', note: 'Startups to corporates' },
     { value: 120, suffix: '+', label: 'Clients advised', note: 'Markets & investment' },
     { value: 1000, suffix: '+', label: 'Seminar attendees', note: 'Taught FX & markets' },

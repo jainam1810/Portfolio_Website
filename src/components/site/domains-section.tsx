@@ -6,6 +6,12 @@ import { useDomainState } from '@/components/domain-context'
 import { domainList } from '@/data/domains'
 import type { Domain } from '@/data/types'
 import { EASE_OUT } from '@/components/anim'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion'
 import { cn } from '@/lib/utils'
 
 /**
@@ -22,7 +28,7 @@ export function DomainsSection() {
       index="02"
       eyebrow="Three domains, one discipline"
       title="Models, contracts and guardrails"
-      lead="A model that decides, a contract that moves the money, and the guardrails around both. I work across all three because in financial software they are not separable concerns — the interesting failures happen where they meet."
+      lead="A model that scores the risk; a smart contract that settles the payment; and the guardrails that stop either being abused. I work across all three because in financial software they are not separable concerns — the interesting failures happen where they meet."
       aside={<DomainSwitch className="hidden md:inline-flex" size="sm" layoutId="domain-switch-section" />}
     >
       {/* Desktop: expanding panels */}
@@ -41,7 +47,7 @@ export function DomainsSection() {
             className="hud-corner rounded-lg border border-border bg-card/40 p-6"
           >
             <PanelHead domain={domain} />
-            <PanelBody domain={domain} />
+            <PanelBody domain={domain} collapsible />
           </div>
         ))}
       </div>
@@ -127,31 +133,58 @@ function PanelHead({ domain }: { domain: Domain }) {
   )
 }
 
-function PanelBody({ domain, compact = false }: { domain: Domain; compact?: boolean }) {
-  const groups = compact ? domain.groups.slice(0, 2) : domain.groups
-  const proof = compact ? domain.proof.slice(0, 1) : domain.proof
+function PanelBody({
+  domain,
+  compact = false,
+  collapsible = false,
+}: {
+  domain: Domain
+  compact?: boolean
+  /** Phones only: the full chip list is far too long to scroll past. */
+  collapsible?: boolean
+}) {
+  // Every panel shows every group, on both desktop and mobile.
+  const groups = domain.groups
+  const proof = domain.proof
+
+  const chips = (items: string[]) => (
+    <ul className="flex flex-wrap gap-1.5">
+      {items.map((item) => (
+        <li
+          key={item}
+          className="rounded border border-border/80 bg-background/50 px-2 py-1 font-mono text-[10px] tracking-wide text-muted-foreground transition-colors duration-300 hover:border-[var(--domain)]/50 hover:text-[var(--domain)]"
+        >
+          {item}
+        </li>
+      ))}
+    </ul>
+  )
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <p className="text-[13px] leading-[1.55] text-muted-foreground text-pretty">{domain.body}</p>
 
-      <div className={cn('mt-6 space-y-4', !compact && 'xl:grid xl:grid-cols-2 xl:gap-6 xl:space-y-0')}>
-        {groups.map((group) => (
-          <div key={group.name}>
-            <p className="eyebrow mb-2 text-muted-foreground/80">{group.name}</p>
-            <ul className="flex flex-wrap gap-1.5">
-              {group.items.map((item) => (
-                <li
-                  key={item}
-                  className="rounded border border-border/80 bg-background/50 px-2 py-1 font-mono text-[10px] tracking-wide text-muted-foreground transition-colors duration-300 hover:border-[var(--domain)]/50 hover:text-[var(--domain)]"
-                >
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
+      {collapsible ? (
+        <Accordion type="multiple" className="mt-5 border-t border-border">
+          {groups.map((group) => (
+            <AccordionItem key={group.name} value={group.name} className="border-b border-border">
+              <AccordionTrigger className="items-center gap-3 py-3 hover:no-underline">
+                <span className="eyebrow text-muted-foreground">{group.name}</span>
+              </AccordionTrigger>
+              <AccordionContent>{chips(group.items)}</AccordionContent>
+            </AccordionItem>
+          ))}
+        </Accordion>
+      ) : (
+        <div className={cn('mt-6 space-y-4', !compact && 'xl:grid xl:grid-cols-2 xl:gap-6 xl:space-y-0')}>
+          {groups.map((group) => (
+            <div key={group.name}>
+              <p className="eyebrow mb-2 text-muted-foreground/80">{group.name}</p>
+              {chips(group.items)}
+            </div>
+          ))}
+        </div>
+      )}
 
       <ul className="mt-auto space-y-2 border-t border-border pt-5">
         {proof.map((point) => (

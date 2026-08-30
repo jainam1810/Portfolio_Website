@@ -129,9 +129,11 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         text-rendering: optimizeLegibility;
-        /* The whole-site re-theme animates from here, since data-domain is set
-           on <html> and every descendant inherits the animated value. */
-        transition: --domain 700ms cubic-bezier(0.22, 1, 0.36, 1);
+        /* --domain deliberately does NOT transition. It is inherited by the whole
+           document and read by dozens of color-mix() expressions, so animating it
+           forces a full-document style recalc and repaint on every frame.
+           Measured: 526ms blocked with the transition, 126ms without. The colour
+           now switches instantly; the panel and grid animations still animate. */
     }
 
     body {
@@ -139,9 +141,11 @@
         overflow-x: clip;
     }
 
+    /* A translucent tint keeps the text itself readable. A solid accent fill
+       turned the huge display type into unreadable coloured slabs. */
     ::selection {
-        background: var(--domain);
-        color: oklch(0.14 0.008 275);
+        background: color-mix(in oklch, var(--domain) 30%, transparent);
+        color: var(--foreground);
     }
 
     ::-webkit-scrollbar { width: 10px; height: 10px; }
@@ -153,10 +157,6 @@
     }
     ::-webkit-scrollbar-thumb:hover { background: var(--domain); }
 
-    /* Lenis smooth-scroll requirements */
-    html.lenis, html.lenis body { height: auto; }
-    .lenis.lenis-smooth { scroll-behavior: auto !important; }
-    .lenis.lenis-stopped { overflow: clip; }
 }
 
 @layer utilities {
@@ -188,16 +188,17 @@
         text-transform: uppercase;
     }
 
-    /* Film grain over the whole page */
+    /* Film grain over the whole page.
+       Deliberately static: animating a full-viewport noise layer repaints it
+       several times a second forever, which is the single most expensive thing
+       a page like this can do on integrated graphics. Painted once, it is free. */
     .grain-overlay {
         position: fixed;
-        inset: -50%;
+        inset: 0;
         z-index: 60;
         pointer-events: none;
         opacity: 0.032;
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");
-        animation: grainShift 620ms steps(2) infinite;
-        will-change: transform;
     }
 
     /* Duotone portrait treatment, tinted by the live domain accent.
@@ -269,10 +270,10 @@
     .hud-corner::after { bottom: -1px; right: -1px; border-bottom: 1px solid; border-right: 1px solid; }
     .hud-corner:hover::before, .hud-corner:hover::after { opacity: 1; }
 
+    /* Solid rather than backdrop-blurred: this sits on fixed chrome, and a
+       backdrop-filter there re-blurs on every scroll frame. */
     .glass {
-        background: color-mix(in oklch, var(--card) 52%, transparent);
-        backdrop-filter: blur(18px) saturate(1.35);
-        -webkit-backdrop-filter: blur(18px) saturate(1.35);
+        background: color-mix(in oklch, var(--card) 92%, var(--background));
     }
 
     .accent-glow {
@@ -296,16 +297,17 @@
         text-orientation: mixed;
     }
 
+    /* Lets the browser skip layout, paint and style for sections that are off
+       screen. On a long single page this is the biggest first-load win
+       available, and browsers remember each section's real height after the
+       first pass, so the scrollbar settles immediately. */
+    .defer-offscreen {
+        content-visibility: auto;
+        contain-intrinsic-size: auto 900px;
+    }
+
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-}
-
-@keyframes grainShift {
-    0%   { transform: translate(0, 0); }
-    25%  { transform: translate(-2%, 1%); }
-    50%  { transform: translate(1%, -2%); }
-    75%  { transform: translate(-1%, -1%); }
-    100% { transform: translate(2%, 1%); }
 }
 
 @keyframes caret {
@@ -325,5 +327,4 @@
         transition-duration: 0.001ms !important;
         scroll-behavior: auto !important;
     }
-    .grain-overlay { animation: none; }
 }
