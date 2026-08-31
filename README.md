@@ -2,7 +2,7 @@
 
 A cinematic, editorial portfolio built around three domains: **AI/ML**, **Blockchain**, and **Security Engineering**.
 
-**Live:** [jv-techfolio.netlify.app](https://jv-techfolio.netlify.app/) · [portfolio-website-xi-three-98.vercel.app](https://portfolio-website-xi-three-98.vercel.app/)
+**Live:** [jv-techfolio.netlify.app](https://jv-techfolio.netlify.app/)
 
 ---
 
@@ -117,7 +117,7 @@ npm run preview
 npm run typecheck
 ```
 
-Build output is `build/`, matching the existing Netlify and Vercel configuration (build command `npm run build`, publish directory `build`).
+Build output is `build/`, matching the existing Netlify configuration (build command `npm run build`, publish directory `build`).
 
 ---
 

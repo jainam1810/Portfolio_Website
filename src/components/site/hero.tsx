@@ -109,7 +109,9 @@ export function Hero({ ready = true }: { ready?: boolean }) {
             {site.intro}
           </p>
 
-          <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-2.5">
+          {/* CVs, socials and the live readout are three stacked blocks with one
+              shared gap, so the rhythm between them is identical. */}
+          <div className="mt-7 flex flex-col items-start gap-5">
             {/* Both CVs share one row on every width; each takes half a phone. */}
             <div className="flex gap-2.5">
               {site.cvs.map((cv, i) => (
@@ -136,7 +138,7 @@ export function Hero({ ready = true }: { ready?: boolean }) {
               ))}
             </div>
 
-            <div className="flex gap-1.5 sm:ml-1">
+            <div className="flex gap-1.5">
               {site.socials.map((s) => (
                 <a
                   key={s.label}
@@ -150,9 +152,9 @@ export function Hero({ ready = true }: { ready?: boolean }) {
                 </a>
               ))}
             </div>
-          </div>
 
-          <StatusStrip ready={ready} />
+            <StatusStrip ready={ready} />
+          </div>
         </motion.div>
       </motion.div>
 
@@ -274,25 +276,17 @@ function StatusStrip({ ready }: { ready: boolean }) {
       initial={{ opacity: 0, y: 14 }}
       animate={ready ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }}
       transition={{ delay: 0.68, duration: 0.7, ease: EASE_OUT }}
-      className="hud-corner mt-8 flex flex-col gap-2 rounded-md border border-border bg-background/70 px-4 py-3 font-mono text-[10px] sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6 sm:gap-y-2"
+      // Two columns: labels size to the widest of them, values all start on the
+      // same line. Same structure on a phone and on a desktop.
+      className="hud-corner grid w-full max-w-md grid-cols-[auto_1fr] gap-x-6 gap-y-1.5 rounded-md border border-border bg-background/70 px-4 py-3 font-mono text-[10px]"
     >
-      <div className="flex items-center gap-2 border-b border-border pb-2 text-[var(--domain)] sm:border-0 sm:pb-0">
-        <span className="relative flex size-1.5">
-          <span className="absolute inline-flex size-full animate-ping rounded-full bg-current opacity-70" />
-          <span className="relative inline-flex size-1.5 rounded-full bg-current" />
-        </span>
-        <span className="tracking-[0.18em] uppercase">Live</span>
-      </div>
 
-      {[
-        ['Based', site.location],
-        ['Focus', focus ?? ''],
-      ].map(([k, v]) => (
-        <div key={k} className="flex items-baseline justify-between gap-3 sm:justify-start sm:gap-2">
-          <dt className="tracking-[0.14em] text-muted-foreground uppercase">{k}</dt>
-          <dd className="text-right text-foreground/90 sm:text-left">{v}</dd>
-        </div>
-      ))}
+      <dt className="tracking-[0.14em] text-muted-foreground uppercase">Based</dt>
+      <dd className="text-foreground/90">{site.location}</dd>
+
+      <dt className="tracking-[0.14em] text-muted-foreground uppercase">Focus</dt>
+      <dd className="text-foreground/90">{focus}</dd>
     </motion.dl>
   )
 }
+

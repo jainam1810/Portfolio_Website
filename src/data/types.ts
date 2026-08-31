@@ -33,13 +33,15 @@ export interface Project {
   /** Primary domain determines the accent; `domains` drives filtering */
   primary: DomainId
   domains: DomainId[]
-  /** Short status line, e.g. "Live" or "Prototype" */
-  status: 'Live' | 'Prototype' | 'Research' | 'Shipped'
+  /** Only shown when there is something worth saying. */
+  status?: 'Live' | 'Dormant'
   summary: string
   /** The measurable or architectural result - the reason it matters */
   impact: string
   stack: string[]
   links: { label: string; href: string; kind: 'repo' | 'live' | 'demo' }[]
+  /** Long-form write-up shown in a dialog rather than sending people away. */
+  writeUp?: { label: string; title: string; body: string[]; source?: string; sourceHref?: string }
   /** Flagship projects get a larger cell in the grid */
   featured?: boolean
 }
@@ -70,6 +72,8 @@ export interface Activity {
   meta: string
   points: string[]
   tags: string[]
+  /** Falls back to `icon` if the file is missing. */
+  logo?: string
   icon: 'trophy' | 'hands' | 'card'
 }
 

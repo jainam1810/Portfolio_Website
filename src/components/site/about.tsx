@@ -2,6 +2,7 @@ import { motion } from 'motion/react'
 import { Counter, Reveal } from '@/components/anim'
 import { Section } from '@/components/site/section'
 import { site } from '@/data/site'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 
 const SPECS = [
   { k: 'MSc', v: 'Financial Technology', note: 'University of Exeter' },
@@ -16,7 +17,7 @@ export function About() {
       id="about"
       index="01"
       eyebrow="About"
-      title="At the intersection of finance and technology"
+      title="Engineer who got into markets"
     >
       <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
         <div className="lg:col-span-7">
@@ -49,7 +50,7 @@ export function About() {
           </div>
 
           <Reveal delay={0.2}>
-            <div className="hud-corner mt-px flex items-center gap-3 rounded-b-lg border border-t-0 border-border px-5 py-4">
+            <div className="hud-corner mt-3 flex items-center gap-3 rounded-lg border border-border px-5 py-4">
               <span className="relative flex size-1.5">
                 <span className="absolute inline-flex size-full animate-ping rounded-full bg-[var(--domain)] opacity-70" />
                 <span className="relative inline-flex size-1.5 rounded-full bg-[var(--domain)]" />
@@ -104,7 +105,8 @@ function Creed() {
 function StatsBand() {
   return (
     <div className="mt-20 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-border bg-border md:mt-24 md:grid-cols-4">
-      {site.stats.map((stat, i) => (
+      {site.stats.map((stat, i) => {
+        const tile = (
         <motion.div
           key={stat.label}
           initial={{ opacity: 0, y: 20 }}
@@ -124,7 +126,20 @@ function StatsBand() {
             {stat.note}
           </div>
         </motion.div>
-      ))}
+        )
+
+        // Only the tiles carrying a hint get a tooltip.
+        return 'hint' in stat && stat.hint ? (
+          <Tooltip key={stat.label}>
+            <TooltipTrigger asChild>{tile}</TooltipTrigger>
+            <TooltipContent side="top" className="max-w-64 text-center">
+              {stat.hint}
+            </TooltipContent>
+          </Tooltip>
+        ) : (
+          tile
+        )
+      })}
     </div>
   )
 }

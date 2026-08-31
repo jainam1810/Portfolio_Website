@@ -11,6 +11,7 @@ import { ProjectsSection } from '@/components/site/projects-section'
 import { ExperienceSection } from '@/components/site/experience-section'
 import { SkillsSection } from '@/components/site/skills-section'
 import { EducationSection } from '@/components/site/education-section'
+import { ActivitiesSection } from '@/components/site/activities-section'
 import { ContactSection } from '@/components/site/contact-section'
 import { Footer } from '@/components/site/footer'
 import { BackToTop } from '@/components/site/back-to-top'
@@ -47,6 +48,7 @@ export default function App() {
             <ExperienceSection />
             <SkillsSection />
             <EducationSection />
+            <ActivitiesSection />
             <ContactSection />
           </main>
 

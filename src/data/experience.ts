@@ -10,9 +10,9 @@ export const roles: Role[] = [
     location: 'Exeter, United Kingdom (Hybrid)',
     domains: ['ml', 'sec'],
     points: [
-      'Build full-scale software products end-to-end from architecture and development to testing and deployment',
-      'Developing AI-powered categorisation and analysis features across multiple concurrent projects, leveraging Generative AI to accelerate delivery, running security and bug analysis to ensure client-safe and vulnerability-free output.',
-      'Co-ordinating directly with the CTO and clients to gather requirements, present project progress, incorporate feedback, and deliver high-quality solutions within tight timelines.',
+      'Build and ship whole products for clients: frontend, backend, and the AI features on top. I also handle the security and bug fixing before anything goes out.',
+      'Add AI where it saves the client time, from sorting content into categories to cutting steps out of a workflow.',
+      'Built the backend for one client that pulls an influencer’s public social media posts, sends them to Gemini, and scores how well they follow the rules, with a dashboard showing the result.',
     ],
     tags: [
       'Full-Stack Development',

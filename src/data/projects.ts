@@ -10,9 +10,9 @@ export const projects: Project[] = [
     status: 'Live',
     featured: true,
     summary:
-      'A non-custodial stablecoin payroll platform. Client companies hand over their freelancer lists, GlobePay prepares the payroll, and each client confirms with one wallet signature — every freelancer is then paid in USDC in a single transaction.',
+      'Payroll for companies paying freelancers abroad. They hand over the list, GlobePay works out who gets what, and the client signs once. Everyone gets paid in USDC in a single transaction.',
     impact:
-      'GlobePay never holds funds or private keys; USDC moves client wallet → freelancer wallet and the database stores only metadata. Tenant isolation is enforced twice — in every API route and again in Postgres row-level security. AI reads the messy freelancer list; all money maths, tax, FX and wallet validation is done in code, never by the model.',
+      "GlobePay is a non-custodial platform. It holds no funds and no keys, so USDC goes straight from the client's wallet to the freelancer's, and the database only records who got paid what. Clients can't see each other either, and that's checked in the API and again in Postgres. The AI reads their messy spreadsheet. Our approach is AI Generates, Code calculated, human approves",
     stack: [
       'Next.js',
       'TypeScript',
@@ -29,6 +29,11 @@ export const projects: Project[] = [
     links: [
       { label: 'Live', href: 'https://globe-pay-five.vercel.app', kind: 'live' },
       { label: 'GitHub', href: 'https://github.com/jainam1810/GlobePay', kind: 'repo' },
+      {
+        label: 'Video',
+        href: 'https://drive.google.com/file/d/1tEMTBMTIPN0Y8t-30ZrYDONQFpdBSAs1/view?usp=sharing',
+        kind: 'demo',
+      },
     ],
   },
   {
@@ -37,12 +42,12 @@ export const projects: Project[] = [
     year: '2026',
     primary: 'chain',
     domains: ['chain', 'sec'],
-    status: 'Prototype',
+    status: 'Dormant',
     featured: true,
     summary:
-      'A US→UK remittance platform that uses stablecoins as invisible settlement infrastructure. The sender pays in fiat, the recipient receives fiat, and USDC on Solana carries the value across the border in between — neither side ever touches crypto.',
+      'Sending money from the US to the UK without either person knowing crypto was involved. You pay in dollars, they receive pounds, and USDC on Solana quietly does the crossing in between.',
     impact:
-      'Real on-chain USDC settlement on Solana behind a double-entry, append-only ledger with reconciliation, a seven-step transaction orchestrator built as a state machine, and a deployed admin dashboard. Shipped with a written post-mortem: the technology worked, the unit economics did not — the float, the funding rail and the compliance burden are what killed it.',
+      'Real USDC settlement on Solana, sitting behind an append-only double-entry ledger and a seven-step state machine that can resume where it left off. It worked. I shut it down anyway and wrote up why: the float you need to hold, the card fees, and the compliance load meant the numbers never added up.',
     stack: [
       'NestJS',
       'TypeScript',
@@ -55,8 +60,24 @@ export const projects: Project[] = [
       'Render',
       'Vercel',
     ],
+    writeUp: {
+      label: 'Why I shelved it?',
+      title: 'Why I shelved CrossBorderX?',
+      source: 'Originally posted on LinkedIn',
+      sourceHref:
+        'https://www.linkedin.com/posts/jainamvaria_github-jainam1810crossborderx-frontend-share-7469533357018779648-61Z5/',
+      body: [
+        'The idea: sending money abroad is slow and expensive. Banks take days and charge a fortune. So I built a platform where you send USD or GBP and your family overseas receives their local currency in about 30 seconds. Behind the scenes the money briefly becomes a stablecoin (USDC) to cross the border instantly. The user never sees crypto. It is invisible plumbing.',
+        'The tech worked. Real settlement on Solana, a proper double-entry ledger, fully deployed. The flow was: sender pays USD, Stripe collects, Circle converts to USDC, Solana moves it US to UK, B2C2 converts to GBP, ClearBank pays out over Faster Payments.',
+        'The money problem: to make transfers feel instant you need your own pool of cash to front payments while the slow bank transfer catches up. Roughly four to five times your daily volume, sitting idle. As a solo builder with no budget, impossible.',
+        'The fees ate the margin: card payments cost around 3%, more than the whole transfer should cost. Bank transfers are cheap but slow, which puts you back on the cash-pool problem.',
+        'Taxes killed key markets: India charges 1% tax on every crypto conversion. That alone matched my entire profit margin. Competitors on traditional rails do not pay it.',
+        'I picked the wrong battles: on popular routes like US to UK and US to India, Wise and Remitly already do it for 0.5 to 0.8%. Stablecoins only win on hard, expensive routes such as parts of Africa and Latin America, and funded players like Bitso, LemFi and Felix Pago already own those.',
+        'The real lesson: moving money across borders is already solved and cheap. The hard part is not better pipes, it is distribution. Owning the trust of a specific community. I had great pipes and no community.',
+        'This is all based on my own research, so I could be wrong on some of it. I would happily start again if there is a way around these.',
+      ],
+    },
     links: [
-      { label: 'Live', href: 'https://crossborderx-frontend.vercel.app', kind: 'live' },
       { label: 'Backend', href: 'https://github.com/jainam1810/crossborderx-api', kind: 'repo' },
       { label: 'Frontend', href: 'https://github.com/jainam1810/crossborderx-frontend', kind: 'repo' },
     ],
@@ -67,12 +88,22 @@ export const projects: Project[] = [
     year: '2026',
     primary: 'chain',
     domains: ['chain', 'sec'],
-    status: 'Shipped',
     featured: true,
     summary:
-      'A Solidity smart contract enabling cross-border stablecoin transfers with multi-currency support, Chainlink oracle integration, and a two-phase claim system that protects the sender if a transfer is never claimed.',
+      "A Solidity contract for cross-border stablecoin transfers. It handles several currencies, pulls rates from Chainlink, and gives the money back if the recipient never claims it, so the sender isn't left out of pocket.",
     impact:
-      'Reduces transfer fees from 6.2% to 0.3% across 5 currency pairs with full on-chain transparency.',
+      'Fees drop from 6.2% to 0.3% across five currency pairs, and every step is visible on-chain.',
+    writeUp: {
+      label: 'vs CrossBorderX',
+      title: 'RemitChain vs CrossBorderX',
+      body: [
+        'Both move money across borders using stablecoins. They solve it from opposite ends. Say you want to send 500 dollars from the US to your brother in the UK.',
+        'On RemitChain you open MetaMask and deposit 500 USDC into the contract. Chainlink prices the pound at the live rate. Your brother connects his own wallet, claims the transfer, waits one minute, then withdraws the same value in a GBP stablecoin. If you pasted the wrong address, you can reverse it inside that minute and get your money back minus the 0.3% fee. He ends up holding a stablecoin and still has to cash it out somewhere.',
+        'On CrossBorderX you pay the 500 dollars with a card. About thirty seconds later your brother has pounds sitting in his bank account. He installs nothing and never sees crypto. Behind the scenes Stripe takes the card payment, Circle turns it into USDC, Solana carries it across, B2C2 sells it for pounds and ClearBank pays him over Faster Payments.',
+        'So RemitChain trusts the contract and asks both people to hold crypto. CrossBorderX trusts a chain of companies and asks the two people to hold nothing.',
+        'That is also why one is much harder to run. RemitChain needs the contract deployed and nothing else. CrossBorderX needs a payment processor, a bank, licences, and a pool of its own cash to front payments while the slow transfers catch up. That last one is what stopped it.',
+      ],
+    },
     stack: ['Solidity', 'Ethereum', 'Hardhat', 'Remix', 'React', 'ethers.js', 'Chainlink'],
     links: [
       { label: 'GitHub', href: 'https://github.com/jainam1810/RemitChain', kind: 'repo' },
@@ -85,16 +116,15 @@ export const projects: Project[] = [
   },
   {
     slug: 'suspicious-transactions',
-    title: 'Suspicious Transaction Detector',
+    title: 'Suspicious Transaction Detector - Liminal',
     year: '2026',
     primary: 'sec',
     domains: ['sec', 'ml'],
-    status: 'Shipped',
     featured: true,
     summary:
-      'An AI-assisted tool that flags suspicious transactions, built in Go on the Nim SDK for the Liminal Vibe Banking Hackathon.',
+      'A tool that flags transactions which look wrong. Written in Go on the Nim SDK for the Liminal Vibe Banking hackathon.',
     impact:
-      'Streams transaction context to an LLM agent over WebSockets with a built-in confirmation flow, so no write operation executes without explicit approval — the human stays in the loop on every state change.',
+      "Transaction context streams to the model over WebSockets, but nothing gets written until a person approves it. The agent can suggest. It can't act on its own.",
     stack: ['Go', 'Claude', 'WebSockets', 'Nim Go SDK', 'React'],
     links: [
       {
@@ -115,11 +145,10 @@ export const projects: Project[] = [
     year: '2026',
     primary: 'ml',
     domains: ['ml'],
-    status: 'Shipped',
     summary:
-      'An AI-powered personal finance dashboard inspired by UK Open Banking, built with Streamlit, machine learning and time-series forecasting to turn raw transactions into intelligent financial insight.',
+      "A personal finance dashboard built around what UK Open Banking actually gives you. Feed it your transactions and it tells you what's recurring, what's coming, and when you're about to run dry.",
     impact:
-      'Analyses transactions to forecast cashflow, detects recurring payments with 85%+ accuracy, and predicts low-balance risk 30–90 days ahead.',
+      'Picks out recurring payments at 85%+ accuracy and warns about a low balance 30 to 90 days before it happens.',
     stack: ['Python', 'Logistic Regression', 'TF-IDF', 'ARIMA', 'Streamlit'],
     links: [
       {
@@ -140,11 +169,10 @@ export const projects: Project[] = [
     year: '2025',
     primary: 'ml',
     domains: ['ml', 'sec'],
-    status: 'Shipped',
     summary:
-      'Deep learning models using Autoencoders to detect anomalies and Restricted Boltzmann Machines to capture complex patterns in transaction data.',
+      "Autoencoders to spot transactions that don't fit the usual pattern, and Restricted Boltzmann Machines to learn the messier structure underneath.",
     impact:
-      'Achieves 91% accuracy and cuts false positives by 35%, reducing losses and protecting customer trust.',
+      '91% accuracy, with 35% fewer false alarms. That second number matters more than it sounds, because every false positive is a real customer getting blocked at a till.',
     stack: ['Python', 'TensorFlow', 'Scikit-learn', 'NumPy', 'Deep Learning'],
     links: [
       {
@@ -160,11 +188,10 @@ export const projects: Project[] = [
     year: '2025',
     primary: 'sec',
     domains: ['sec', 'chain'],
-    status: 'Shipped',
     summary:
-      'A blockchain-based verification system using Merkle Trees — the server stores only the 32-byte Merkle root while clients prove membership with a compact cryptographic proof.',
+      'Proving someone is on a list without storing the list. The server keeps one 32-byte Merkle root, and the client brings a short proof.',
     impact:
-      'Merkle-root verification cuts storage by 95%, verifies in under 100ms, and cuts gas fees by roughly 50%.',
+      '95% less storage, verification in under 100ms, and roughly half the gas.',
     stack: ['JavaScript', 'Node.js', 'Express.js', 'Merkle Trees', 'Blockchain'],
     links: [{ label: 'GitHub', href: 'https://github.com/jainam1810/Merkle-GiftList', kind: 'repo' }],
   },
@@ -174,11 +201,10 @@ export const projects: Project[] = [
     year: '2025',
     primary: 'chain',
     domains: ['chain'],
-    status: 'Shipped',
     summary:
-      'An Ethereum faucet built with Solidity, Hardhat and React. Users connect a wallet and withdraw test ETH straight from a smart contract.',
+      'An Ethereum faucet in Solidity, Hardhat and React. Connect a wallet, pull test ETH out of the contract, get on with building.',
     impact:
-      'Faucets provide free test ETH, reducing onboarding friction by 70% and testing costs by 90%.',
+      'Free test ETH means far less setup before you can start. Onboarding friction down 70%, testing costs down 90%.',
     stack: ['Solidity', 'Hardhat', 'React', 'JavaScript'],
     links: [
       { label: 'GitHub', href: 'https://github.com/jainam1810/faucet-dapp', kind: 'repo' },
@@ -195,11 +221,10 @@ export const projects: Project[] = [
     year: '2025',
     primary: 'ml',
     domains: ['ml'],
-    status: 'Shipped',
     summary:
-      'Random Forest, Decision Tree and SVM models trained on historical pollution and weather data, surfaced through an interactive geospatial AQI dashboard for Mumbai.',
+      'Random Forest, Decision Tree and SVM trained on years of Mumbai pollution and weather data, with a map you can actually click around.',
     impact:
-      'Achieves 92% accuracy with under 100ms response time, enabling real-time monitoring against the live CPCB feed.',
+      '92% accuracy, answers in under 100ms, and checks itself against the live CPCB feed.',
     stack: ['Python', 'Scikit-learn', 'Pandas', 'NumPy', 'Streamlit', 'Folium'],
     links: [
       {

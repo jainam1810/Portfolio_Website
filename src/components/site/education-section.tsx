@@ -1,24 +1,17 @@
 import { motion } from 'motion/react'
-import { CalendarDays, HeartHandshake, IdCard, MapPin, Trophy } from 'lucide-react'
+import { CalendarDays, MapPin } from 'lucide-react'
 import { Section } from '@/components/site/section'
 import { Reveal } from '@/components/anim'
-import { activities, languages, studies } from '@/data/misc'
-import type { Activity } from '@/data/types'
-
-const ICONS = {
-  trophy: Trophy,
-  hands: HeartHandshake,
-  card: IdCard,
-} as const
+import { languages, studies } from '@/data/misc'
 
 export function EducationSection() {
   return (
     <Section
       id="education"
       index="06"
-      eyebrow="Education, leadership & languages"
-      title="The rest of the record"
-      lead="Two degrees across India and the United Kingdom, a cricket captaincy, eight years of community work, and six languages."
+      eyebrow="Education"
+      title="Education"
+      lead="Two degrees, one in Mumbai and one in Exeter. I speak six languages, badly in one of them."
     >
       <div className="grid gap-3 lg:grid-cols-2">
         {studies.map((study, i) => (
@@ -56,14 +49,12 @@ export function EducationSection() {
         ))}
       </div>
 
-      <SubHeading>Extra-curricular & volunteer</SubHeading>
-      <div className="grid gap-3 md:grid-cols-3">
-        {activities.map((activity, i) => (
-          <ActivityCard key={activity.org} activity={activity} delay={i * 0.08} />
-        ))}
-      </div>
+      <Reveal className="mt-16 mb-7 flex items-center gap-3">
+        <span className="h-px w-8 bg-[var(--domain)]" />
+        <h3 className="eyebrow text-muted-foreground">Languages</h3>
+        <span className="h-px flex-1 bg-border" />
+      </Reveal>
 
-      <SubHeading>Languages</SubHeading>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
         {languages.map((language, i) => (
           <motion.div
@@ -74,12 +65,7 @@ export function EducationSection() {
             transition={{ duration: 0.55, delay: i * 0.05 }}
             className="hud-corner rounded-lg border border-border bg-card/30 p-4"
           >
-            <div className="flex items-baseline justify-between">
-              <span className="text-sm font-semibold text-foreground">{language.name}</span>
-              <span className="font-mono text-[10px] text-muted-foreground tabular-nums">
-                {language.value}
-              </span>
-            </div>
+            <span className="text-sm font-semibold text-foreground">{language.name}</span>
             <div className="mt-1 font-mono text-[10px] tracking-[0.12em] text-muted-foreground uppercase">
               {language.level}
             </div>
@@ -96,56 +82,5 @@ export function EducationSection() {
         ))}
       </div>
     </Section>
-  )
-}
-
-function SubHeading({ children }: { children: string }) {
-  return (
-    <Reveal className="mt-16 mb-7 flex items-center gap-3">
-      <span className="h-px w-8 bg-[var(--domain)]" />
-      <h3 className="eyebrow text-muted-foreground">{children}</h3>
-      <span className="h-px flex-1 bg-border" />
-    </Reveal>
-  )
-}
-
-function ActivityCard({ activity, delay }: { activity: Activity; delay: number }) {
-  const Icon = ICONS[activity.icon]
-
-  return (
-    <Reveal
-      delay={delay}
-      className="hud-corner flex flex-col rounded-lg border border-border bg-card/30 p-5 transition-colors duration-500 hover:border-[color-mix(in_oklch,var(--domain)_35%,transparent)]"
-    >
-      <span className="grid size-10 place-items-center rounded-md border border-[var(--domain)]/25 bg-[var(--domain)]/[0.07]">
-        <Icon className="size-4 text-[var(--domain)]" />
-      </span>
-      <h4 className="mt-4 text-base font-semibold text-foreground">{activity.role}</h4>
-      <p className="text-sm font-medium text-[var(--domain)]">{activity.org}</p>
-      <p className="mt-0.5 font-mono text-[10px] tracking-[0.12em] text-muted-foreground uppercase">
-        {activity.meta}
-      </p>
-      <ul className="mt-4 space-y-2">
-        {activity.points.map((point) => (
-          <li
-            key={point}
-            className="relative pl-4 text-[12.5px] leading-[1.5] text-muted-foreground text-pretty"
-          >
-            <span className="absolute top-[0.55em] left-0 size-1 rounded-full bg-[var(--domain)]/70" />
-            {point}
-          </li>
-        ))}
-      </ul>
-      <div className="mt-auto flex flex-wrap gap-1.5 pt-4">
-        {activity.tags.map((tag) => (
-          <span
-            key={tag}
-            className="rounded border border-border/70 px-2 py-1 font-mono text-[10px] text-muted-foreground"
-          >
-            {tag}
-          </span>
-        ))}
-      </div>
-    </Reveal>
   )
 }

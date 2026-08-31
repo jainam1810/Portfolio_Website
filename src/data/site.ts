@@ -6,7 +6,6 @@ export const site = {
   badge: 'Creating Something Big — Stay Tuned!',
   role: 'B.Tech Computer Engineer · MSc Financial Technology',
   location: 'Exeter, United Kingdom',
-  timezone: 'GMT +0',
   email: 'jainamvaria1010@gmail.com',
 
   /** Typewriter phrases, carried over verbatim from the previous site */
@@ -18,7 +17,7 @@ export const site = {
   ],
 
   intro:
-    'MSc Financial Technology at the University of Exeter, with a B.Tech in Computer Engineering. I work where machine learning, decentralised settlement and application security meet — and I ship the whole thing, not just the interesting part.',
+    "MSc Financial Technology at the University of Exeter, with a B.Tech in Computer Engineering. I work in three areas: machine learning, blockchain settlement and application security. Most projects I take on need at least two of them, and I'd rather build the whole thing than just the part that demos well.",
 
   about: [
     "I'm a 22-year-old tech enthusiast passionate about the intersection of finance and technology. Currently living in Exeter, United Kingdom, pursuing my Master of Science in Financial Technology at the University of Exeter, I bring a strong foundation in computer engineering from my B.Tech at K.J. Somaiya Institute of Technology.",
@@ -34,7 +33,7 @@ export const site = {
     "Whether you have a project idea, want to collaborate on research, or just want to say hello — I'd love to hear from you. Currently based in Exeter, UK.",
 
   contactIntro:
-    "I'm always open to discussing new opportunities, collaborations, or just having a chat about AI/ML, blockchain and building software that holds up.",
+    "Open to roles, freelance work, or just a chat about anything I've built here. I reply to everything.",
 
   cvs: [
     {
@@ -59,10 +58,16 @@ export const site = {
 
   /** Real, verifiable figures drawn from the CV */
   stats: [
-    { value: 10, suffix: '+', label: 'Projects shipped', note: 'AI/ML, blockchain & security' },
-    { value: 6, suffix: '', label: 'Professional roles', note: 'Startups to corporates' },
-    { value: 120, suffix: '+', label: 'Clients advised', note: 'Markets & investment' },
-    { value: 1000, suffix: '+', label: 'Seminar attendees', note: 'Taught FX & markets' },
+    {
+      value: 10,
+      suffix: '+',
+      label: 'Projects shipped',
+      note: 'Nine personal, rest built at work',
+      hint: 'The nine below are my own projects. The others were built at work and cannot be shared.',
+    },
+    { value: 6, suffix: '', label: 'Professional roles', note: 'A warehouse floor to a CTO' },
+    { value: 120, suffix: '+', label: 'Clients advised', note: 'On forex and investing' },
+    { value: 1000, suffix: '+', label: 'Seminar attendees', note: 'Seminars on how markets work' },
   ],
 
   voice: {
@@ -90,5 +95,6 @@ export const navItems = [
   { id: 'experience', label: 'Experience' },
   { id: 'skills', label: 'Skills' },
   { id: 'education', label: 'Education' },
+  { id: 'activities', label: 'Activities' },
   { id: 'contact', label: 'Contact' },
 ] as const
