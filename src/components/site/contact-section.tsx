@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import { motion } from 'motion/react'
 import emailjs from '@emailjs/browser'
-import { ArrowUpRight, Pause, Play, Send } from 'lucide-react'
+import { ArrowUpRight, Check, Copy, Pause, Play, Send } from 'lucide-react'
 import { Section } from '@/components/site/section'
 import { Reveal } from '@/components/anim'
 import { site } from '@/data/site'
@@ -9,21 +9,96 @@ import { BrandGlyph } from '@/lib/icons'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
 
 type Status = 'idle' | 'sending' | 'sent' | 'error'
+
+const ROW =
+  'group flex w-full items-center gap-4 bg-background px-5 py-4 text-left transition-colors duration-300 hover:bg-card'
+const ROW_ICON =
+  'size-4 text-muted-foreground transition-colors duration-300 group-hover:text-[var(--domain)]'
+const ROW_ARROW =
+  'size-3.5 shrink-0 text-muted-foreground transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[var(--domain)]'
+
+/**
+ * A web page cannot trigger Android's app chooser - Intent.createChooser and
+ * setPackage are native APIs - so wa.me just opens whichever WhatsApp the OS
+ * picked, with no way back. This offers the choice in our own UI instead, which
+ * behaves identically everywhere. Business is targeted through an intent URL,
+ * which only Android understands, so it is only offered there.
+ */
+function WhatsAppRow({ href }: { href: string }) {
+  const number = href.split('/').filter(Boolean).pop() ?? ''
+  const isAndroid = typeof navigator !== 'undefined' && /android/i.test(navigator.userAgent)
+  const [copied, setCopied] = useState(false)
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(`+${number}`)
+      setCopied(true)
+      window.setTimeout(() => setCopied(false), 2000)
+    } catch {
+      setCopied(false)
+    }
+  }
+
+  const option =
+    'flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-left text-sm transition-colors hover:bg-muted'
+
+  return (
+    <Popover>
+      <PopoverTrigger className={ROW}>
+        <BrandGlyph name="whatsapp" className={ROW_ICON} />
+        <span className="text-sm font-medium text-foreground">WhatsApp</span>
+        <ArrowUpRight className={cn(ROW_ARROW, 'ml-auto')} />
+      </PopoverTrigger>
+
+      <PopoverContent align="start" className="w-64 p-1.5">
+        <p className="px-3 pt-2 pb-1.5 font-mono text-[10px] tracking-[0.14em] text-muted-foreground uppercase">
+          Open with
+        </p>
+
+        <a href={href} target="_blank" rel="noopener noreferrer" className={option}>
+          <BrandGlyph name="whatsapp" className="size-4 text-[var(--domain)]" />
+          WhatsApp
+        </a>
+
+        {isAndroid && (
+          <a
+            href={`intent://send?phone=${number}#Intent;scheme=whatsapp;package=com.whatsapp.w4b;end`}
+            className={option}
+          >
+            <BrandGlyph name="whatsapp" className="size-4 text-[var(--domain)]" />
+            WhatsApp Business
+          </a>
+        )}
+
+        <button onClick={copy} className={cn(option, 'font-sans')}>
+          {copied ? (
+            <Check className="size-4 text-[var(--domain)]" />
+          ) : (
+            <Copy className="size-4 text-muted-foreground" />
+          )}
+          {copied ? 'Number copied' : 'Copy number'}
+        </button>
+      </PopoverContent>
+    </Popover>
+  )
+}
 
 export function ContactSection() {
   return (
     <Section
       id="contact"
-      index="07"
-      eyebrow="Get in touch"
-      title="Let's build something that holds"
+      index="08"
+      eyebrow="Say hello"
+      title="Contact Me"
       lead={site.contactIntro}
     >
       <div className="grid gap-10 lg:grid-cols-2 lg:gap-6">
-        <div className="flex flex-col">
+        {/* On phones the form leads; on desktop it sits on the right as before. */}
+        <div className="order-2 flex flex-col lg:order-1">
           <Reveal>
             <p className="max-w-md text-sm leading-relaxed text-muted-foreground text-pretty">
               {site.contactBlurb}
@@ -31,31 +106,34 @@ export function ContactSection() {
           </Reveal>
 
           <Reveal delay={0.08} className="mt-8 grid gap-px overflow-hidden rounded-lg border border-border bg-border">
-            {site.socials.map((social) => (
-              <a
-                key={social.label}
-                href={social.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center gap-4 bg-background px-5 py-4 transition-colors duration-300 hover:bg-card"
-              >
-                <BrandGlyph
-                  name={social.icon}
-                  className="size-4 text-muted-foreground transition-colors duration-300 group-hover:text-[var(--domain)]"
-                />
-                <span className="text-sm font-medium text-foreground">{social.label}</span>
-                <span className="ml-auto font-mono text-[10px] tracking-[0.14em] text-muted-foreground uppercase">
-                  {social.label === 'Email' ? site.email : ''}
-                </span>
-                <ArrowUpRight className="size-3.5 shrink-0 text-muted-foreground transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[var(--domain)]" />
-              </a>
-            ))}
+            {site.socials.map((social) =>
+              social.icon === 'whatsapp' ? (
+                <WhatsAppRow key={social.label} href={social.href} />
+              ) : (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={ROW}
+                >
+                  <BrandGlyph name={social.icon} className={ROW_ICON} />
+                  <span className="text-sm font-medium text-foreground">{social.label}</span>
+                  <span className="ml-auto font-mono text-[10px] tracking-[0.14em] text-muted-foreground uppercase">
+                    {social.label === 'Email' ? site.email : ''}
+                  </span>
+                  <ArrowUpRight className={ROW_ARROW} />
+                </a>
+              ),
+            )}
           </Reveal>
 
           <VoiceNote />
         </div>
 
-        <ContactForm />
+        <div className="order-1 lg:order-2">
+          <ContactForm />
+        </div>
       </div>
     </Section>
   )
@@ -163,8 +241,8 @@ function ContactForm() {
             )}
           >
             {status === 'sent'
-              ? 'Message sent successfully — I will get back to you soon.'
-              : 'Failed to send. Please try again, or email me directly.'}
+              ? "Got it. I'll get back to you soon."
+              : "That didn't send. Try again, or just email me directly."}
           </p>
         )}
       </form>

@@ -8,9 +8,9 @@ export const domains: Record<DomainId, Domain> = {
     index: '01',
     label: 'AI / ML',
     word: 'Models',
-    title: 'Intelligent Systems',
-    statement: 'Models that earn their place in a product.',
-    body: 'I build machine learning that has to survive contact with real data — forecasting cashflow, classifying transactions, detecting anomalies. The interesting part is rarely the model: it is the feature work, the honest evaluation, and knowing which decisions a model should never be trusted to make.',
+    title: 'Machine Learning',
+    statement: 'A model is only useful if it beats a simple rule.',
+    body: 'I build models that work on real financial data. Forecasting what a balance does next month, reading the merchant text on a transaction to label it, catching card fraud, and flagging payments that look wrong. Most of the job is cleaning the data and testing it honestly. Picking the algorithm is the quick part.',
     groups: [
       {
         name: 'Modelling',
@@ -45,9 +45,9 @@ export const domains: Record<DomainId, Domain> = {
       },
     ],
     proof: [
-      'Cashflow forecasting and recurring-payment detection at 85%+ accuracy, predicting low-balance risk 30–90 days ahead',
-      'Autoencoder + RBM fraud detection reaching 91% accuracy with 35% fewer false positives',
-      'AQI forecasting at 92% accuracy with sub-100ms response time',
+      'Spots recurring payments at 85%+ accuracy and warns about a low balance 30 to 90 days out',
+      'Autoencoders and RBMs catch card fraud at 91% accuracy, with 35% fewer false alarms',
+      'Air quality model hits 92% accuracy and answers in under 100ms',
     ],
   },
 
@@ -56,9 +56,9 @@ export const domains: Record<DomainId, Domain> = {
     index: '02',
     label: 'Blockchain',
     word: 'Contracts',
-    title: 'Decentralised Settlement',
-    statement: 'Chains are plumbing, not the product.',
-    body: 'I write smart contracts and the infrastructure around them — but the work I care about hides the chain entirely. Fiat goes in, fiat comes out, and stablecoins move the value across the border in between. That means contracts, ledgers, reconciliation and orchestration have to be right together.',
+    title: 'Blockchain Development',
+    statement: 'People want the money to arrive. They should not have to learn what a wallet is.',
+    body: 'I write smart contracts and the systems around them. Cross-border transfers priced by Chainlink, payroll that pays a whole team from one signature, a faucet that hands out test ETH, and Merkle proofs that check membership without storing the list. The contract is the easy part. The ledger, the retries and the reconciliation are the real work.',
     groups: [
       {
         name: 'Contracts',
@@ -74,9 +74,9 @@ export const domains: Record<DomainId, Domain> = {
       },
     ],
     proof: [
-      'RemitChain cuts cross-border transfer fees from 6.2% to 0.3% across 5 currency pairs, fully on-chain',
-      'CrossBorderX settles real USDC on Solana behind a double-entry, append-only ledger with reconciliation',
-      'GlobePay pays an entire freelancer roster in one transaction from a single client wallet signature',
+      'RemitChain took transfer fees from 6.2% down to 0.3% across five currency pairs',
+      'CrossBorderX moves real USDC on Solana, with a double-entry ledger behind it that reconciles every transfer',
+      'GlobePay pays a whole freelancer roster from one wallet signature',
     ],
   },
 
@@ -85,9 +85,9 @@ export const domains: Record<DomainId, Domain> = {
     index: '03',
     label: 'Security',
     word: 'Guardrails',
-    title: 'Secure by Design',
-    statement: 'The properties that decide whether software survives production.',
-    body: 'Not offensive security — I am not a Burp-and-Metasploit operator, and I do not claim to be. What I know is the application and protocol layer: where trust boundaries sit, how requests get abused, and what has to be true for a system to hold under load and under attack. On GlobePay that meant a custody guarantee the code is not allowed to break, tenant isolation enforced twice, and money maths the AI is never permitted to touch.',
+    title: 'Application Security',
+    statement: 'Check every request. Trust nothing by default.',
+    body: 'I work on the part of security that decides whether an app holds up. Who is allowed to call what, how requests get abused, and what happens when the same request arrives twice. On GlobePay that meant never holding funds or keys, checking clients in the API and again in the database, and keeping the AI away from the money maths.',
     groups: [
       {
         name: 'Web & protocol',
@@ -137,9 +137,9 @@ export const domains: Record<DomainId, Domain> = {
       },
     ],
     proof: [
-      'Non-custodial by construction: GlobePay orchestrates USDC transfers but never holds funds or private keys',
-      'Multi-tenant isolation enforced twice — in every API route and again in Postgres row-level security policies',
-      'Merkle-root verification proves membership while storing only 32 bytes, cutting storage 95% and gas ~50%',
+      'GlobePay never touches your funds or your keys. It can only ask your wallet to sign.',
+      'Clients cannot see each other. Checked in the API, then checked again in Postgres row-level security.',
+      'A 32-byte Merkle root replaces the whole list. 95% less storage, roughly half the gas.',
     ],
   },
 }

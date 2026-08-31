@@ -15,9 +15,9 @@ export function SkillsSection() {
     <Section
       id="skills"
       index="05"
-      eyebrow="Toolkit"
-      title="What I actually work with"
-      lead="Listed honestly — these are the languages, models, protocols and defences I have used in projects or roles, not a keyword sweep."
+      eyebrow="Tools"
+      title="Skills"
+      lead="Everything here has been used in something real. If I only read about it, it's not on the list."
       aside={<DomainSwitch className="hidden md:inline-flex" size="sm" layoutId="domain-switch-skills" />}
     >
       <motion.div layout className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
@@ -41,9 +41,6 @@ export function SkillsSection() {
               <header className="mb-4 flex items-center gap-2.5">
                 <span className="size-1.5 rounded-full bg-[var(--domain)]" />
                 <h3 className="text-sm font-semibold text-foreground">{group.name}</h3>
-                <span className="ml-auto font-mono text-[10px] text-muted-foreground tabular-nums">
-                  {String(group.items.length).padStart(2, '0')}
-                </span>
               </header>
 
               <ul className="flex flex-wrap gap-1.5">

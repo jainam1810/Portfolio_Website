@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from 'motion/react'
-import { ArrowUpRight, FolderGit2 } from 'lucide-react'
+import { ArrowUpRight, FolderGit2, PlayCircle } from 'lucide-react'
 import { Section } from '@/components/site/section'
 import { DomainSwitch } from '@/components/site/domain-switch'
 import { useDomainState } from '@/components/domain-context'
@@ -8,6 +8,14 @@ import { domains } from '@/data/domains'
 import type { Project } from '@/data/types'
 import { EASE_OUT } from '@/components/anim'
 import { BrandGlyph } from '@/lib/icons'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 import { cn } from '@/lib/utils'
 
 export function ProjectsSection() {
@@ -19,8 +27,8 @@ export function ProjectsSection() {
       id="projects"
       index="03"
       eyebrow={`${visible.length} of ${projects.length} shown`}
-      title="Things I have shipped"
-      lead="Smart contracts, forecasting models, settlement infrastructure and the security work that holds them together. Every figure below is measured, and every repository is public."
+      title="Projects"
+      lead="Some of these are polished. One of them I stopped on purpose and wrote up why. Every number below came out of the project and the code is public if you want to check."
       aside={<DomainSwitch className="hidden md:inline-flex" size="sm" layoutId="domain-switch-projects" />}
     >
       {/* Every card is the same width, and the clamped copy below keeps every
@@ -64,16 +72,18 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         </span>
         <span className="flex items-center gap-2 font-mono text-[9px] tracking-[0.14em] text-muted-foreground uppercase">
           {project.year}
-          <span
-            className={cn(
-              'rounded-full border px-2 py-0.5',
-              project.status === 'Live'
-                ? 'border-[var(--domain)]/40 text-[var(--domain)]'
-                : 'border-border',
-            )}
-          >
-            {project.status}
-          </span>
+          {project.status && (
+            <span
+              className={cn(
+                'rounded-full border px-2 py-0.5',
+                project.status === 'Live'
+                  ? 'border-[var(--domain)]/40 text-[var(--domain)]'
+                  : 'border-border text-muted-foreground',
+              )}
+            >
+              {project.status}
+            </span>
+          )}
         </span>
       </div>
 
@@ -124,6 +134,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
       {/* Row 7 - links, pinned to the bottom of every card */}
       <div className="relative mt-auto flex flex-wrap gap-1.5 pt-4">
+        {project.writeUp && <WriteUpDialog writeUp={project.writeUp} />}
         {project.links.map((link) => (
           <a
             key={link.href}
@@ -138,12 +149,61 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             )}
           >
             {link.kind === 'repo' && <BrandGlyph name="github" className="size-2.5" />}
+            {link.kind === 'demo' && <PlayCircle className="size-3" />}
             {link.label}
             <ArrowUpRight className="size-2.5" />
           </a>
         ))}
       </div>
     </motion.article>
+  )
+}
+
+/** Keeps a long explanation on the page instead of sending people to LinkedIn. */
+function WriteUpDialog({ writeUp }: { writeUp: NonNullable<Project['writeUp']> }) {
+  return (
+    <Dialog>
+      <DialogTrigger className="inline-flex items-center gap-1.5 rounded-md border border-[var(--domain)]/40 px-2.5 py-1.5 font-mono text-[10px] tracking-wide text-[var(--domain)] transition-all duration-300 hover:bg-[var(--domain)]/10">
+        {writeUp.label}
+      </DialogTrigger>
+      {/* The default dialog scrolls as one block, which slides the title under
+          the top edge and reads as clipped. Header is pinned; only the body
+          scrolls. */}
+      <DialogContent className="flex max-h-[85dvh] flex-col gap-0 overflow-hidden p-0 sm:max-w-2xl">
+        <DialogHeader className="shrink-0 border-b border-border px-6 pt-6 pb-4 pr-14">
+          <DialogTitle className="font-display display-sm text-left text-foreground">
+            {writeUp.title}
+          </DialogTitle>
+          {writeUp.source && (
+            <DialogDescription asChild>
+              {writeUp.sourceHref ? (
+                <a
+                  href={writeUp.sourceHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex w-fit items-center gap-1.5 text-left font-mono text-[10px] tracking-[0.14em] uppercase underline-offset-4 transition-colors hover:text-[var(--domain)] hover:underline"
+                >
+                  {writeUp.source}
+                  <ArrowUpRight className="size-3" />
+                </a>
+              ) : (
+                <span className="text-left font-mono text-[10px] tracking-[0.14em] uppercase">
+                  {writeUp.source}
+                </span>
+              )}
+            </DialogDescription>
+          )}
+        </DialogHeader>
+
+        <div className="min-h-0 flex-1 space-y-3 overflow-y-auto px-6 py-5">
+          {writeUp.body.map((para) => (
+            <p key={para.slice(0, 40)} className="text-[13px] leading-[1.6] text-muted-foreground">
+              {para}
+            </p>
+          ))}
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 
@@ -163,7 +223,7 @@ function GithubCard() {
       <div className="mt-6">
         <h3 className="font-display display-sm text-foreground">More on GitHub</h3>
         <p className="mt-2 text-[13px] leading-[1.45] text-muted-foreground">
-          Experiments, hackathon builds and work in progress live in the repositories.
+          Half-finished experiments, hackathon builds, and things I'm still poking at.
         </p>
         <span className="mt-3 inline-flex items-center gap-1.5 font-mono text-[10px] tracking-wide text-[var(--domain)]">
           <BrandGlyph name="github" className="size-2.5" />

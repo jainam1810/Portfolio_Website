@@ -79,10 +79,6 @@ export function Footer() {
               </button>
             ))}
           </div>
-
-          <p className="font-mono text-[10px] tracking-[0.14em] text-muted-foreground uppercase">
-            Built in Exeter, UK
-          </p>
         </div>
       </div>
     </footer>

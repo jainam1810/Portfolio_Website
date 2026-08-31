@@ -5,19 +5,25 @@ import { DomainSwitch } from '@/components/site/domain-switch'
 import { useDomainState } from '@/components/domain-context'
 import { domainList } from '@/data/domains'
 import type { Domain } from '@/data/types'
-import { EASE_OUT } from '@/components/anim'
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion'
+import { EASE_OUT } from '@/components/anim'
 import { cn } from '@/lib/utils'
 
 /**
- * The three pillars. With no domain selected all three sit side by side; select
- * one and it expands while the others collapse to vertical rails — so the
- * switcher in the nav has a visible, physical consequence.
+ * The three pillars.
+ *
+ * On desktop these are full-width bands stacked down the page rather than three
+ * columns side by side. Security has far more to say than the other two, and in
+ * a column layout that left the shorter cards half empty. Stacked, each band is
+ * only as tall as it needs to be and there are no neighbouring columns left to
+ * mismatch. Choosing a domain collapses the other two to slim bars.
+ *
+ * Mobile is deliberately unchanged: stacked cards, groups behind chevrons.
  */
 export function DomainsSection() {
   const { active } = useDomainState()
@@ -26,19 +32,26 @@ export function DomainsSection() {
     <Section
       id="domains"
       index="02"
-      eyebrow="Three domains, one discipline"
-      title="Models, contracts and guardrails"
-      lead="A model that scores the risk; a smart contract that settles the payment; and the guardrails that stop either being abused. I work across all three because in financial software they are not separable concerns — the interesting failures happen where they meet."
+      eyebrow="What I actually do"
+      title="About Domains"
+      lead="A model that spots the risk. A contract that moves the money. Checks that keep both safe. In financial software these are not three separate jobs."
       aside={<DomainSwitch className="hidden md:inline-flex" size="sm" layoutId="domain-switch-section" />}
     >
-      {/* Desktop: expanding panels */}
-      <div className="hidden gap-3 lg:flex lg:min-h-[30rem]">
+      {/* Desktop: stacked full-width bands when showing everything, and a row
+          of one open band plus two vertical rails once a domain is picked.
+          Motion's `layout` FLIPs between the two, which is the only way to
+          animate a flex-direction change. */}
+      <motion.div
+        layout
+        transition={{ layout: { duration: 0.55, ease: EASE_OUT } }}
+        className={cn('hidden gap-3 lg:flex', active === 'all' ? 'flex-col' : 'flex-row')}
+      >
         {domainList.map((domain) => (
-          <DesktopPanel key={domain.id} domain={domain} active={active} />
+          <DesktopBand key={domain.id} domain={domain} active={active} />
         ))}
-      </div>
+      </motion.div>
 
-      {/* Mobile: every panel fully expanded, stacked */}
+      {/* Mobile: stacked cards, groups behind chevrons */}
       <div className="flex flex-col gap-4 lg:hidden">
         {domainList.map((domain) => (
           <div
@@ -47,7 +60,7 @@ export function DomainsSection() {
             className="hud-corner rounded-lg border border-border bg-card/40 p-6"
           >
             <PanelHead domain={domain} />
-            <PanelBody domain={domain} collapsible />
+            <MobileBody domain={domain} />
           </div>
         ))}
       </div>
@@ -55,65 +68,19 @@ export function DomainsSection() {
   )
 }
 
-function DesktopPanel({ domain, active }: { domain: Domain; active: string }) {
-  const isExpanded = active === domain.id
-  const isAll = active === 'all'
-  const isCollapsed = !isAll && !isExpanded
-
+/** Shared chip list. */
+function Chips({ items }: { items: string[] }) {
   return (
-    <motion.div
-      layout
-      data-domain={domain.id}
-      transition={{ duration: 0.7, ease: EASE_OUT }}
-      style={{ flexGrow: isExpanded ? 4 : isAll ? 1 : 0, flexBasis: isCollapsed ? '4.5rem' : 0 }}
-      className={cn(
-        'hud-corner relative min-w-0 overflow-hidden rounded-lg border transition-colors duration-500',
-        isCollapsed
-          ? 'border-border bg-background'
-          : 'border-[color-mix(in_oklch,var(--domain)_28%,transparent)] bg-card/40',
-      )}
-    >
-      <div
-        className="pointer-events-none absolute inset-0 opacity-60"
-        style={{
-          background:
-            'radial-gradient(90% 60% at 0% 0%, color-mix(in oklch, var(--domain) 12%, transparent), transparent 70%)',
-        }}
-      />
-
-      <AnimatePresence mode="wait" initial={false}>
-        {isCollapsed ? (
-          <motion.div
-            key="rail"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="relative flex h-full flex-col items-center justify-between py-6"
-          >
-            <span className="font-mono text-[10px] tracking-[0.18em] text-[var(--domain)]">
-              {domain.index}
-            </span>
-            <span className="writing-vertical font-display text-lg tracking-wide text-muted-foreground">
-              {domain.label}
-            </span>
-            <span className="size-1.5 rounded-full bg-[var(--domain)]" />
-          </motion.div>
-        ) : (
-          <motion.div
-            key="full"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.35, delay: 0.12 }}
-            className="relative flex h-full flex-col p-6 xl:p-8"
-          >
-            <PanelHead domain={domain} />
-            <PanelBody domain={domain} compact={!isExpanded} />
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.div>
+    <ul className="flex flex-wrap gap-1.5">
+      {items.map((item) => (
+        <li
+          key={item}
+          className="rounded border border-border/80 bg-background/50 px-2 py-1 font-mono text-[10px] tracking-wide text-muted-foreground transition-colors duration-300 hover:border-[var(--domain)]/50 hover:text-[var(--domain)]"
+        >
+          {item}
+        </li>
+      ))}
+    </ul>
   )
 }
 
@@ -133,61 +100,121 @@ function PanelHead({ domain }: { domain: Domain }) {
   )
 }
 
-function PanelBody({
-  domain,
-  compact = false,
-  collapsible = false,
-}: {
-  domain: Domain
-  compact?: boolean
-  /** Phones only: the full chip list is far too long to scroll past. */
-  collapsible?: boolean
-}) {
-  // Every panel shows every group, on both desktop and mobile.
-  const groups = domain.groups
-  const proof = domain.proof
+function DesktopBand({ domain, active }: { domain: Domain; active: string }) {
+  const isCollapsed = active !== 'all' && active !== domain.id
 
-  const chips = (items: string[]) => (
-    <ul className="flex flex-wrap gap-1.5">
-      {items.map((item) => (
-        <li
-          key={item}
-          className="rounded border border-border/80 bg-background/50 px-2 py-1 font-mono text-[10px] tracking-wide text-muted-foreground transition-colors duration-300 hover:border-[var(--domain)]/50 hover:text-[var(--domain)]"
-        >
-          {item}
-        </li>
-      ))}
-    </ul>
+  return (
+    <motion.div
+      layout
+      transition={{ layout: { duration: 0.55, ease: EASE_OUT } }}
+      data-domain={domain.id}
+      // perspective is what makes the rotateX below read as depth rather than
+      // a vertical squash.
+      style={{
+        perspective: '1400px',
+        flexGrow: isCollapsed ? 0 : 1,
+        flexBasis: isCollapsed ? '4.75rem' : 'auto',
+      }}
+      className={cn(
+        'hud-corner relative min-w-0 overflow-hidden rounded-lg border transition-colors duration-500',
+        isCollapsed
+          ? 'border-border bg-background'
+          : 'border-[color-mix(in_oklch,var(--domain)_28%,transparent)] bg-card/40',
+      )}
+    >
+      <div
+        className="pointer-events-none absolute inset-0 opacity-60"
+        style={{
+          background:
+            'radial-gradient(60% 130% at 0% 0%, color-mix(in oklch, var(--domain) 11%, transparent), transparent 70%)',
+        }}
+      />
+
+      <AnimatePresence mode="wait" initial={false}>
+        {isCollapsed ? (
+          <motion.div
+            key="rail"
+            initial={{ rotateX: -80, opacity: 0 }}
+            animate={{ rotateX: 0, opacity: 1 }}
+            exit={{ rotateX: 80, opacity: 0 }}
+            transition={{ duration: 0.32, ease: EASE_OUT }}
+            style={{ transformOrigin: 'center center', backfaceVisibility: 'hidden' }}
+            className="relative flex h-full flex-col items-center justify-between py-6"
+          >
+            <span className="font-mono text-[10px] tracking-[0.18em] text-[var(--domain)]">
+              {domain.index}
+            </span>
+            <span className="writing-vertical font-display text-lg tracking-wide text-muted-foreground">
+              {domain.label}
+            </span>
+            <span className="size-1.5 rounded-full bg-[var(--domain)]" />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="full"
+            initial={{ rotateX: 80, opacity: 0 }}
+            animate={{ rotateX: 0, opacity: 1 }}
+            exit={{ rotateX: -80, opacity: 0 }}
+            transition={{ duration: 0.4, ease: EASE_OUT }}
+            style={{ transformOrigin: 'center center', backfaceVisibility: 'hidden' }}
+            className="relative p-8"
+          >
+            <PanelHead domain={domain} />
+
+            <p className="max-w-4xl text-[13px] leading-[1.55] text-muted-foreground text-pretty">
+              {domain.body}
+            </p>
+
+            {/* auto-fit: three groups make three columns, four make four, so a
+                band is never taller than it has to be. */}
+            <div className="mt-7 grid gap-x-8 gap-y-6 grid-cols-[repeat(auto-fit,minmax(13rem,1fr))]">
+              {domain.groups.map((group) => (
+                <div key={group.name}>
+                  <p className="eyebrow mb-2.5 text-muted-foreground/80">{group.name}</p>
+                  <Chips items={group.items} />
+                </div>
+              ))}
+            </div>
+
+            <ul className="mt-7 grid gap-x-8 gap-y-2.5 border-t border-border pt-5 grid-cols-[repeat(auto-fit,minmax(18rem,1fr))]">
+              {domain.proof.map((point) => (
+                <li
+                  key={point}
+                  className="flex gap-2.5 text-[12.5px] leading-[1.5] text-foreground/80"
+                >
+                  <Check className="mt-0.5 size-3.5 shrink-0 text-[var(--domain)]" />
+                  <span className="text-pretty">{point}</span>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   )
+}
 
+/** Phones only: the full chip list is far too long to scroll past. */
+function MobileBody({ domain }: { domain: Domain }) {
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <p className="text-[13px] leading-[1.55] text-muted-foreground text-pretty">{domain.body}</p>
 
-      {collapsible ? (
-        <Accordion type="multiple" className="mt-5 border-t border-border">
-          {groups.map((group) => (
-            <AccordionItem key={group.name} value={group.name} className="border-b border-border">
-              <AccordionTrigger className="items-center gap-3 py-3 hover:no-underline">
-                <span className="eyebrow text-muted-foreground">{group.name}</span>
-              </AccordionTrigger>
-              <AccordionContent>{chips(group.items)}</AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
-      ) : (
-        <div className={cn('mt-6 space-y-4', !compact && 'xl:grid xl:grid-cols-2 xl:gap-6 xl:space-y-0')}>
-          {groups.map((group) => (
-            <div key={group.name}>
-              <p className="eyebrow mb-2 text-muted-foreground/80">{group.name}</p>
-              {chips(group.items)}
-            </div>
-          ))}
-        </div>
-      )}
+      <Accordion type="multiple" className="mt-5 border-t border-border">
+        {domain.groups.map((group) => (
+          <AccordionItem key={group.name} value={group.name} className="border-b border-border">
+            <AccordionTrigger className="items-center gap-3 py-3 hover:no-underline">
+              <span className="eyebrow text-muted-foreground">{group.name}</span>
+            </AccordionTrigger>
+            <AccordionContent>
+              <Chips items={group.items} />
+            </AccordionContent>
+          </AccordionItem>
+        ))}
+      </Accordion>
 
-      <ul className="mt-auto space-y-2 border-t border-border pt-5">
-        {proof.map((point) => (
+      <ul className="mt-6 space-y-2 border-t border-border pt-5">
+        {domain.proof.map((point) => (
           <li key={point} className="flex gap-2.5 text-[12.5px] leading-[1.5] text-foreground/80">
             <Check className="mt-0.5 size-3.5 shrink-0 text-[var(--domain)]" />
             <span className="text-pretty">{point}</span>

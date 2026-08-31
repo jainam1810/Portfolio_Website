@@ -143,6 +143,23 @@
 
     /* A translucent tint keeps the text itself readable. A solid accent fill
        turned the huge display type into unreadable coloured slabs. */
+    /* Tailwind v4 dropped the default pointer cursor on <button>, so nothing
+       clickable showed one. Put it back for anything that responds to a click. */
+    button:not(:disabled),
+    [role='button']:not([aria-disabled='true']),
+    [role='tab'],
+    [role='option'],
+    a[href],
+    summary,
+    label[for] {
+        cursor: pointer;
+    }
+
+    button:disabled,
+    [aria-disabled='true'] {
+        cursor: not-allowed;
+    }
+
     ::selection {
         background: color-mix(in oklch, var(--domain) 30%, transparent);
         color: var(--foreground);

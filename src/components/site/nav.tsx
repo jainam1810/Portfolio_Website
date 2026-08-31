@@ -217,7 +217,7 @@ function MenuOverlay({
                       ))}
                     </div>
                     <p className="font-mono text-[10px] tracking-[0.18em] text-muted-foreground uppercase">
-                      {site.location} · {site.timezone}
+                      {site.location}
                     </p>
                   </motion.div>
                 </div>
