@@ -18,7 +18,7 @@ export function ExperienceSection() {
       index="04"
       eyebrow="Where I've worked"
       title="Experience"
-      lead="Trading desk. A clothing brand I started and ran. An Amazon warehouse. Research, and now building softwares. Pick a domain above and the relevant roles light up, but nothing disappears. The warehouse taught me as much about deadlines as any of it."
+      lead="Trading desk. A clothing brand I started and ran. An Amazon warehouse. Research, and now building softwares. Pick a domain above and the relevant roles light up, but nothing disappears."
     >
       {active !== 'all' && (
         <p className="mb-6 font-mono text-[11px] tracking-[0.14em] text-muted-foreground uppercase">
