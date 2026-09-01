@@ -20,12 +20,11 @@ export function SkillsSection() {
       lead="Everything here has been used in something real. If I only read about it, it's not on the list."
       aside={<DomainSwitch className="hidden md:inline-flex" size="sm" layoutId="domain-switch-skills" />}
     >
-      <motion.div layout className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
         <AnimatePresence mode="popLayout">
           {visible.map((group, i) => (
             <motion.div
               key={group.name}
-              layout
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.96 }}
@@ -33,7 +32,6 @@ export function SkillsSection() {
                 duration: 0.5,
                 delay: Math.min(i * 0.05, 0.2),
                 ease: EASE_OUT,
-                layout: { duration: 0.5, ease: EASE_OUT },
               }}
               data-domain={group.domains.length === 1 ? group.domains[0] : undefined}
               className="hud-corner group flex flex-col rounded-lg border border-border bg-card/30 p-5 transition-colors duration-500 hover:border-[color-mix(in_oklch,var(--domain)_35%,transparent)]"
@@ -60,7 +58,7 @@ export function SkillsSection() {
             </motion.div>
           ))}
         </AnimatePresence>
-      </motion.div>
+      </div>
     </Section>
   )
 }

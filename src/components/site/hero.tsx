@@ -1,7 +1,7 @@
 import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
 import type { MotionValue } from 'motion/react'
 import { ArrowDown, Download } from 'lucide-react'
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { site } from '@/data/site'
 import { domainList } from '@/data/domains'
 import { useDomainState } from '@/components/domain-context'
@@ -10,10 +10,9 @@ import { EASE_OUT } from '@/components/anim'
 import { BrandGlyph } from '@/lib/icons'
 import { cn } from '@/lib/utils'
 
-/* Drop a transparent PNG at public/profile-cutout.png and the hero picks it up
-   automatically; until then it falls back to the original photo. */
-const CUTOUT = '/profile-cutout.png'
-const FALLBACK_PHOTO = '/profile.jpg'
+/* A transparent cut-out: the tint layers are clipped to its alpha and the
+   figure sits on the page rather than inside a rectangle. */
+const PORTRAIT = '/profile.png'
 
 export function Hero({ ready = true }: { ready?: boolean }) {
   const ref = useRef<HTMLElement>(null)
@@ -36,13 +35,7 @@ export function Hero({ ready = true }: { ready?: boolean }) {
     >
       {/* Technical ground plane */}
       <div className="hud-grid pointer-events-none absolute inset-0 opacity-40" />
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            'radial-gradient(65% 55% at 62% 20%, color-mix(in oklch, var(--domain) 16%, transparent), transparent 70%)',
-        }}
-      />
+      <div className="hero-glow pointer-events-none absolute inset-0" />
 
       <Portrait y={portraitY} ready={ready} />
 
@@ -222,42 +215,32 @@ function Word({
  * so the type crosses over it.
  */
 function Portrait({ y, ready }: { y: MotionValue<string>; ready: boolean }) {
-  // Flips to false if the cut-out is absent, so the hero never shows a broken image.
-  const [cutout, setCutout] = useState(true)
-
   return (
     <motion.div
       style={{ y }}
       initial={{ opacity: 0, scale: 1.04 }}
       animate={ready ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 1.04 }}
       transition={{ duration: 1.3, delay: 0.2, ease: EASE_OUT }}
-      className="pointer-events-none absolute right-0 bottom-0 z-10 h-[62%] w-[80%] origin-bottom-right opacity-35 sm:h-[74%] sm:w-[64%] sm:opacity-60 lg:h-[88%] lg:w-[46%] lg:opacity-100 xl:right-[3%] xl:w-[42%]"
+      className="pointer-events-none absolute top-[34%] right-0 z-10 h-[32%] w-[80%] origin-bottom-right opacity-35 sm:top-[28%] sm:h-[44%] sm:w-[64%] sm:opacity-60 lg:top-auto lg:bottom-0 lg:h-[88%] lg:w-[46%] lg:opacity-100 xl:right-[3%] xl:w-[42%]"
     >
       <div
-        className={cn('duotone-wrap relative size-full', !cutout && 'photo-vignette')}
-        style={cutout ? ({ '--cutout': `url(${CUTOUT})` } as React.CSSProperties) : undefined}
+        className="duotone-wrap relative size-full"
+        style={{ '--cutout': `url(${PORTRAIT})` } as React.CSSProperties}
       >
         <img
-          src={cutout ? CUTOUT : FALLBACK_PHOTO}
+          src={PORTRAIT}
           alt="Jainam Varia"
-          onError={() => setCutout(false)}
-          className={cn('size-full', cutout ? 'object-contain object-bottom' : 'object-cover')}
-          style={cutout ? undefined : { objectPosition: '36% 22%' }}
+          className="size-full object-contain object-bottom"
           loading="eager"
           decoding="async"
         />
-        <span className={cn('duotone-tint', cutout && 'cutout-mask')} />
-        <span className={cn('duotone-glow', cutout && 'cutout-mask')} />
+        {/* Clipped to the cut-out's alpha, or they would paint a rectangle. */}
+        <span className="duotone-tint cutout-mask" />
+        <span className="duotone-glow cutout-mask" />
       </div>
 
-      {/* Scrim: keeps the left-hand copy readable where it crosses the figure.
-          A cut-out needs far less of it than a full rectangle does. */}
-      <div
-        className={cn(
-          'absolute inset-0 bg-gradient-to-r from-background to-transparent',
-          cutout ? 'via-background/55 lg:via-transparent' : 'via-background/75 lg:via-background/20',
-        )}
-      />
+      {/* Only phones need a scrim: there the figure sits behind the copy. */}
+      <div className="absolute inset-0 bg-gradient-to-r from-background via-background/55 to-transparent lg:hidden" />
       <div className="absolute inset-x-0 bottom-0 h-1/5 bg-gradient-to-t from-background to-transparent" />
     </motion.div>
   )

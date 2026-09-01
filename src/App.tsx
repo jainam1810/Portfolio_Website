@@ -15,14 +15,18 @@ import { ActivitiesSection } from '@/components/site/activities-section'
 import { ContactSection } from '@/components/site/contact-section'
 import { Footer } from '@/components/site/footer'
 import { BackToTop } from '@/components/site/back-to-top'
-import { useKonami } from '@/hooks/use-portfolio'
+import { useKonami, useScrollAnchor } from '@/hooks/use-portfolio'
 import { site } from '@/data/site'
 import { EASE_OUT } from '@/components/anim'
+
+/** Sections whose height changes when the domain filter changes. */
+const RESIZING_SECTIONS = ['domains', 'projects', 'skills', 'experience'] as const
 
 export default function App() {
   const [loading, setLoading] = useState(true)
 
   useKonami()
+  useScrollAnchor(RESIZING_SECTIONS)
 
   useEffect(() => {
     const timer = window.setTimeout(() => setLoading(false), 900)

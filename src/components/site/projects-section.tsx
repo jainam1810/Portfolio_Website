@@ -33,7 +33,7 @@ export function ProjectsSection() {
     >
       {/* Every card is the same width, and the clamped copy below keeps every
           card the same height too - so the grid stays a clean matrix. */}
-      <motion.div layout className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
         <AnimatePresence mode="popLayout">
           {visible.map((project, i) => (
             <ProjectCard key={project.slug} project={project} index={i} />
@@ -41,7 +41,7 @@ export function ProjectsSection() {
         </AnimatePresence>
 
         {active === 'all' && <GithubCard />}
-      </motion.div>
+      </div>
     </Section>
   )
 }
@@ -49,12 +49,15 @@ export function ProjectsSection() {
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   return (
     <motion.article
-      layout
+      // No `layout` here on purpose. Filtering can resize sections far above
+      // this one, and the scroll correction that follows leaves Motion
+      // animating each card from a viewport position that is already stale -
+      // the page appeared to jump and then slide back. Cards fade instead.
       data-domain={project.primary}
       initial={{ opacity: 0, scale: 0.97 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.97 }}
-      transition={{ duration: 0.45, ease: EASE_OUT, layout: { duration: 0.5, ease: EASE_OUT } }}
+      transition={{ duration: 0.45, ease: EASE_OUT }}
       className="hud-corner group relative flex h-full flex-col overflow-hidden rounded-lg border border-border bg-card/30 p-5 transition-colors duration-500 hover:border-[color-mix(in_oklch,var(--domain)_40%,transparent)]"
     >
       <div
