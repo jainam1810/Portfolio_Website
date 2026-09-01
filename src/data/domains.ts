@@ -17,7 +17,8 @@ export const domains: Record<DomainId, Domain> = {
         items: [
           'Linear Regression',
           'Logistic Regression',
-          'SVM / SVR',
+          'SVM',
+          'SVR',
           'XGBoost',
           'Random Forest',
           'Gradient Boosting',
@@ -114,7 +115,8 @@ export const domains: Record<DomainId, Domain> = {
       {
         name: 'Abuse & availability',
         items: [
-          'DoS / DDoS defence',
+          'DoS defence',
+          'DDoS defence',
           'Replay attacks',
           'Idempotency',
           'Rate limiting — IP-based',

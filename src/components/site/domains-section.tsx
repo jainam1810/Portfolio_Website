@@ -1,4 +1,5 @@
-import { AnimatePresence, motion } from 'motion/react'
+import { useRef } from 'react'
+import { AnimatePresence, motion, useInView } from 'motion/react'
 import { Check } from 'lucide-react'
 import { Section } from '@/components/site/section'
 import { DomainSwitch } from '@/components/site/domain-switch'
@@ -27,6 +28,13 @@ import { cn } from '@/lib/utils'
  */
 export function DomainsSection() {
   const { active } = useDomainState()
+  const ref = useRef<HTMLDivElement>(null)
+  // Animate the morph only while this section is genuinely being looked at.
+  // `amount: 0` was true even when just the section's bottom padding grazed the
+  // viewport, so switching domain from further down the page still animated a
+  // 900px reflow above the reader and yanked the page around.
+  const onScreen = useInView(ref, { margin: '-30% 0px -30% 0px' })
+
 
   return (
     <Section
@@ -42,12 +50,14 @@ export function DomainsSection() {
           Motion's `layout` FLIPs between the two, which is the only way to
           animate a flex-direction change. */}
       <motion.div
+        ref={ref}
+        data-onscreen={onScreen ? 'yes' : 'no'}
         layout
-        transition={{ layout: { duration: 0.55, ease: EASE_OUT } }}
+        transition={{ layout: { duration: onScreen ? 0.55 : 0, ease: EASE_OUT } }}
         className={cn('hidden gap-3 lg:flex', active === 'all' ? 'flex-col' : 'flex-row')}
       >
         {domainList.map((domain) => (
-          <DesktopBand key={domain.id} domain={domain} active={active} />
+          <DesktopBand key={domain.id} domain={domain} active={active} animate={onScreen} />
         ))}
       </motion.div>
 
@@ -100,13 +110,21 @@ function PanelHead({ domain }: { domain: Domain }) {
   )
 }
 
-function DesktopBand({ domain, active }: { domain: Domain; active: string }) {
+function DesktopBand({
+  domain,
+  active,
+  animate,
+}: {
+  domain: Domain
+  active: string
+  animate: boolean
+}) {
   const isCollapsed = active !== 'all' && active !== domain.id
 
   return (
     <motion.div
       layout
-      transition={{ layout: { duration: 0.55, ease: EASE_OUT } }}
+      transition={{ layout: { duration: animate ? 0.55 : 0, ease: EASE_OUT } }}
       data-domain={domain.id}
       // perspective is what makes the rotateX below read as depth rather than
       // a vertical squash.
@@ -137,7 +155,7 @@ function DesktopBand({ domain, active }: { domain: Domain; active: string }) {
             initial={{ rotateX: -80, opacity: 0 }}
             animate={{ rotateX: 0, opacity: 1 }}
             exit={{ rotateX: 80, opacity: 0 }}
-            transition={{ duration: 0.32, ease: EASE_OUT }}
+            transition={{ duration: animate ? 0.32 : 0, ease: EASE_OUT }}
             style={{ transformOrigin: 'center center', backfaceVisibility: 'hidden' }}
             className="relative flex h-full flex-col items-center justify-between py-6"
           >
@@ -155,7 +173,7 @@ function DesktopBand({ domain, active }: { domain: Domain; active: string }) {
             initial={{ rotateX: 80, opacity: 0 }}
             animate={{ rotateX: 0, opacity: 1 }}
             exit={{ rotateX: -80, opacity: 0 }}
-            transition={{ duration: 0.4, ease: EASE_OUT }}
+            transition={{ duration: animate ? 0.4 : 0, ease: EASE_OUT }}
             style={{ transformOrigin: 'center center', backfaceVisibility: 'hidden' }}
             className="relative p-8"
           >

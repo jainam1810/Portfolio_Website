@@ -120,11 +120,122 @@ export function useKonami(onTrigger: () => void = launchCricketFireworks) {
 }
 
 /**
+ * True while a deliberate scroll (nav click, back-to-top) is in flight. Any
+ * programmatic scroll cancels an in-progress smooth scroll, so useScrollAnchor
+ * has to stay out of the way until it settles.
+ */
+let navigating = false
+
+/**
  * Anchor navigation only. Uses the browser's own smooth scroll, so wheel and
  * trackpad scrolling keep the operating system's native speed and feel.
  */
 export function useScrollTo() {
   return useCallback((id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    const el = document.getElementById(id)
+    if (!el) return
+
+    navigating = true
+    const done = () => {
+      navigating = false
+      window.removeEventListener('scrollend', done)
+    }
+    window.addEventListener('scrollend', done)
+    // scrollend is not everywhere yet, so time out as well.
+    window.setTimeout(done, 1500)
+
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }, [])
+}
+
+/**
+ * Keeps what you are reading still when a section above it resizes.
+ *
+ * Changing domain resizes several sections at once, and the domains section
+ * alone swings by about 900px. Deltas are attributed per section, not per
+ * batch: several sections resize together, and bailing out because one of them
+ * is the one being read would throw away the others - which is what moved the
+ * page.
+ */
+export function useScrollAnchor(ids: readonly string[]) {
+  useEffect(() => {
+    if (typeof ResizeObserver === 'undefined') return
+    const sections = ids
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null)
+    if (sections.length === 0) return
+
+    let anchor: Element | null = null
+    let adjusting = false
+    const heights = new Map<Element, number>()
+
+    const pick = () => {
+      if (adjusting) return
+      anchor = document.elementFromPoint(
+        Math.round(window.innerWidth / 2),
+        Math.round(window.innerHeight / 2),
+      )
+    }
+
+    const observer = new ResizeObserver((entries) => {
+      // Never scroll during deliberate navigation: it would abort the smooth
+      // scroll and strand the page part-way.
+      if (navigating) {
+        for (const entry of entries) {
+          heights.set(entry.target, entry.target.getBoundingClientRect().height)
+        }
+        return
+      }
+      if (!anchor || !anchor.isConnected) {
+        for (const entry of entries) {
+          heights.set(entry.target, entry.target.getBoundingClientRect().height)
+        }
+        pick()
+        return
+      }
+
+      let shift = 0
+
+      for (const entry of entries) {
+        const rect = entry.target.getBoundingClientRect()
+        const previous = heights.get(entry.target)
+        heights.set(entry.target, rect.height)
+        if (previous === undefined) continue
+
+        // The section holding the anchor is the one being read; let it move.
+        if (entry.target.contains(anchor)) continue
+
+        // "Above" is decided by document order, not by screen position. By the
+        // time this runs the anchor has already been pushed by the resize, so
+        // comparing viewport tops blamed the wrong sections entirely.
+        const anchorComesAfter =
+          entry.target.compareDocumentPosition(anchor) & Node.DOCUMENT_POSITION_FOLLOWING
+        if (!anchorComesAfter) continue
+
+        shift += rect.height - previous
+      }
+
+      if (Math.abs(shift) > 1) {
+        adjusting = true
+        window.scrollBy(0, shift)
+        requestAnimationFrame(() => {
+          adjusting = false
+        })
+      }
+    })
+
+    pick()
+    for (const el of sections) {
+      heights.set(el, el.getBoundingClientRect().height)
+      observer.observe(el)
+    }
+    window.addEventListener('scroll', pick, { passive: true })
+    window.addEventListener('resize', pick)
+
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('scroll', pick)
+      window.removeEventListener('resize', pick)
+    }
+  }, [ids])
 }

@@ -139,10 +139,13 @@
     body {
         @apply bg-background text-foreground;
         overflow-x: clip;
+        /* The browser's own scroll anchoring also adjusts scrollY when a
+           section above the viewport resizes. With useScrollAnchor doing the
+           same job, the two corrected each other and the page drifted. One
+           mechanism owns scroll position, and it is ours. */
+        overflow-anchor: none;
     }
 
-    /* A translucent tint keeps the text itself readable. A solid accent fill
-       turned the huge display type into unreadable coloured slabs. */
     /* Tailwind v4 dropped the default pointer cursor on <button>, so nothing
        clickable showed one. Put it back for anything that responds to a click. */
     button:not(:disabled),
@@ -160,6 +163,8 @@
         cursor: not-allowed;
     }
 
+    /* A translucent tint keeps the text itself readable. A solid accent fill
+       turned the huge display type into unreadable coloured slabs. */
     ::selection {
         background: color-mix(in oklch, var(--domain) 30%, transparent);
         color: var(--foreground);
@@ -243,12 +248,7 @@
         pointer-events: none;
     }
 
-    /* Fallback treatment for a rectangular photo: dissolves its edges into the
-       page so it does not read as a pasted-in box. Used until a cut-out exists. */
-    .photo-vignette {
-        -webkit-mask-image: radial-gradient(62% 66% at 46% 38%, #000 40%, transparent 84%);
-        mask-image: radial-gradient(62% 66% at 46% 38%, #000 40%, transparent 84%);
-    }
+
 
     /* With a transparent cut-out, the tint layers must be clipped to its alpha
        or they paint a solid rectangle. Geometry mirrors object-contain/bottom. */
@@ -264,6 +264,27 @@
     }
 
     /* Technical HUD hairlines */
+    /* The hero's accent glow. On a phone the desktop version is squeezed into
+       390px, which makes one half visibly brighter than the other and reads as
+       two panels. Small screens get a wider, flatter, weaker version. */
+    .hero-glow {
+        background: radial-gradient(
+            140% 55% at 50% 8%,
+            color-mix(in oklch, var(--domain) 9%, transparent),
+            transparent 75%
+        );
+    }
+
+    @media (min-width: 1024px) {
+        .hero-glow {
+            background: radial-gradient(
+                65% 55% at 62% 20%,
+                color-mix(in oklch, var(--domain) 16%, transparent),
+                transparent 70%
+            );
+        }
+    }
+
     .hud-grid {
         background-image:
             linear-gradient(to right, color-mix(in oklch, var(--foreground) 5%, transparent) 1px, transparent 1px),
