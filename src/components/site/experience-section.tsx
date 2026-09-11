@@ -15,7 +15,7 @@ export function ExperienceSection() {
   return (
     <Section
       id="experience"
-      index="04"
+      index="05"
       eyebrow="Where I've worked"
       title="Experience"
       lead="Trading desk. A clothing brand I started and ran. An Amazon warehouse. Research, and now building softwares. Pick a domain above and the relevant roles light up, but nothing disappears."
@@ -127,11 +127,15 @@ function RoleRow({
           ))}
         </ul>
 
-        <div className="mt-4 flex flex-wrap items-center gap-1.5">
+        {/* Tags and domain pills share one row from lg up. The widest role is
+            five tags plus three pills, which needs about 5% more than the card
+            gives it - so the type and the padding step down rather than the row
+            wrapping a single pill onto a line of its own. */}
+        <div className="mt-4 flex flex-wrap items-center gap-1.5 lg:flex-nowrap lg:gap-1">
           {role.tags.map((tag) => (
             <span
               key={tag}
-              className="rounded border border-border/70 bg-background/40 px-2 py-1 font-mono text-[10px] text-muted-foreground"
+              className="rounded border border-border/70 bg-background/40 px-2 py-1 font-mono text-[10px] whitespace-nowrap text-muted-foreground lg:px-1.5 lg:text-[9px]"
             >
               {tag}
             </span>
@@ -140,7 +144,7 @@ function RoleRow({
             <span
               key={d}
               data-domain={d}
-              className="rounded-full border border-[var(--domain)]/35 px-2 py-0.5 font-mono text-[9px] tracking-[0.14em] text-[var(--domain)] uppercase"
+              className="rounded-full border border-[var(--domain)]/35 px-2 py-0.5 font-mono text-[9px] tracking-[0.14em] whitespace-nowrap text-[var(--domain)] uppercase lg:px-1.5 lg:text-[8.5px] lg:tracking-[0.1em]"
             >
               {domains[d].label}
             </span>

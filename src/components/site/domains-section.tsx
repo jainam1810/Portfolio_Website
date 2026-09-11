@@ -1,40 +1,47 @@
-import { useRef } from 'react'
-import { AnimatePresence, motion, useInView } from 'motion/react'
-import { Check } from 'lucide-react'
-import { Section } from '@/components/site/section'
-import { DomainSwitch } from '@/components/site/domain-switch'
-import { useDomainState } from '@/components/domain-context'
-import { domainList } from '@/data/domains'
-import type { Domain } from '@/data/types'
+import { useEffect, useState } from "react";
+import { Check, ChevronLeft, ChevronRight } from "lucide-react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { EffectCoverflow, Pagination } from "swiper/modules";
+import type { Swiper as SwiperClass } from "swiper";
+import "swiper/css";
+import "swiper/css/effect-coverflow";
+import "swiper/css/pagination";
+import { Section } from "@/components/site/section";
+import { DomainSwitch } from "@/components/site/domain-switch";
+import { useDomainState } from "@/components/domain-context";
+import { domainList } from "@/data/domains";
+import type { Domain } from "@/data/types";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from '@/components/ui/accordion'
-import { EASE_OUT } from '@/components/anim'
-import { cn } from '@/lib/utils'
+} from "@/components/ui/accordion";
 
 /**
- * The three pillars.
+ * The five pillars, as one coverflow carousel at every width.
  *
- * On desktop these are full-width bands stacked down the page rather than three
- * columns side by side. Security has far more to say than the other two, and in
- * a column layout that left the shorter cards half empty. Stacked, each band is
- * only as tall as it needs to be and there are no neighbouring columns left to
- * mismatch. Choosing a domain collapses the other two to slim bars.
+ * This replaced a desktop-only layout of stacked full-width bands that
+ * collapsed to vertical rails. The carousel says the same thing in a fifth of
+ * the page height, and it behaves identically on a phone and on a desktop, so
+ * there is one layout to reason about rather than two.
  *
- * Mobile is deliberately unchanged: stacked cards, groups behind chevrons.
+ * Picking a domain in the switcher slides the carousel to it. Swiping does not
+ * change the site theme in return: each card carries its own data-domain, so it
+ * is already the right colour, and re-theming the whole page from a swipe would
+ * be a large effect from a small gesture.
  */
 export function DomainsSection() {
-  const { active } = useDomainState()
-  const ref = useRef<HTMLDivElement>(null)
-  // Animate the morph only while this section is genuinely being looked at.
-  // `amount: 0` was true even when just the section's bottom padding grazed the
-  // viewport, so switching domain from further down the page still animated a
-  // 900px reflow above the reader and yanked the page around.
-  const onScreen = useInView(ref, { margin: '-30% 0px -30% 0px' })
+  const { active } = useDomainState();
+  const [swiper, setSwiper] = useState<SwiperClass | null>(null);
 
+  useEffect(() => {
+    if (!swiper || swiper.destroyed || active === "all") return;
+    const index = domainList.findIndex((d) => d.id === active);
+    // realIndex / slideToLoop, not activeIndex / slideTo: looping inserts
+    // duplicated slides, so the raw index no longer matches the domain list.
+    if (index >= 0 && index !== swiper.realIndex) swiper.slideToLoop(index);
+  }, [swiper, active]);
 
   return (
     <Section
@@ -42,40 +49,113 @@ export function DomainsSection() {
       index="02"
       eyebrow="What I actually do"
       title="About Domains"
-      lead="A model that spots the risk. A contract that moves the money. Checks that keep both safe. In financial software these are not three separate jobs."
-      aside={<DomainSwitch className="hidden md:inline-flex" size="sm" layoutId="domain-switch-section" />}
+      lead="A model that spots the risk. A contract that moves the money. Checks that keep both safe. Then the screens and the database around all of it. In financial software these are not separate jobs."
+      aside={
+        <DomainSwitch
+          className="hidden md:inline-flex"
+          size="sm"
+          layoutId="domain-switch-section"
+        />
+      }
     >
-      {/* Desktop: stacked full-width bands when showing everything, and a row
-          of one open band plus two vertical rails once a domain is picked.
-          Motion's `layout` FLIPs between the two, which is the only way to
-          animate a flex-direction change. */}
-      <motion.div
-        ref={ref}
-        data-onscreen={onScreen ? 'yes' : 'no'}
-        layout
-        transition={{ layout: { duration: onScreen ? 0.55 : 0, ease: EASE_OUT } }}
-        className={cn('hidden gap-3 lg:flex', active === 'all' ? 'flex-col' : 'flex-row')}
+      {/* Coverflow puts transform-style: preserve-3d on the slide wrapper, and an
+          element inside a 3D context cannot be clipped by an ancestor's
+          overflow. The slides therefore escaped the carousel and were sliced
+          square by the viewport edge. This wrapper is flat, so it clips, and
+          the mask dissolves the outermost cards instead of cutting them. */}
+      {/* The pagination vars live out here because the dots are rendered into
+          the control row below, outside the carousel element itself. */}
+      <div
+        style={
+          {
+            "--swiper-pagination-color": "var(--domain)",
+            "--swiper-pagination-bullet-inactive-color":
+              "var(--muted-foreground)",
+            "--swiper-pagination-bullet-inactive-opacity": "0.4",
+            "--swiper-pagination-bullet-size": "7px",
+          } as React.CSSProperties
+        }
       >
-        {domainList.map((domain) => (
-          <DesktopBand key={domain.id} domain={domain} active={active} animate={onScreen} />
-        ))}
-      </motion.div>
-
-      {/* Mobile: stacked cards, groups behind chevrons */}
-      <div className="flex flex-col gap-4 lg:hidden">
-        {domainList.map((domain) => (
-          <div
-            key={domain.id}
-            data-domain={domain.id}
-            className="hud-corner rounded-lg border border-border bg-card/40 p-6"
+        <div className="fade-edges relative overflow-hidden">
+          <Swiper
+            onSwiper={setSwiper}
+            modules={[EffectCoverflow, Pagination]}
+            effect="coverflow"
+            grabCursor
+            loop
+            slideToClickedSlide
+            centeredSlides
+            slidesPerView="auto"
+            spaceBetween={16}
+            coverflowEffect={{
+              rotate: 18,
+              stretch: 0,
+              depth: 130,
+              modifier: 1.6,
+              slideShadows: false,
+            }}
+            pagination={{ el: ".domains-pagination", clickable: true }}
+            // Swiper preventDefaults the pointerdown unless the target itself
+            // matches its focusableElements list. The accordion label is a
+            // <span> inside the trigger, so it did not match and the press
+            // never reached Radix - only the chevron area worked, where the
+            // chevron is pointer-events-none and the target is the button.
+            // This makes Swiper stand back for anything inside a control;
+            // swiping from the rest of the card is unaffected.
+            noSwipingSelector="button, a, [role='button'], input, textarea, select"
+            observer
+            observeParents
+            className="domain-swiper !pb-2"
           >
-            <PanelHead domain={domain} />
-            <MobileBody domain={domain} />
-          </div>
-        ))}
+            {domainList.map((domain) => (
+              // Narrower slides on wider screens, so the neighbouring cards stay
+              // visible either side instead of one card filling the row.
+              <SwiperSlide
+                key={domain.id}
+                className="!h-auto !w-[86%] max-w-sm sm:!w-[62%] sm:max-w-md lg:!w-[46%] lg:max-w-lg xl:!w-[40%] xl:max-w-xl"
+              >
+                <div
+                  data-domain={domain.id}
+                  className="hud-corner flex h-full flex-col rounded-lg border border-border bg-card/40 p-6 lg:p-8"
+                >
+                  <PanelHead domain={domain} />
+                  <PanelBody domain={domain} />
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+
+        {/* Arrows sit either side of the dots rather than over the cards, where
+          they would cover the copy. */}
+        <div className="mt-6 flex items-center justify-center gap-4">
+          <Arrow direction="prev" onClick={() => swiper?.slidePrev()} />
+          <div className="domains-pagination !static !w-auto" />
+          <Arrow direction="next" onClick={() => swiper?.slideNext()} />
+        </div>
       </div>
     </Section>
-  )
+  );
+}
+
+function Arrow({
+  direction,
+  onClick,
+}: {
+  direction: "prev" | "next";
+  onClick: () => void;
+}) {
+  const Icon = direction === "prev" ? ChevronLeft : ChevronRight;
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={direction === "prev" ? "Previous domain" : "Next domain"}
+      className="grid size-9 shrink-0 place-items-center rounded-full border border-border text-muted-foreground transition-colors duration-300 hover:border-[var(--domain)] hover:text-[var(--domain)]"
+    >
+      <Icon className="size-4" />
+    </button>
+  );
 }
 
 /** Shared chip list. */
@@ -91,7 +171,7 @@ function Chips({ items }: { items: string[] }) {
         </li>
       ))}
     </ul>
-  )
+  );
 }
 
 function PanelHead({ domain }: { domain: Domain }) {
@@ -104,125 +184,41 @@ function PanelHead({ domain }: { domain: Domain }) {
         <span className="h-px flex-1 bg-border" />
         <span className="eyebrow text-muted-foreground">{domain.label}</span>
       </div>
-      <h3 className="font-display display-md mt-4 text-foreground">{domain.title}</h3>
-      <p className="mt-2 font-serif text-base text-[var(--domain)] italic">{domain.statement}</p>
+      <h3 className="font-display display-md mt-4 text-foreground">
+        {domain.title}
+      </h3>
+      <p className="mt-2 font-serif text-base text-[var(--domain)] italic">
+        {domain.statement}
+      </p>
     </header>
-  )
+  );
 }
 
-function DesktopBand({
-  domain,
-  active,
-  animate,
-}: {
-  domain: Domain
-  active: string
-  animate: boolean
-}) {
-  const isCollapsed = active !== 'all' && active !== domain.id
-
-  return (
-    <motion.div
-      layout
-      transition={{ layout: { duration: animate ? 0.55 : 0, ease: EASE_OUT } }}
-      data-domain={domain.id}
-      // perspective is what makes the rotateX below read as depth rather than
-      // a vertical squash.
-      style={{
-        perspective: '1400px',
-        flexGrow: isCollapsed ? 0 : 1,
-        flexBasis: isCollapsed ? '4.75rem' : 'auto',
-      }}
-      className={cn(
-        'hud-corner relative min-w-0 overflow-hidden rounded-lg border transition-colors duration-500',
-        isCollapsed
-          ? 'border-border bg-background'
-          : 'border-[color-mix(in_oklch,var(--domain)_28%,transparent)] bg-card/40',
-      )}
-    >
-      <div
-        className="pointer-events-none absolute inset-0 opacity-60"
-        style={{
-          background:
-            'radial-gradient(60% 130% at 0% 0%, color-mix(in oklch, var(--domain) 11%, transparent), transparent 70%)',
-        }}
-      />
-
-      <AnimatePresence mode="wait" initial={false}>
-        {isCollapsed ? (
-          <motion.div
-            key="rail"
-            initial={{ rotateX: -80, opacity: 0 }}
-            animate={{ rotateX: 0, opacity: 1 }}
-            exit={{ rotateX: 80, opacity: 0 }}
-            transition={{ duration: animate ? 0.32 : 0, ease: EASE_OUT }}
-            style={{ transformOrigin: 'center center', backfaceVisibility: 'hidden' }}
-            className="relative flex h-full flex-col items-center justify-between py-6"
-          >
-            <span className="font-mono text-[10px] tracking-[0.18em] text-[var(--domain)]">
-              {domain.index}
-            </span>
-            <span className="writing-vertical font-display text-lg tracking-wide text-muted-foreground">
-              {domain.label}
-            </span>
-            <span className="size-1.5 rounded-full bg-[var(--domain)]" />
-          </motion.div>
-        ) : (
-          <motion.div
-            key="full"
-            initial={{ rotateX: 80, opacity: 0 }}
-            animate={{ rotateX: 0, opacity: 1 }}
-            exit={{ rotateX: -80, opacity: 0 }}
-            transition={{ duration: animate ? 0.4 : 0, ease: EASE_OUT }}
-            style={{ transformOrigin: 'center center', backfaceVisibility: 'hidden' }}
-            className="relative p-8"
-          >
-            <PanelHead domain={domain} />
-
-            <p className="max-w-4xl text-[13px] leading-[1.55] text-muted-foreground text-pretty">
-              {domain.body}
-            </p>
-
-            {/* auto-fit: three groups make three columns, four make four, so a
-                band is never taller than it has to be. */}
-            <div className="mt-7 grid gap-x-8 gap-y-6 grid-cols-[repeat(auto-fit,minmax(13rem,1fr))]">
-              {domain.groups.map((group) => (
-                <div key={group.name}>
-                  <p className="eyebrow mb-2.5 text-muted-foreground/80">{group.name}</p>
-                  <Chips items={group.items} />
-                </div>
-              ))}
-            </div>
-
-            <ul className="mt-7 grid gap-x-8 gap-y-2.5 border-t border-border pt-5 grid-cols-[repeat(auto-fit,minmax(18rem,1fr))]">
-              {domain.proof.map((point) => (
-                <li
-                  key={point}
-                  className="flex gap-2.5 text-[12.5px] leading-[1.5] text-foreground/80"
-                >
-                  <Check className="mt-0.5 size-3.5 shrink-0 text-[var(--domain)]" />
-                  <span className="text-pretty">{point}</span>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.div>
-  )
-}
-
-/** Phones only: the full chip list is far too long to scroll past. */
-function MobileBody({ domain }: { domain: Domain }) {
+function PanelBody({ domain }: { domain: Domain }) {
   return (
     <div className="flex min-h-0 flex-1 flex-col">
-      <p className="text-[13px] leading-[1.55] text-muted-foreground text-pretty">{domain.body}</p>
+      <p className="text-[13px] leading-[1.55] text-muted-foreground text-pretty">
+        {domain.body}
+      </p>
 
       <Accordion type="multiple" className="mt-5 border-t border-border">
         {domain.groups.map((group) => (
-          <AccordionItem key={group.name} value={group.name} className="border-b border-border">
-            <AccordionTrigger className="items-center gap-3 py-3 hover:no-underline">
-              <span className="eyebrow text-muted-foreground">{group.name}</span>
+          <AccordionItem
+            key={group.name}
+            value={group.name}
+            className="border-b border-border"
+          >
+            {/* The chevrons are pointer-events-none, so a click there lands on
+                the button and toggles. The label was a live target of its own,
+                and inside the carousel that press never reached Radix. Making
+                the label transparent to pointers means the whole row behaves
+                like the chevron: the button is always what gets clicked.
+                select-none stops a click on the words turning into a text
+                drag, which the carousel reads as a swipe. */}
+            <AccordionTrigger className="items-center gap-3 py-3 select-none hover:no-underline">
+              <span className="eyebrow pointer-events-none text-muted-foreground">
+                {group.name}
+              </span>
             </AccordionTrigger>
             <AccordionContent>
               <Chips items={group.items} />
@@ -231,14 +227,19 @@ function MobileBody({ domain }: { domain: Domain }) {
         ))}
       </Accordion>
 
-      <ul className="mt-6 space-y-2 border-t border-border pt-5">
+      {/* No border here: the last accordion row already closes with one, and
+          the two together read as a double rule. */}
+      <ul className="mt-6 space-y-2">
         {domain.proof.map((point) => (
-          <li key={point} className="flex gap-2.5 text-[12.5px] leading-[1.5] text-foreground/80">
+          <li
+            key={point}
+            className="flex gap-2.5 text-[12.5px] leading-[1.5] text-foreground/80"
+          >
             <Check className="mt-0.5 size-3.5 shrink-0 text-[var(--domain)]" />
             <span className="text-pretty">{point}</span>
           </li>
         ))}
       </ul>
     </div>
-  )
+  );
 }

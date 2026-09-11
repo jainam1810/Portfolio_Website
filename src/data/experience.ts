@@ -8,7 +8,7 @@ export const roles: Role[] = [
     logo: '/dizzy-otter-logo.png',
     period: 'Feb 2026 — Present',
     location: 'Exeter, United Kingdom (Hybrid)',
-    domains: ['ml', 'sec'],
+    domains: ['ml', 'sec', 'stack'],
     points: [
       'Build and ship whole products for clients: frontend, backend, and the AI features on top. I also handle the security and bug fixing before anything goes out.',
       'Add AI where it saves the client time, from sorting content into categories to cutting steps out of a workflow.',
@@ -42,7 +42,7 @@ export const roles: Role[] = [
     logo: '/Kifs-logo.png',
     period: 'Jun 2025 — Jul 2025',
     location: 'Mumbai, India',
-    domains: ['chain', 'ml', 'sec'],
+    domains: ['chain', 'ml', 'sec', 'fin'],
     points: [
       'Researched and proposed an AI + Blockchain-based ledger for loan risk and fraud detection, improving processing speed by 30–40% and reducing manual intervention by 50%.',
       'Designed a strategic implementation plan inspired by Figure Technologies (USA) to enhance system efficiency.',

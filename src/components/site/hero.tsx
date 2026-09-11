@@ -1,9 +1,9 @@
-import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
+import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
 import type { MotionValue } from 'motion/react'
 import { ArrowDown, Download } from 'lucide-react'
 import { useRef } from 'react'
 import { site } from '@/data/site'
-import { domainList } from '@/data/domains'
+import { HERO_STRIP, domainList, domains } from '@/data/domains'
 import { useDomainState } from '@/components/domain-context'
 import { useScrollTo, useTypewriter } from '@/hooks/use-portfolio'
 import { EASE_OUT } from '@/components/anim'
@@ -20,6 +20,7 @@ export function Hero({ ready = true }: { ready?: boolean }) {
   const typed = useTypewriter(site.taglines)
   const scrollTo = useScrollTo()
   const { active } = useDomainState()
+  const cvs = site.cvs.filter((cv) => active === 'all' || cv.domains.includes(active))
 
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
   const contentY = useTransform(scrollYProgress, [0, 1], ['0%', reduced ? '0%' : '16%'])
@@ -39,11 +40,6 @@ export function Hero({ ready = true }: { ready?: boolean }) {
 
       <Portrait y={portraitY} ready={ready} />
 
-      {/* Left edge marker */}
-      <span className="writing-vertical absolute top-1/2 left-4 hidden -translate-y-1/2 font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase xl:block">
-        Portfolio — MMXXVI
-      </span>
-
       <motion.div
         style={{ y: contentY, opacity: contentOpacity }}
         className="relative z-20 mx-auto w-full max-w-[1440px] px-5 md:px-10 xl:pr-28"
@@ -61,38 +57,17 @@ export function Hero({ ready = true }: { ready?: boolean }) {
           {site.badge}
         </motion.p>
 
-        {/* Each word names something that exists in a repository: models,
-            smart contracts, and the guardrails around them. */}
-        <h1 className="font-display display-xl text-foreground">
-          <span className="flex flex-wrap items-baseline gap-x-[0.2em]">
-            <Word text={site.heroLead} delay={0.1} ready={ready} />
-            <Word
-              text={`${domainList[0].word}.`}
-              domain={domainList[0].id}
-              delay={0.24}
-              ready={ready}
-              dimmed={active !== 'all' && active !== domainList[0].id}
-            />
-          </span>
-          <span className="mt-1 flex flex-wrap items-baseline gap-x-[0.2em]">
-            {domainList.slice(1).map((d, i) => (
-              <Word
-                key={d.id}
-                text={`${d.word}.`}
-                domain={d.id}
-                delay={0.38 + i * 0.14}
-                ready={ready}
-                dimmed={active !== 'all' && active !== d.id}
-              />
-            ))}
-          </span>
-        </h1>
+        {/* "I build" is constant; the tail is whatever domain is selected.
+            Each domain sets its own type scale so its sentence fills the
+            measure exactly - short headlines come out large, long ones small,
+            and both span the same width. See .hero-headline in index.css. */}
+        <Headline ready={ready} />
 
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={ready ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
           transition={{ delay: 0.5, duration: 0.7, ease: EASE_OUT }}
-          className="mt-9 max-w-lg"
+          className="mt-5 max-w-lg"
         >
           <p className="min-h-[1.7em] font-mono text-sm text-[var(--domain)]">
             {typed}
@@ -105,9 +80,10 @@ export function Hero({ ready = true }: { ready?: boolean }) {
           {/* CVs, socials and the live readout are three stacked blocks with one
               shared gap, so the rhythm between them is identical. */}
           <div className="mt-7 flex flex-col items-start gap-5">
-            {/* Both CVs share one row on every width; each takes half a phone. */}
+            {/* One CV per selected domain; every CV when nothing is selected.
+                Both share one row on any width, each taking half a phone. */}
             <div className="flex gap-2.5">
-              {site.cvs.map((cv, i) => (
+              {cvs.map((cv, i) => (
                 <a
                   key={cv.label}
                   href={cv.href}
@@ -121,12 +97,7 @@ export function Hero({ ready = true }: { ready?: boolean }) {
                   )}
                 >
                   <Download className="size-3.5 shrink-0" />
-                  <span className="flex min-w-0 flex-col leading-tight">
-                    <span className="truncate">{cv.label}</span>
-                    <span className="truncate font-mono text-[9px] tracking-[0.12em] uppercase opacity-60">
-                      {cv.note}
-                    </span>
-                  </span>
+                  <span className="min-w-0 truncate">{cv.label}</span>
                 </a>
               ))}
             </div>
@@ -167,46 +138,47 @@ export function Hero({ ready = true }: { ready?: boolean }) {
   )
 }
 
-/** One word of the headline: fades and eases up to full size. */
-function Word({
-  text,
-  domain,
-  delay,
-  ready,
-  dimmed = false,
-}: {
-  text: string
-  domain?: string
-  delay: number
-  ready: boolean
-  dimmed?: boolean
-}) {
-  // Reduced motion still gets a fade - opacity is not motion. Previously this
-  // disabled the entrance outright, which looked like nothing happening at all.
+/**
+ * The headline. One shared entrance, then the tail cross-fades whenever the
+ * domain changes. A fade rather than a slide: at this size a slide reads as the
+ * whole page lurching.
+ */
+function Headline({ ready }: { ready: boolean }) {
+  const { active } = useDomainState()
   const reduced = useReducedMotion()
-  const from = reduced ? { opacity: 0 } : { opacity: 0, scale: 0.96 }
+  const { heroLine: tail, heroScale } = active === 'all' ? site : domains[active]
+
+  const from = reduced ? { opacity: 0 } : { opacity: 0, scale: 0.97 }
   const to = reduced ? { opacity: 1 } : { opacity: 1, scale: 1 }
 
   return (
-    // Two layers on purpose: the outer one owns the entrance, the inner one owns
-    // the dimmed state. Nested opacity multiplies, so neither fights the other.
-    <motion.span
-      className="inline-block"
+    <motion.h1
       initial={from}
       animate={ready ? to : from}
-      transition={{ duration: 0.85, delay, ease: EASE_OUT }}
+      transition={{ duration: 0.85, delay: 0.16, ease: EASE_OUT }}
+      style={
+        {
+          '--hero-scale-2': heroScale.two,
+          '--hero-scale-3': heroScale.three,
+          '--hero-strip-2': HERO_STRIP.two,
+          '--hero-strip-3': HERO_STRIP.three,
+        } as React.CSSProperties
+      }
+      className="hero-headline font-display flex origin-left items-center text-foreground"
     >
-      <span
-        data-domain={domain}
-        className={cn(
-          'inline-block transition-all duration-500',
-          domain ? 'text-[var(--domain)]' : 'text-foreground',
-          dimmed && 'opacity-25 blur-[1.5px]',
-        )}
-      >
-        {text}
-      </span>
-    </motion.span>
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.span
+          key={active}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.22, ease: EASE_OUT }}
+          className="block w-full"
+        >
+          {site.heroLead} <span className="text-[var(--domain)]">{tail}</span>
+        </motion.span>
+      </AnimatePresence>
+    </motion.h1>
   )
 }
 
@@ -251,8 +223,8 @@ function StatusStrip({ ready }: { ready: boolean }) {
   const { active } = useDomainState()
   const focus =
     active === 'all'
-      ? 'AI/ML · Blockchain · Security'
-      : domainList.find((d) => d.id === active)?.title
+      ? domainList.map((d) => d.label).join(' · ')
+      : domains[active].title
 
   return (
     <motion.dl

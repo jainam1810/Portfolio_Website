@@ -15,7 +15,7 @@ export function ActivitiesSection() {
   return (
     <Section
       id="activities"
-      index="07"
+      index="08"
       eyebrow="Outside the code"
       title="Extra-curricular Activities"
       lead="I captained my college cricket team to its first ever trophy. I have volunteered with BAPS since I was thirteen, and I help run events for the Business and Finance Society at Exeter."

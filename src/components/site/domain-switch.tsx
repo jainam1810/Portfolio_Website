@@ -10,8 +10,8 @@ const OPTIONS: { id: DomainFilter; index: string; label: string }[] = [
 ]
 
 /**
- * The tri-domain switcher. Changing the selection re-themes the entire site
- * through the --domain custom property and filters projects, skills and roles.
+ * The domain switcher. Changing the selection re-themes the entire site through
+ * the --domain custom property and filters projects, skills, roles and CVs.
  */
 export function DomainSwitch({
   size = 'md',
@@ -29,7 +29,7 @@ export function DomainSwitch({
       role="tablist"
       aria-label="Filter by domain"
       className={cn(
-        'inline-flex w-max items-center gap-0.5 rounded-full border border-border/80 bg-background/90 p-1',
+        'no-scrollbar inline-flex w-max max-w-full items-center gap-0.5 overflow-x-auto rounded-full border border-border/80 bg-background/90 p-1',
         className,
       )}
     >

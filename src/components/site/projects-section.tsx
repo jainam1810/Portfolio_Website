@@ -4,6 +4,7 @@ import { Section } from '@/components/site/section'
 import { DomainSwitch } from '@/components/site/domain-switch'
 import { useDomainState } from '@/components/domain-context'
 import { projects } from '@/data/projects'
+import { site } from '@/data/site'
 import { domains } from '@/data/domains'
 import type { Project } from '@/data/types'
 import { EASE_OUT } from '@/components/anim'
@@ -19,7 +20,7 @@ import {
 import { cn } from '@/lib/utils'
 
 export function ProjectsSection() {
-  const { active, matches } = useDomainState()
+  const { matches } = useDomainState()
   const visible = projects.filter((p) => matches(p.domains))
 
   return (
@@ -40,8 +41,9 @@ export function ProjectsSection() {
           ))}
         </AnimatePresence>
 
-        {active === 'all' && <GithubCard />}
       </div>
+
+      <GithubCard />
     </Section>
   )
 }
@@ -146,9 +148,15 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             rel="noopener noreferrer"
             className={cn(
               'inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 font-mono text-[10px] tracking-wide transition-all duration-300',
-              link.kind === 'live'
-                ? 'bg-[var(--domain)] text-background hover:brightness-110'
-                : 'border border-border text-muted-foreground hover:border-[var(--domain)] hover:text-[var(--domain)]',
+              link.kind === 'live' &&
+                'bg-[var(--domain)] text-background hover:brightness-110',
+              // Deliberately not a hue: the accent cycles through five colours,
+              // so any fixed one clashes with at least one domain. A bright
+              // neutral separates Video from the muted GitHub link in all five.
+              link.kind === 'demo' &&
+                'border border-foreground/45 bg-foreground/[0.08] text-foreground hover:border-foreground hover:bg-foreground/15',
+              link.kind === 'repo' &&
+                'border border-border text-muted-foreground hover:border-[var(--domain)] hover:text-[var(--domain)]',
             )}
           >
             {link.kind === 'repo' && <BrandGlyph name="github" className="size-2.5" />}
@@ -213,27 +221,31 @@ function WriteUpDialog({ writeUp }: { writeUp: NonNullable<Project['writeUp']> }
 function GithubCard() {
   return (
     <motion.a
-      layout
-      href="https://github.com/jainam1810"
+      href={`https://github.com/${site.githubUser}`}
       target="_blank"
       rel="noopener noreferrer"
-      initial={{ opacity: 0, scale: 0.97 }}
-      animate={{ opacity: 1, scale: 1 }}
+      initial={{ opacity: 0, y: 12 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.4 }}
       transition={{ duration: 0.45, ease: EASE_OUT }}
-      className="hud-corner group relative flex h-full flex-col justify-between overflow-hidden rounded-lg border border-dashed border-border p-5 transition-colors duration-500 hover:border-[var(--domain)]"
+      // A full-width bar rather than a grid cell: it is not a project, and at
+      // this width it lines up with the contributions board in the next section.
+      className="hud-corner group relative mt-3 flex flex-wrap items-center gap-x-5 gap-y-3 overflow-hidden rounded-lg border border-dashed border-border p-5 transition-colors duration-500 hover:border-[var(--domain)]"
     >
-      <FolderGit2 className="size-5 text-muted-foreground transition-colors duration-500 group-hover:text-[var(--domain)]" />
-      <div className="mt-6">
+      <FolderGit2 className="size-5 shrink-0 text-muted-foreground transition-colors duration-500 group-hover:text-[var(--domain)]" />
+
+      <div className="min-w-0 flex-1">
         <h3 className="font-display display-sm text-foreground">More on GitHub</h3>
-        <p className="mt-2 text-[13px] leading-[1.45] text-muted-foreground">
+        <p className="mt-1 text-[13px] leading-[1.45] text-muted-foreground">
           Half-finished experiments, hackathon builds, and things I'm still poking at.
         </p>
-        <span className="mt-3 inline-flex items-center gap-1.5 font-mono text-[10px] tracking-wide text-[var(--domain)]">
-          <BrandGlyph name="github" className="size-2.5" />
-          github.com/jainam1810
-          <ArrowUpRight className="size-2.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-        </span>
       </div>
+
+      <span className="inline-flex shrink-0 items-center gap-1.5 font-mono text-[10px] tracking-wide text-[var(--domain)]">
+        <BrandGlyph name="github" className="size-2.5" />
+        github.com/{site.githubUser}
+        <ArrowUpRight className="size-2.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+      </span>
     </motion.a>
   )
 }

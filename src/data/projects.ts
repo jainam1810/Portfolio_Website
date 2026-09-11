@@ -6,7 +6,7 @@ export const projects: Project[] = [
     title: 'GlobePay',
     year: '2026',
     primary: 'chain',
-    domains: ['chain', 'sec'],
+    domains: ['chain', 'sec', 'fin', 'stack'],
     status: 'Live',
     featured: true,
     summary:
@@ -41,7 +41,7 @@ export const projects: Project[] = [
     title: 'CrossBorderX',
     year: '2026',
     primary: 'chain',
-    domains: ['chain', 'sec'],
+    domains: ['chain', 'sec', 'fin', 'stack'],
     status: 'Dormant',
     featured: true,
     summary:
@@ -87,7 +87,7 @@ export const projects: Project[] = [
     title: 'RemitChain',
     year: '2026',
     primary: 'chain',
-    domains: ['chain', 'sec'],
+    domains: ['chain', 'sec', 'fin', 'stack'],
     featured: true,
     summary:
       "A Solidity contract for cross-border stablecoin transfers. It handles several currencies, pulls rates from Chainlink, and gives the money back if the recipient never claims it, so the sender isn't left out of pocket.",
@@ -119,7 +119,7 @@ export const projects: Project[] = [
     title: 'Suspicious Transaction Detector - Liminal',
     year: '2026',
     primary: 'sec',
-    domains: ['sec', 'ml'],
+    domains: ['sec', 'ml', 'fin', 'stack'],
     featured: true,
     summary:
       'A tool that flags transactions which look wrong. Written in Go on the Nim SDK for the Liminal Vibe Banking hackathon.',
@@ -144,7 +144,7 @@ export const projects: Project[] = [
     title: 'AI-Powered Financial Advisor',
     year: '2026',
     primary: 'ml',
-    domains: ['ml'],
+    domains: ['ml', 'fin'],
     summary:
       "A personal finance dashboard built around what UK Open Banking actually gives you. Feed it your transactions and it tells you what's recurring, what's coming, and when you're about to run dry.",
     impact:
@@ -168,7 +168,7 @@ export const projects: Project[] = [
     title: 'Credit Card Fraud Detection',
     year: '2025',
     primary: 'ml',
-    domains: ['ml', 'sec'],
+    domains: ['ml', 'sec', 'fin'],
     summary:
       "Autoencoders to spot transactions that don't fit the usual pattern, and Restricted Boltzmann Machines to learn the messier structure underneath.",
     impact:
@@ -187,7 +187,7 @@ export const projects: Project[] = [
     title: 'Merkle GiftList',
     year: '2025',
     primary: 'sec',
-    domains: ['sec', 'chain'],
+    domains: ['sec', 'chain', 'stack'],
     summary:
       'Proving someone is on a list without storing the list. The server keeps one 32-byte Merkle root, and the client brings a short proof.',
     impact:
@@ -200,7 +200,7 @@ export const projects: Project[] = [
     title: 'Faucet DApp',
     year: '2025',
     primary: 'chain',
-    domains: ['chain'],
+    domains: ['chain', 'stack'],
     summary:
       'An Ethereum faucet in Solidity, Hardhat and React. Connect a wallet, pull test ETH out of the contract, get on with building.',
     impact:
