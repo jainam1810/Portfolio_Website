@@ -158,8 +158,6 @@ function Headline({ ready }: { ready: boolean }) {
       transition={{ duration: 0.85, delay: 0.16, ease: EASE_OUT }}
       style={
         {
-          '--hero-scale-2': heroScale.two,
-          '--hero-scale-3': heroScale.three,
           '--hero-strip-2': HERO_STRIP.two,
           '--hero-strip-3': HERO_STRIP.three,
         } as React.CSSProperties
@@ -169,6 +167,14 @@ function Headline({ ready }: { ready: boolean }) {
       <AnimatePresence mode="wait" initial={false}>
         <motion.span
           key={active}
+          // Keyed with the text, so the scale travels with the sentence it
+          // belongs to rather than switching under the one on its way out.
+          style={
+            {
+              '--hero-scale-2': heroScale.two,
+              '--hero-scale-3': heroScale.three,
+            } as React.CSSProperties
+          }
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
