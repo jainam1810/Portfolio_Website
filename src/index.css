@@ -221,16 +221,26 @@
      */
     .hero-headline {
         --hero-measure: min(52.5rem, 100vw - 2.5rem);
-        font-size: calc(var(--hero-measure) * var(--hero-scale-3));
         line-height: 0.95;
         min-height: calc(var(--hero-measure) * var(--hero-strip-3));
         max-width: var(--hero-measure);
     }
 
+    /* On the sentence, not the heading: the scale changes the moment you pick a
+       domain, but the outgoing sentence is still on screen fading out. Sized
+       from the heading it would reflow to the new domain's size for the length
+       of the cross-fade, which read as the line breaking and snapping back. */
+    .hero-headline > span {
+        font-size: calc(var(--hero-measure) * var(--hero-scale-3));
+    }
+
     @media (min-width: 640px) {
         .hero-headline {
-            font-size: calc(var(--hero-measure) * var(--hero-scale-2));
             min-height: calc(var(--hero-measure) * var(--hero-strip-2));
+        }
+
+        .hero-headline > span {
+            font-size: calc(var(--hero-measure) * var(--hero-scale-2));
         }
     }
 
@@ -400,6 +410,19 @@
 
     .domain-swiper .swiper-wrapper { align-items: stretch; }
     .domain-swiper .swiper-slide { height: auto; }
+
+    /* Coverflow sets transform-style: preserve-3d on the wrapper and slides, and
+       in a 3D rendering context Chromium hit-tests against the projected
+       geometry rather than the painted boxes. Measured: every pointerdown,
+       pointerup and click inside the carousel landed on .swiper-wrapper, never
+       on a slide or a card, so nothing inside a card was clickable -
+       accordions, links, click-to-centre, none of it. Flattening restores
+       normal hit testing. !important because Swiper's own stylesheet is
+       unlayered and unlayered CSS beats anything in a @layer. */
+    .domain-swiper .swiper-wrapper,
+    .domain-swiper .swiper-slide {
+        transform-style: flat !important;
+    }
 
     /* Coverflow tilts the neighbouring cards toward the viewer, so their inner
        edges sit over the active card. The slide itself stays clickable, which
