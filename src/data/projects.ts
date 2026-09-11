@@ -11,7 +11,20 @@ export const projects: Project[] = [
     summary:
       'Private credit funds check their loan covenants by hand in Excel, about two analyst-weeks a quarter. QuarterMark reads the loan agreement, recalculates every covenant from the borrower’s own accounts, and flags a breach before the fund finds one.',
     impact:
-      "A borrower reported net leverage of 3.90x against a 4.50x limit, comfortably inside it. Recalculated from the audited accounts under that contract's own definition it came to 4.62x, a breach: £2.44m of add-backs the agreement does not allow. Every figure links back to the page it came from, and nothing is final until a person approves it. Early build — the design system, module registry and permission model are in; the covenant engine and document pipeline are being written.",
+      'The dashboard ranks the whole book worst-first, so the fund sees who is closest to the edge rather than a list of passes and fails. Every covenant keeps its headroom history, which turns a pass or fail into a direction: a borrower drifting toward its limit over four quarters reads differently from one sitting flat, even while both are still compliant. Between reporting dates, public filings are read daily, so a new charge or an overdue set of accounts surfaces in days instead of at the next quarterly pack.',
+    writeUp: {
+      label: 'Inside QuarterMark',
+      title: 'Inside QuarterMark',
+      body: [
+        "Private credit funds lend across dozens of companies, and every loan carries rules buried in a 200-page agreement. Checking them is a quarterly job done by hand in Excel, roughly two analyst-weeks. QuarterMark does the checking and leaves the judgement to a person.",
+        "The fund owns the rules, the borrower owns the numbers, and QuarterMark checks one against the other. It never accepts the ratio a borrower reports. It recalculates from the raw accounts using that contract's own definition of the terms, and shows the page every figure came from.",
+        'The dashboard ranks the whole book worst-first, so the question becomes who is closest to the edge rather than who has already failed. Each covenant keeps its headroom history, which turns a state into a direction and lets a breach be seen coming rather than reported after the fact.',
+        'Between reporting dates, public filings are read daily. Not for fresh accounts, which private companies file late and once a year, but for events: a new charge registered, a director resigning, accounts overdue, an insolvency notice.',
+        'Nothing is final until a person approves it, and approving is a separate permission from editing. An approval records who signed it off, the exact figures, which version of the definition was in force, and every source page cited.',
+        'Colour never carries meaning on its own. Compliance status always comes with an icon and a label as well, so it still reads for someone colour-blind or on a black and white printout. Light and dark both ship, with one restrained accent and two typefaces: one for display, one for interface and figures.',
+        "Six modules are live. Four more - valuation, servicing, underwriting and fund accounting - are declared in the same registry, so adding one is additive rather than a rebuild. Everything sits on open standards, so moving to a client's own cloud is a deployment change rather than a rewrite.",
+      ],
+    },
     stack: ['TypeScript', 'Next.js', 'React', 'PostgreSQL', 'Claude', 'S3'],
     links: [
       { label: 'GitHub', href: 'https://github.com/jainam1810/quartermark', kind: 'repo' },
