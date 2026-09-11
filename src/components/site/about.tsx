@@ -7,7 +7,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 const SPECS = [
   { k: 'MSc', v: 'Financial Technology', note: 'University of Exeter' },
   { k: 'B.Tech', v: 'Computer Engineering', note: 'K.J. Somaiya Institute of Technology' },
-  { k: '3', v: 'Core domains', note: 'AI/ML · Blockchain · Security' },
+  { k: '5', v: 'Core domains', note: 'Pick one to filter the site' },
   { k: 'UK', v: 'Exeter, Devon', note: 'Open to opportunities' },
 ]
 

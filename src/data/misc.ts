@@ -7,9 +7,9 @@ export const studies: Study[] = [
     degree: 'MSc Financial Technology',
     school: 'University of Exeter',
     location: 'Exeter, Devon, United Kingdom',
-    period: '2025 — Present',
+    period: '2025 — 2026',
     detail:
-      'Specializing in the intersection of finance and technology, focusing on blockchain, AI in finance, and quantitative analysis',
+      'Specialised in the intersection of finance and technology, focusing on blockchain, AI in finance, and quantitative analysis',
     logo: exeterLogo,
   },
   {
@@ -26,7 +26,7 @@ export const studies: Study[] = [
 export const skillGroups: SkillGroup[] = [
   {
     name: 'Programming',
-    domains: ['ml', 'chain', 'sec'],
+    domains: ['ml', 'chain', 'sec', 'fin', 'stack'],
     items: [
       'Python',
       'R',
@@ -64,6 +64,12 @@ export const skillGroups: SkillGroup[] = [
       'LSTMs',
       'LLMs',
       'NLP',
+      'LLM APIs',
+      'RAG',
+      'Embeddings',
+      'Vector databases (pgvector)',
+      'LangChain',
+      'Hugging Face',
     ],
   },
   {
@@ -112,8 +118,28 @@ export const skillGroups: SkillGroup[] = [
     ],
   },
   {
+    name: 'Financial Technology',
+    domains: ['fin'],
+    items: [
+      'Payment flows',
+      'Cross-border remittance',
+      'Double-entry ledgers',
+      'Reconciliation',
+      'Settlement',
+      'FX pricing',
+      'Stablecoin payouts',
+      'Loan risk scoring',
+      'Credit risk modelling',
+      'Fraud detection',
+      'Operational risk',
+      'Balance forecasting',
+      'Transaction categorisation',
+      'Audit trails',
+    ],
+  },
+  {
     name: 'Frameworks & Runtime',
-    domains: ['ml', 'chain', 'sec'],
+    domains: ['ml', 'chain', 'sec', 'fin', 'stack'],
     items: [
       'React',
       'Next.js',
@@ -139,12 +165,12 @@ export const skillGroups: SkillGroup[] = [
   },
   {
     name: 'Databases',
-    domains: ['ml', 'chain', 'sec'],
+    domains: ['ml', 'chain', 'sec', 'fin', 'stack'],
     items: ['PostgreSQL', 'MySQL', 'MongoDB', 'Amazon DynamoDB', 'Supabase', 'Prisma'],
   },
   {
     name: 'Infrastructure & Tools',
-    domains: ['ml', 'chain', 'sec'],
+    domains: ['ml', 'chain', 'sec', 'fin', 'stack'],
     items: [
       'AWS',
       'Microsoft Azure',

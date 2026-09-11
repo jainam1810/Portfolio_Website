@@ -8,6 +8,7 @@ import { Ticker } from '@/components/site/ticker'
 import { About } from '@/components/site/about'
 import { DomainsSection } from '@/components/site/domains-section'
 import { ProjectsSection } from '@/components/site/projects-section'
+import { ContributionsSection } from '@/components/site/contributions-section'
 import { ExperienceSection } from '@/components/site/experience-section'
 import { SkillsSection } from '@/components/site/skills-section'
 import { EducationSection } from '@/components/site/education-section'
@@ -49,6 +50,7 @@ export default function App() {
             <About />
             <DomainsSection />
             <ProjectsSection />
+            <ContributionsSection />
             <ExperienceSection />
             <SkillsSection />
             <EducationSection />

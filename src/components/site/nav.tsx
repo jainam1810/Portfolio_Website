@@ -76,8 +76,8 @@ export function Nav() {
             </span>
           </button>
 
-          <DomainSwitch className="hidden lg:inline-flex" />
-          <DomainDots className="lg:hidden" />
+          <DomainSwitch className="hidden xl:inline-flex" />
+          <DomainDots className="xl:hidden" />
 
           <div className="flex items-center gap-3">
             <span className="hidden font-mono text-[10px] tracking-[0.18em] text-muted-foreground uppercase xl:block">
@@ -135,14 +135,14 @@ function MenuOverlay({
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -16 }}
                 transition={{ duration: 0.45, ease: EASE_OUT }}
-                className="fixed inset-0 z-[85] flex flex-col overflow-y-auto focus:outline-none"
+                className="fixed inset-0 z-[85] flex flex-col overflow-hidden focus:outline-none"
               >
                 <VisuallyHidden.Root>
                   <Dialog.Title>Site navigation</Dialog.Title>
                 </VisuallyHidden.Root>
 
-                <div className="mx-auto flex w-full max-w-[1440px] flex-1 flex-col px-5 py-5 md:px-10">
-                  <div className="flex items-center justify-between gap-3">
+                <div className="mx-auto flex min-h-0 w-full max-w-[1440px] flex-1 flex-col px-5 py-5 md:px-10">
+                  <div className="flex shrink-0 items-center justify-between gap-3">
                     {/* The switcher is wider than a phone. Let it scroll inside its
                         own track rather than pushing the close button off screen. */}
                     <div className="relative min-w-0 flex-1">
@@ -162,8 +162,8 @@ function MenuOverlay({
                     </Dialog.Close>
                   </div>
 
-                  <nav className="flex flex-1 flex-col justify-center py-10">
-                    <ul>
+                  <nav className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain py-10">
+                    <ul className="m-auto w-full">
                       {navItems.map((item, i) => (
                         <motion.li
                           key={item.id}
@@ -200,7 +200,7 @@ function MenuOverlay({
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.4, duration: 0.5 }}
-                    className="flex flex-wrap items-center justify-between gap-4 border-t border-border pt-5"
+                    className="flex shrink-0 flex-wrap items-center justify-between gap-4 border-t border-border pt-5"
                   >
                     <div className="flex gap-2">
                       {site.socials.map((s) => (

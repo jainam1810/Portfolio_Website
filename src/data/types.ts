@@ -1,10 +1,10 @@
 /**
  * Every piece of content on the site is typed here and authored in `src/data`.
  * Components never hard-code copy - they read from these structures, so the
- * three-domain filtering stays consistent everywhere.
+ * domain filtering stays consistent everywhere.
  */
 
-export type DomainId = 'ml' | 'chain' | 'sec'
+export type DomainId = 'ml' | 'chain' | 'sec' | 'fin' | 'stack'
 export type DomainFilter = DomainId | 'all'
 
 export interface Domain {
@@ -12,8 +12,15 @@ export interface Domain {
   index: string
   /** Short label used in the switcher */
   label: string
-  /** The noun this domain contributes to the hero line - each maps to real work */
-  word: string
+  /** The tail of the hero sentence. Swaps in when this domain is selected. */
+  heroLine: string
+  /**
+   * Font size as a fraction of the hero measure, so every headline's longest
+   * row fills it. `two` is used from sm up, `three` on phones, where two rows
+   * would drop the longest headline to 22px.
+   * Written by scripts/hero-scales.mjs - rerun it after changing any heroLine.
+   */
+  heroScale: { two: number; three: number }
   /** Full section title */
   title: string
   /** One-line positioning statement */

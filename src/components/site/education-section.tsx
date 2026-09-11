@@ -8,7 +8,7 @@ export function EducationSection() {
   return (
     <Section
       id="education"
-      index="06"
+      index="07"
       eyebrow="Education"
       title="Education"
       lead="Two degrees, one in Mumbai and one in Exeter. I speak six languages, badly in one of them."

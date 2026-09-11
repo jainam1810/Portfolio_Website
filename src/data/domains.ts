@@ -1,16 +1,17 @@
 import type { Domain, DomainId } from './types'
 
-export const DOMAIN_IDS: DomainId[] = ['ml', 'chain', 'sec']
+export const DOMAIN_IDS: DomainId[] = ['ml', 'chain', 'stack', 'fin', 'sec']
 
 export const domains: Record<DomainId, Domain> = {
   ml: {
     id: 'ml',
     index: '01',
     label: 'AI / ML',
-    word: 'Models',
-    title: 'Machine Learning',
+    heroLine: 'production-grade AI/ML systems that scale.',
+    heroScale: { two: 0.09562, three: 0.10493 },
+    title: 'AI & Machine Learning',
     statement: 'A model is only useful if it beats a simple rule.',
-    body: 'I build models that work on real financial data. Forecasting what a balance does next month, reading the merchant text on a transaction to label it, catching card fraud, and flagging payments that look wrong. Most of the job is cleaning the data and testing it honestly. Picking the algorithm is the quick part.',
+    body: "Two halves. The models: forecasting what a balance does next month, labelling a transaction from its merchant text, catching card fraud, flagging payments that look wrong. Then the AI features on top: a model that reads a messy spreadsheet, or scores a post against the rules. There the maths stays in code and the last word stays with a person. Most of the job either way is cleaning the data and testing it honestly. Picking the algorithm is the quick part.",
     groups: [
       {
         name: 'Modelling',
@@ -28,7 +29,25 @@ export const domains: Record<DomainId, Domain> = {
       },
       {
         name: 'Deep learning',
-        items: ['Autoencoders', 'RBMs', 'CNNs', 'RNNs', 'LSTMs', 'LLMs', 'NLP'],
+        items: ['Autoencoders', 'RBMs', 'CNNs', 'RNNs', 'LSTMs'],
+      },
+      {
+        name: 'AI features',
+        items: [
+          'LLMs',
+          'NLP',
+          'Claude',
+          'Gemini',
+          'Prompt design',
+          'LLM APIs',
+          'RAG',
+          'Embeddings',
+          'Vector databases (pgvector)',
+          'LangChain',
+          'Hugging Face',
+          'Text classification',
+          'Document extraction',
+        ],
       },
       {
         name: 'Toolchain',
@@ -49,6 +68,7 @@ export const domains: Record<DomainId, Domain> = {
       'Spots recurring payments at 85%+ accuracy and warns about a low balance 30 to 90 days out',
       'Autoencoders and RBMs catch card fraud at 91% accuracy, with 35% fewer false alarms',
       'Air quality model hits 92% accuracy and answers in under 100ms',
+      "On GlobePay the AI reads the client's messy spreadsheet, code does the money maths, and a person approves",
     ],
   },
 
@@ -56,7 +76,8 @@ export const domains: Record<DomainId, Domain> = {
     id: 'chain',
     index: '02',
     label: 'Blockchain',
-    word: 'Contracts',
+    heroLine: 'scalable, gas-optimised contracts.',
+    heroScale: { two: 0.09848, three: 0.15362 },
     title: 'Blockchain Development',
     statement: 'People want the money to arrive. They should not have to learn what a wallet is.',
     body: 'I write smart contracts and the systems around them. Cross-border transfers priced by Chainlink, payroll that pays a whole team from one signature, a faucet that hands out test ETH, and Merkle proofs that check membership without storing the list. The contract is the easy part. The ledger, the retries and the reconciliation are the real work.',
@@ -81,11 +102,109 @@ export const domains: Record<DomainId, Domain> = {
     ],
   },
 
+  stack: {
+    id: 'stack',
+    index: '03',
+    label: 'Full-Stack',
+    heroLine: 'both the frontend and the backend of an app.',
+    heroScale: { two: 0.09374, three: 0.1341 },
+    title: 'Full-Stack Development',
+    statement: 'One person, from architecture and development to testing and deployment.',
+    body: 'At Dizzy Otter I ship whole products for clients: the interface, the API behind it, the database, the AI features on top, and the security pass and bug fixes before anything goes out. My own projects work the same way. There is no hand-off, so nothing gets lost in one.',
+    groups: [
+      {
+        name: 'Frontend',
+        items: [
+          'React',
+          'Next.js',
+          'TypeScript',
+          'React Native',
+          'SolidJS',
+          'Tailwind CSS',
+          'Bootstrap',
+          'Vite',
+        ],
+      },
+      {
+        name: 'Backend',
+        items: ['Node.js', 'Express.js', 'Nest.js', 'FastAPI', 'REST APIs', 'WebSockets', 'Zod', 'Golang'],
+      },
+      {
+        name: 'Data',
+        items: ['PostgreSQL', 'MySQL', 'MongoDB', 'Supabase', 'Prisma', 'Amazon DynamoDB'],
+      },
+      {
+        name: 'Ship & run',
+        items: ['Docker', 'GitHub Actions', 'Vercel', 'Netlify', 'Railway', 'AWS', 'Git', 'Postman'],
+      },
+    ],
+    proof: [
+      'At Dizzy Otter I build client products end to end, then do the security pass and bug fixes myself',
+      "Built a backend that pulls an influencer's public posts, scores them with Gemini, and shows the result on a dashboard",
+      'GlobePay, RemitChain and the Faucet DApp are mine end to end: React frontend, contract, and deploy',
+    ],
+  },
+
+  fin: {
+    id: 'fin',
+    index: '04',
+    label: 'FinTech',
+    heroLine: 'robust, tamper-proof payment systems.',
+    heroScale: { two: 0.08704, three: 0.13846 },
+    title: 'Financial Technology',
+    statement: 'Moving the money is the easy part. Making the numbers agree is not.',
+    body: 'This is the part I studied for my MSc and the part most of my projects sit in. Two halves: getting money from one place to another, and deciding who is good for it. Sending a payment is one line of code. The ledger behind it, the retries, the reconciliation and the audit trail are the rest of the work.',
+    groups: [
+      {
+        name: 'Payments & settlement',
+        items: [
+          'Cross-border transfers',
+          'Double-entry ledgers',
+          'Reconciliation',
+          'Settlement',
+          'FX rates via Chainlink',
+          'Stablecoin payouts',
+          'Payroll runs',
+          'Idempotent transfers',
+        ],
+      },
+      {
+        name: 'Lending & risk',
+        items: [
+          'Loan risk scoring',
+          'Credit risk models',
+          'Fraud detection',
+          'Operational risk',
+          'Anomaly detection',
+          'Audit trails',
+        ],
+      },
+      {
+        name: 'Money data',
+        items: [
+          'Balance forecasting',
+          'Transaction categorisation',
+          'Recurring payment detection',
+          'Python',
+          'Pandas',
+          'PostgreSQL',
+          'PowerBI',
+        ],
+      },
+    ],
+    proof: [
+      'RemitChain took transfer fees from 6.2% down to 0.3% across five currency pairs',
+      'CrossBorderX settles real USDC and reconciles every transfer against a double-entry ledger',
+      'The KIFS loan ledger design projected 30-40% faster processing and 50% less manual work',
+    ],
+  },
+
   sec: {
     id: 'sec',
-    index: '03',
+    index: '05',
     label: 'Security',
-    word: 'Guardrails',
+    heroLine: 'secure, abuse-proof application systems.',
+    heroScale: { two: 0.09299, three: 0.11949 },
     title: 'Application Security',
     statement: 'Check every request. Trust nothing by default.',
     body: 'I work on the part of security that decides whether an app holds up. Who is allowed to call what, how requests get abused, and what happens when the same request arrives twice. On GlobePay that meant never holding funds or keys, checking clients in the API and again in the database, and keeping the AI away from the money maths.',
@@ -145,5 +264,9 @@ export const domains: Record<DomainId, Domain> = {
     ],
   },
 }
+
+/** Height of the hero headline as a fraction of its measure, by row count.
+    Written by scripts/hero-scales.mjs - do not edit by hand. */
+export const HERO_STRIP = { two: 0.1886, three: 0.4378 }
 
 export const domainList = DOMAIN_IDS.map((id) => domains[id])

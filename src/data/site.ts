@@ -1,26 +1,33 @@
+import type { DomainId } from './types'
+
 export const site = {
   name: 'Jainam Varia',
   initials: 'JV',
-  /** The hero line: "I build systems that LEARN. SETTLE. HOLD." */
+  /** The hero line is "I build" plus a tail that swaps with the active domain.
+      This is the tail shown when no single domain is selected. */
   heroLead: 'I build',
+  heroLine: 'and ship software systems, end to end.',
+  heroScale: { two: 0.09925, three: 0.13155 },
   badge: 'Creating Something Big — Stay Tuned!',
   role: 'B.Tech Computer Engineer · MSc Financial Technology',
   location: 'Exeter, United Kingdom',
   email: 'jainamvaria1010@gmail.com',
+  githubUser: 'jainam1810',
 
   /** Typewriter phrases, carried over verbatim from the previous site */
   taglines: [
-    'AI/ML & Blockchain Enthusiast',
+    'AI/ML & Blockchain Engineer',
+    'Full-Stack Developer',
     'Financial Innovator',
     'Quantitative Thinker',
     'Expert in building solutions',
   ],
 
   intro:
-    "MSc Financial Technology at the University of Exeter, with a B.Tech in Computer Engineering. I work in three areas: machine learning, blockchain settlement and application security. Most projects I take on need at least two of them, and I'd rather build the whole thing than just the part that demos well.",
+    "MSc Financial Technology at the University of Exeter, with a B.Tech in Computer Engineering. I work across machine learning, blockchain, application security, fintech and full-stack. Most projects I take on need at least two of them, and I'd rather build the whole thing than just the part that demos well.",
 
   about: [
-    "I'm a 22-year-old tech enthusiast passionate about the intersection of finance and technology. Currently living in Exeter, United Kingdom, pursuing my Master of Science in Financial Technology at the University of Exeter, I bring a strong foundation in computer engineering from my B.Tech at K.J. Somaiya Institute of Technology.",
+    "I'm a 22-year-old tech enthusiast passionate about the intersection of finance and technology. Currently living in Exeter, United Kingdom, having completed my Master of Science in Financial Technology at the University of Exeter, I bring a strong foundation in computer engineering from my B.Tech at K.J. Somaiya Institute of Technology.",
     "My journey combines technical expertise with financial acumen, positioning me to drive innovation in the rapidly evolving FinTech landscape. I'm committed to leveraging technology to solve complex financial challenges and create impactful solutions.",
     "With expertise spanning AI/ML, blockchain development, and quantitative analysis, I've developed projects ranging from forecasting and fraud detection systems to decentralized applications. I am actively exploring opportunities in AI/ML and blockchain-driven roles across the United Kingdom.",
   ],
@@ -35,18 +42,23 @@ export const site = {
   contactIntro:
     "Open to roles, freelance work, or just a chat about anything I've built here. I reply to everything.",
 
+  /**
+   * `domains` decides which CV is offered for the selected pillar. There is no
+   * FinTech or Full-Stack CV yet, so those pillars borrow the closest one.
+   * Give a pillar its own file and it just moves to the new entry.
+   */
   cvs: [
     {
       label: 'AI/ML CV',
-      note: 'Updated Jan 2026',
-      href: 'https://drive.google.com/file/d/1yGlR7KL837Q-Iyi3Igc2dV9nhRr4udC_/view?usp=sharing',
+      href: 'https://drive.google.com/file/d/1YN1GesHOC0njXz87UdHx5O9V3D1UP0el/view',
+      domains: ['ml', 'stack'],
     },
     {
       label: 'Blockchain CV',
-      note: 'Updated Jan 2026',
-      href: 'https://drive.google.com/file/d/1warqB-sx-OUkT_qfCYQF7qEgEWx7xak8/view?usp=sharing',
+      href: 'https://drive.google.com/file/d/1SJNQ6zqwKCcnypmMalduxj4SqnLKJ8OL/view',
+      domains: ['chain', 'sec', 'fin'],
     },
-  ],
+  ] as { label: string; href: string; domains: DomainId[] }[],
 
   socials: [
     { label: 'LinkedIn', href: 'https://www.linkedin.com/in/jainamvaria/', icon: 'linkedin' },
@@ -92,6 +104,7 @@ export const navItems = [
   { id: 'about', label: 'About' },
   { id: 'domains', label: 'Domains' },
   { id: 'projects', label: 'Projects' },
+  { id: 'contributions', label: 'Contributions' },
   { id: 'experience', label: 'Experience' },
   { id: 'skills', label: 'Skills' },
   { id: 'education', label: 'Education' },

@@ -14,7 +14,7 @@ export function SkillsSection() {
   return (
     <Section
       id="skills"
-      index="05"
+      index="06"
       eyebrow="Tools"
       title="Skills"
       lead="Everything here has been used in something real. If I only read about it, it's not on the list."

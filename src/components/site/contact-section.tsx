@@ -91,7 +91,7 @@ export function ContactSection() {
   return (
     <Section
       id="contact"
-      index="08"
+      index="09"
       eyebrow="Say hello"
       title="Contact Me"
       lead={site.contactIntro}
