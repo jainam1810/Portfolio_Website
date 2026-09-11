@@ -2,6 +2,22 @@ import type { Project } from './types'
 
 export const projects: Project[] = [
   {
+    slug: 'quartermark',
+    title: 'QuarterMark',
+    year: '2026',
+    primary: 'fin',
+    domains: ['fin', 'ml', 'stack', 'sec'],
+    featured: true,
+    summary:
+      'Private credit funds check their loan covenants by hand in Excel, about two analyst-weeks a quarter. QuarterMark reads the loan agreement, recalculates every covenant from the borrower’s own accounts, and flags a breach before the fund finds one.',
+    impact:
+      "A borrower reported net leverage of 3.90x against a 4.50x limit, comfortably inside it. Recalculated from the audited accounts under that contract's own definition it came to 4.62x, a breach: £2.44m of add-backs the agreement does not allow. Every figure links back to the page it came from, and nothing is final until a person approves it. Early build — the design system, module registry and permission model are in; the covenant engine and document pipeline are being written.",
+    stack: ['TypeScript', 'Next.js', 'React', 'PostgreSQL', 'Claude', 'S3'],
+    links: [
+      { label: 'GitHub', href: 'https://github.com/jainam1810/quartermark', kind: 'repo' },
+    ],
+  },
+  {
     slug: 'globepay',
     title: 'GlobePay',
     year: '2026',

@@ -29,9 +29,35 @@ export default function App() {
   useKonami()
   useScrollAnchor(RESIZING_SECTIONS)
 
+  // Hold the loader until the fonts are actually in, not just until a timer
+  // fires. The hero headline is sized from Anton's own metrics, so painting it
+  // in a fallback face wraps it wrongly and then snaps - and that fallback is a
+  // different font on every operating system. Still capped, so a font that
+  // never arrives cannot hold the page hostage.
   useEffect(() => {
-    const timer = window.setTimeout(() => setLoading(false), 900)
-    return () => window.clearTimeout(timer)
+    let settled = false
+    const reveal = () => {
+      if (settled) return
+      settled = true
+      setLoading(false)
+    }
+
+    const held = window.setTimeout(reveal, 2500)
+    const wait = window.setTimeout(() => {
+      const faces = document.fonts
+        ? Promise.all([
+            document.fonts.load('400 1rem Anton'),
+            document.fonts.load('400 1rem "Geist Variable"'),
+            document.fonts.load('400 1rem "JetBrains Mono Variable"'),
+          ]).then(() => document.fonts.ready)
+        : Promise.resolve()
+      faces.then(reveal, reveal)
+    }, 900)
+
+    return () => {
+      window.clearTimeout(held)
+      window.clearTimeout(wait)
+    }
   }, [])
 
   return (
