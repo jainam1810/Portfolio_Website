@@ -22,7 +22,7 @@ export const projects: Project[] = [
         'Between reporting dates, public filings are read daily. Not for fresh accounts, which private companies file late and once a year, but for events: a new charge registered, a director resigning, accounts overdue, an insolvency notice.',
         'Nothing is final until a person approves it, and approving is a separate permission from editing. An approval records who signed it off, the exact figures, which version of the definition was in force, and every source page cited.',
         'Colour never carries meaning on its own. Compliance status always comes with an icon and a label as well, so it still reads for someone colour-blind or on a black and white printout. Light and dark both ship, with one restrained accent and two typefaces: one for display, one for interface and figures.',
-        "Six modules are live. Four more - valuation, servicing, underwriting and fund accounting - are declared in the same registry, so adding one is additive rather than a rebuild. Everything sits on open standards, so moving to a client's own cloud is a deployment change rather than a rewrite.",
+        "Covenant monitoring is the way in, not the ceiling. Valuation, servicing, underwriting and fund accounting are already declared in the same registry, so each one is an addition rather than a rebuild - the platform is built to grow into everything a credit fund runs on. It sits on open standards throughout, so moving to a client's own cloud is a deployment change rather than a rewrite.",
       ],
     },
     stack: ['TypeScript', 'Next.js', 'React', 'PostgreSQL', 'Claude', 'S3'],
