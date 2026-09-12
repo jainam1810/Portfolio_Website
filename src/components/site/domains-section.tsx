@@ -40,7 +40,17 @@ export function DomainsSection() {
     const index = domainList.findIndex((d) => d.id === active);
     // realIndex / slideToLoop, not activeIndex / slideTo: looping inserts
     // duplicated slides, so the raw index no longer matches the domain list.
-    if (index >= 0 && index !== swiper.realIndex) swiper.slideToLoop(index);
+    if (index < 0 || index === swiper.realIndex) return;
+
+    // Deferred a frame on purpose. Changing domain re-renders every slide, and
+    // calling this inside the same commit let Swiper's own update cancel the
+    // move while it was still settling - which silently ate any hop of a single
+    // slide. Two or more survived, so Blockchain and FinTech were the ones that
+    // never arrived. Measured: direct calls always work, this one did not.
+    const frame = requestAnimationFrame(() => {
+      if (!swiper.destroyed) swiper.slideToLoop(index);
+    });
+    return () => cancelAnimationFrame(frame);
   }, [swiper, active]);
 
   return (
