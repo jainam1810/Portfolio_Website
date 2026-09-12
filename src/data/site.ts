@@ -43,20 +43,30 @@ export const site = {
     "Open to roles, freelance work, or just a chat about anything I've built here. I reply to everything.",
 
   /**
-   * `domains` decides which CV is offered for the selected pillar. There is no
-   * FinTech or Full-Stack CV yet, so those pillars borrow the closest one.
-   * Give a pillar its own file and it just moves to the new entry.
+   * `domains` decides which CV is offered for the selected pillar. A pillar with
+   * no file of its own falls back to the full picker rather than quietly handing
+   * over the nearest CV - add an entry here and that pillar goes direct.
    */
   cvs: [
     {
       label: 'AI/ML CV',
       href: 'https://drive.google.com/file/d/1YN1GesHOC0njXz87UdHx5O9V3D1UP0el/view',
-      domains: ['ml', 'stack'],
+      domains: ['ml'],
     },
     {
       label: 'Blockchain CV',
-      href: 'https://drive.google.com/file/d/1SJNQ6zqwKCcnypmMalduxj4SqnLKJ8OL/view',
-      domains: ['chain', 'sec', 'fin'],
+      href: 'https://drive.google.com/file/d/1dWrPH6uzuGUB--8LNy2fl2mUY2SZOlam/view',
+      domains: ['chain'],
+    },
+    {
+      label: 'Full-Stack CV',
+      href: 'https://drive.google.com/file/d/1llcvrkL61qqVjs9wRHli8fCi1qIzZYvj/view',
+      domains: ['stack'],
+    },
+    {
+      label: 'FinTech CV',
+      href: 'https://drive.google.com/file/d/1XRx_wWazQGXaySNxUz361LQ7diRc6U6G/view',
+      domains: ['fin'],
     },
   ] as { label: string; href: string; domains: DomainId[] }[],
 
@@ -86,6 +96,7 @@ export const site = {
     quote: '"So no matter what, I promise you, If you need us, if you need me, I\'ll be there!"',
     src: '/Captain_audio.mp3',
   },
+
 
   emailjs: {
     serviceId: 'service_wvng7kc',

@@ -194,7 +194,11 @@ export function launchCricketFireworks() {
   }
 
   const bat = document.createElement('div')
-  bat.innerHTML = BAT_SVG
+  // Parsed as XML rather than assigned through innerHTML. The markup is a
+  // constant today, so this changes nothing that runs - it means an edit that
+  // ever made it dynamic could not turn into an injection.
+  const parsedBat = new DOMParser().parseFromString(BAT_SVG, 'image/svg+xml').documentElement
+  if (parsedBat.nodeName !== 'parsererror') bat.appendChild(parsedBat)
   bat.style.cssText =
     'position:absolute;bottom:30%;left:-100px;transition:none;z-index:2;transform-origin:center center;'
   overlay.appendChild(bat)
@@ -205,8 +209,10 @@ export function launchCricketFireworks() {
   ball.style.background = 'radial-gradient(circle at 35% 35%,#ff4444,#cc0000)'
   ball.style.boxShadow =
     '0 0 10px rgba(255,0,0,0.5),inset -2px -2px 4px rgba(0,0,0,0.3),inset 2px 2px 4px rgba(255,255,255,0.3)'
-  ball.innerHTML =
-    '<div style="position:absolute;inset:3px;border:1.5px dashed rgba(255,255,255,0.4);border-radius:50%;"></div>'
+  const seam = document.createElement('div')
+  seam.style.cssText =
+    'position:absolute;inset:3px;border:1.5px dashed rgba(255,255,255,0.4);border-radius:50%;'
+  ball.appendChild(seam)
   overlay.appendChild(ball)
 
   const W = canvas.width

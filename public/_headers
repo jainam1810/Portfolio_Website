@@ -1,0 +1,27 @@
+# Security headers, served by Netlify for every response.
+#
+# The Content-Security-Policy was written from the origins the site actually
+# requests, recorded from a real page load rather than guessed:
+#
+#   self                                  scripts, styles, fonts, images, audio,
+#                                         and the contact form POST
+#   api.github.com                        the repo list on the GitHub card
+#   github-contributions-api.jogruber.de  the contributions board
+#   api.emailjs.com                       the contact form
+#   avatars.githubusercontent.com         the GitHub avatar
+#
+# Adding a service means adding its origin here, or the browser will block it.
+#
+# font-src allows data: because Vite inlines any asset under 4KB, and the
+# JetBrains Mono Cyrillic subset falls under it. Verified against a real load:
+# without data: the browser refuses that face.
+
+/*
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: https://avatars.githubusercontent.com; media-src 'self'; manifest-src 'self'; worker-src 'self'; connect-src 'self' https://api.github.com https://github-contributions-api.jogruber.de https://api.emailjs.com; upgrade-insecure-requests
+  Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: accelerometer=(), camera=(), display-capture=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=(), interest-cohort=()
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Resource-Policy: same-origin

@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
-import { motion } from 'motion/react'
 import emailjs from '@emailjs/browser'
+import { motion } from 'motion/react'
 import { ArrowUpRight, Check, Copy, Pause, Play, Send } from 'lucide-react'
 import { Section } from '@/components/site/section'
 import { Reveal } from '@/components/anim'
@@ -142,22 +142,56 @@ export function ContactSection() {
 function ContactForm() {
   const [form, setForm] = useState({ name: '', email: '', message: '' })
   const [status, setStatus] = useState<Status>('idle')
+  const lastSent = useRef(0)
+  // A field no person can see or tab into. Bots fill every input they find.
+  const trap = useRef<HTMLInputElement>(null)
+  // Bots submit the instant they land. People have to read and type first.
+  const opened = useRef(Date.now())
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (status === 'sending') return
+
+    // Honeypot and time-to-submit. Both report success rather than an error:
+    // telling a bot it failed only teaches it to try again differently. A
+    // honeypot alone stops most of this traffic on a form this size, and the
+    // timer catches the scripted submits that fill hidden fields anyway.
+    const tooFast = Date.now() - opened.current < 3000
+    if (trap.current?.value || tooFast) {
+      setStatus('sent')
+      setForm({ name: '', email: '', message: '' })
+      window.setTimeout(() => setStatus('idle'), 4000)
+      return
+    }
+
+    // Whitespace-only input passes `required`, so it is rejected here.
+    const name = form.name.trim()
+    const email = form.email.trim()
+    const message = form.message.trim()
+    if (!name || !email || !message) return
+
+    // One send every 20 seconds. This stops double taps and casual repeat
+    // sending; it is not a security control, because the EmailJS key is public
+    // by design and anyone can call their API directly. The real limit is the
+    // per-template rate limit and the allowed-domain list in the EmailJS
+    // dashboard, which have to be set there rather than here.
+    const now = Date.now()
+    if (now - lastSent.current < 20_000) {
+      setStatus('error')
+      window.setTimeout(() => setStatus('idle'), 4000)
+      return
+    }
+    lastSent.current = now
+
     setStatus('sending')
     try {
       await emailjs.send(
         site.emailjs.serviceId,
         site.emailjs.templateId,
-        {
-          from_name: form.name,
-          from_email: form.email,
-          to_name: site.name,
-          message: form.message,
-        },
+        { from_name: name, from_email: email, to_name: site.name, message },
         site.emailjs.publicKey,
       )
+
       setStatus('sent')
       setForm({ name: '', email: '', message: '' })
       window.setTimeout(() => setStatus('idle'), 4000)
@@ -170,13 +204,26 @@ function ContactForm() {
   const field = 'mt-1.5 border-border bg-background/60 focus-visible:border-[var(--domain)]'
 
   return (
-    <Reveal delay={0.12} className="hud-corner rounded-lg border border-border bg-card/30 p-6 md:p-8">
+    <Reveal delay={0.12} className="hud-corner relative rounded-lg border border-border bg-card/30 p-6 md:p-8">
       <h3 className="font-display display-sm text-foreground">Send a message</h3>
       <p className="mt-1.5 font-mono text-[10px] tracking-[0.14em] text-muted-foreground uppercase">
         Goes straight to my inbox
       </p>
 
       <form onSubmit={onSubmit} className="mt-6 space-y-4">
+        {/* Off-screen rather than display:none or type=hidden, both of which
+            bots learned to skip years ago. aria-hidden and tabIndex keep it
+            away from screen readers and the keyboard. */}
+        <input
+          ref={trap}
+          type="text"
+          name="company-website"
+          tabIndex={-1}
+          autoComplete="off"
+          aria-hidden="true"
+          className="pointer-events-none absolute -left-[9999px] size-0 opacity-0"
+        />
+
         <div>
           <Label htmlFor="name" className="eyebrow text-muted-foreground">
             Your name
@@ -185,6 +232,8 @@ function ContactForm() {
             id="name"
             name="name"
             required
+            maxLength={100}
+            autoComplete="name"
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
             placeholder="Jane Doe"
@@ -201,6 +250,8 @@ function ContactForm() {
             name="email"
             type="email"
             required
+            maxLength={254}
+            autoComplete="email"
             value={form.email}
             onChange={(e) => setForm({ ...form, email: e.target.value })}
             placeholder="jane@example.com"
@@ -216,6 +267,7 @@ function ContactForm() {
             id="message"
             name="message"
             required
+            maxLength={2000}
             rows={5}
             value={form.message}
             onChange={(e) => setForm({ ...form, message: e.target.value })}
