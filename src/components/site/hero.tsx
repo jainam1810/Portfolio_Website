@@ -1,6 +1,6 @@
 import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
 import type { MotionValue } from 'motion/react'
-import { ArrowDown, Download } from 'lucide-react'
+import { ArrowDown, ArrowUpRight, Eye } from 'lucide-react'
 import { useRef } from 'react'
 import { site } from '@/data/site'
 import { HERO_STRIP, domainList, domains } from '@/data/domains'
@@ -8,7 +8,14 @@ import { useDomainState } from '@/components/domain-context'
 import { useScrollTo, useTypewriter } from '@/hooks/use-portfolio'
 import { EASE_OUT } from '@/components/anim'
 import { BrandGlyph } from '@/lib/icons'
-import { cn } from '@/lib/utils'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 
 /* A transparent cut-out: the tint layers are clipped to its alpha and the
    figure sits on the page rather than inside a rectangle. */
@@ -20,7 +27,11 @@ export function Hero({ ready = true }: { ready?: boolean }) {
   const typed = useTypewriter(site.taglines)
   const scrollTo = useScrollTo()
   const { active } = useDomainState()
-  const cvs = site.cvs.filter((cv) => active === 'all' || cv.domains.includes(active))
+  // A pillar with its own CV goes straight to it. One without - Security, for
+  // now - gets the same picker as All, rather than being handed a CV written
+  // for a different kind of role without being told.
+  const own = active === 'all' ? [] : site.cvs.filter((cv) => cv.domains.includes(active))
+  const cvs = own.length > 0 ? own : site.cvs
 
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] })
   const contentY = useTransform(scrollYProgress, [0, 1], ['0%', reduced ? '0%' : '16%'])
@@ -80,26 +91,14 @@ export function Hero({ ready = true }: { ready?: boolean }) {
           {/* CVs, socials and the live readout are three stacked blocks with one
               shared gap, so the rhythm between them is identical. */}
           <div className="mt-7 flex flex-col items-start gap-5">
-            {/* One CV per selected domain; every CV when nothing is selected.
-                Both share one row on any width, each taking half a phone. */}
+            {/* Pick a domain and you get that CV in one click. With nothing
+                selected there are four, and four buttons is a wall of choices
+                in the place a recruiter is deciding whether to bother. One
+                labelled button opens a dialog instead: a menu would hide them
+                behind a control people are known to miss, and each CV needs a
+                line saying what it is for, which a menu row cannot carry. */}
             <div className="flex gap-2.5">
-              {cvs.map((cv, i) => (
-                <a
-                  key={cv.label}
-                  href={cv.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={cn(
-                    'hud-corner group flex min-w-0 flex-1 items-center gap-2 rounded-md px-3 py-2.5 text-sm font-medium transition-all duration-300 sm:flex-none sm:gap-2.5 sm:px-4',
-                    i === 0
-                      ? 'bg-[var(--domain)] text-background hover:brightness-110'
-                      : 'border border-border bg-background/60 text-foreground hover:border-[var(--domain)] hover:text-[var(--domain)]',
-                  )}
-                >
-                  <Download className="size-3.5 shrink-0" />
-                  <span className="min-w-0 truncate">{cv.label}</span>
-                </a>
-              ))}
+              {cvs.length === 1 ? <CvLink cv={cvs[0]} /> : <CvPicker cvs={cvs} />}
             </div>
 
             <div className="flex gap-1.5">
@@ -185,6 +184,67 @@ function Headline({ ready }: { ready: boolean }) {
         </motion.span>
       </AnimatePresence>
     </motion.h1>
+  )
+}
+
+/** One CV, straight to the file. */
+function CvLink({ cv }: { cv: (typeof site.cvs)[number] }) {
+  return (
+    <a
+      href={cv.href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="hud-corner group flex min-w-0 flex-1 items-center gap-2 rounded-md bg-[var(--domain)] px-3 py-2.5 text-sm font-medium text-background transition-all duration-300 hover:brightness-110 sm:flex-none sm:gap-2.5 sm:px-4"
+    >
+      <Eye className="size-3.5 shrink-0" />
+      <span className="min-w-0 truncate">{cv.label}</span>
+    </a>
+  )
+}
+
+/** All of them, behind one button, each labelled with the work it covers. */
+function CvPicker({ cvs }: { cvs: typeof site.cvs }) {
+  return (
+    <Dialog>
+      <DialogTrigger className="hud-corner group flex min-w-0 flex-1 items-center gap-2 rounded-md bg-[var(--domain)] px-3 py-2.5 text-sm font-medium text-background transition-all duration-300 hover:brightness-110 sm:flex-none sm:gap-2.5 sm:px-4">
+        <Eye className="size-3.5 shrink-0" />
+        <span className="min-w-0 truncate">All CVs</span>
+        <span className="font-mono text-[10px] opacity-70">{cvs.length}</span>
+      </DialogTrigger>
+
+      <DialogContent className="sm:max-w-lg">
+        <DialogHeader>
+          <DialogTitle>Choose a CV</DialogTitle>
+          <DialogDescription>
+            One per domain, each written for that kind of role.
+          </DialogDescription>
+        </DialogHeader>
+
+        <ul className="mt-1 flex flex-col gap-2">
+          {cvs.map((cv) => (
+            <li key={cv.label}>
+              <a
+                href={cv.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                // Each row wears the colour of the domain it belongs to.
+                data-domain={cv.domains[0]}
+                className="group flex items-center gap-3 rounded-md border border-border px-4 py-3 transition-colors duration-300 hover:border-[var(--domain)] hover:bg-[var(--domain)]/[0.06]"
+              >
+                <Eye className="size-4 shrink-0 text-[var(--domain)]" />
+                <span className="flex min-w-0 flex-col leading-tight">
+                  <span className="text-sm font-medium text-foreground">{cv.label}</span>
+                  <span className="mt-0.5 truncate font-mono text-[10px] tracking-[0.12em] text-muted-foreground uppercase">
+                    {cv.domains.map((d) => domains[d].title).join(' · ')}
+                  </span>
+                </span>
+                <ArrowUpRight className="ml-auto size-3.5 shrink-0 text-muted-foreground transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </DialogContent>
+    </Dialog>
   )
 }
 
