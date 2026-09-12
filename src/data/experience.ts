@@ -53,6 +53,7 @@ export const roles: Role[] = [
       'Python & Golang',
       'Scikit-learn & PyTorch',
       'Hyperledger Fabric & Corda',
+      'SHAP & AutoGluon',
     ],
   },
   {
