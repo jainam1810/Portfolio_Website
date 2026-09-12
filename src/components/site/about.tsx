@@ -56,7 +56,7 @@ export function About() {
                 <span className="relative inline-flex size-1.5 rounded-full bg-[var(--domain)]" />
               </span>
               <span className="font-mono text-[10px] tracking-[0.16em] text-muted-foreground uppercase">
-                Actively exploring opportunities in AI/ML, blockchain and cybersecurity across the UK
+                Actively exploring AI/ML, blockchain and full-stack roles across the UK
               </span>
             </div>
           </Reveal>

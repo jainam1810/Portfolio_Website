@@ -10,9 +10,20 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { suggestEmail } from '@/lib/email-suggest'
 import { cn } from '@/lib/utils'
 
-type Status = 'idle' | 'sending' | 'sent' | 'error'
+type Status = 'idle' | 'sending' | 'sent' | 'error' | 'invalid' | 'throttled'
+
+/** type="email" accepts "a@b" - no dot, no TLD. This wants both. */
+const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
+
+const MESSAGE: Record<Exclude<Status, 'idle' | 'sending'>, string> = {
+  sent: "Got it. I'll get back to you soon.",
+  invalid: 'That email address does not look right - check it and try again.',
+  throttled: 'Just sent one. Give it a moment before sending another.',
+  error: "That didn't send. Try again, or just email me directly.",
+}
 
 const ROW =
   'group flex w-full items-center gap-4 bg-background px-5 py-4 text-left transition-colors duration-300 hover:bg-card'
@@ -170,6 +181,12 @@ function ContactForm() {
     const message = form.message.trim()
     if (!name || !email || !message) return
 
+    if (!EMAIL.test(email)) {
+      setStatus('invalid')
+      window.setTimeout(() => setStatus('idle'), 4000)
+      return
+    }
+
     // One send every 20 seconds. This stops double taps and casual repeat
     // sending; it is not a security control, because the EmailJS key is public
     // by design and anyone can call their API directly. The real limit is the
@@ -177,7 +194,7 @@ function ContactForm() {
     // dashboard, which have to be set there rather than here.
     const now = Date.now()
     if (now - lastSent.current < 20_000) {
-      setStatus('error')
+      setStatus('throttled')
       window.setTimeout(() => setStatus('idle'), 4000)
       return
     }
@@ -200,6 +217,14 @@ function ContactForm() {
       window.setTimeout(() => setStatus('idle'), 4000)
     }
   }
+
+  // Live, from the first character typed. Empty is not "wrong" - it is just
+  // not filled in yet - so the message only appears once there is something
+  // to judge, and disappears the moment the address becomes valid.
+  const emailInvalid = form.email.trim().length > 0 && !EMAIL.test(form.email.trim())
+  // A suggestion, not an error: gmail.co is a real domain, so this can only
+  // offer the likelier spelling. It never blocks a send.
+  const suggestion = emailInvalid ? null : suggestEmail(form.email.trim())
 
   const field = 'mt-1.5 border-border bg-background/60 focus-visible:border-[var(--domain)]'
 
@@ -255,8 +280,24 @@ function ContactForm() {
             value={form.email}
             onChange={(e) => setForm({ ...form, email: e.target.value })}
             placeholder="jane@example.com"
+            aria-invalid={emailInvalid || undefined}
+            aria-describedby={emailInvalid ? 'email-error' : undefined}
             className={field}
           />
+          {emailInvalid && (
+            <p id="email-error" className="mt-1.5 font-mono text-[10px] tracking-wide text-destructive">
+              Invalid email
+            </p>
+          )}
+          {suggestion && (
+            <button
+              type="button"
+              onClick={() => setForm({ ...form, email: suggestion })}
+              className="mt-1.5 font-mono text-[10px] tracking-wide text-muted-foreground transition-colors hover:text-[var(--domain)]"
+            >
+              Did you mean <span className="text-[var(--domain)] underline underline-offset-2">{suggestion}</span>?
+            </button>
+          )}
         </div>
 
         <div>
@@ -292,9 +333,7 @@ function ContactForm() {
               status === 'sent' ? 'text-[var(--domain)]' : 'text-destructive',
             )}
           >
-            {status === 'sent'
-              ? "Got it. I'll get back to you soon."
-              : "That didn't send. Try again, or just email me directly."}
+            {MESSAGE[status]}
           </p>
         )}
       </form>

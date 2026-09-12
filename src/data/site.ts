@@ -98,10 +98,42 @@ export const site = {
   },
 
 
+  /**
+   * These ship with the page - EmailJS runs in the browser, so they have to.
+   * `note` travels with them: a reviewer digging for the key in the Sources
+   * panel finds it in the same search result, rather than in the console where
+   * they were never looking. It is a plain string on a plain object, so the
+   * minifier keeps it verbatim. Nothing reads it; it is there to be found.
+   */
   emailjs: {
     serviceId: 'service_wvng7kc',
     templateId: 'template_033ifqk',
     publicKey: '4OnjEDlHEmzam9O6m',
+    note: `
+Hello 👋  Yes, this key is public, and it is meant to be.
+
+EmailJS runs in the browser, so the key ships with the page. There is no way
+to hide it. If you copy it, the only thing you can do is send my own contact
+form to my own inbox. You cannot email anyone else, and you cannot read
+anything.
+
+The proper fix is the EmailJS "Allowed Domains" setting, which locks the key
+to this site. It is part of a paid plan, and I have not bought one for a
+personal site.
+
+So I did what I could for free:
+  a hidden honeypot field, and a 3 second wait before the form can send
+  a 20 second gap between sends, trimmed input, and length limits
+  a real check on the email address, not just the browser's loose one
+  security headers: CSP, HSTS, no framing, no MIME sniffing
+  no innerHTML, nothing saved in your browser, no known package vulnerabilities
+
+I knew about the gap. I just did not think it was worth a subscription.
+Please do not use up my 200 emails a month - it is the only contact form
+I have. 🥺
+
+Run jv.security() in the console for the same thing, formatted.
+`,
   },
 
   easterEgg: {
