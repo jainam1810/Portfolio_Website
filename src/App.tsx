@@ -116,7 +116,11 @@ function Loader() {
             className="h-full origin-left bg-[var(--domain)]"
           />
         </div>
-        <p className="mt-4 font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase">
+        {/* One line on every phone. The 0.3em tracking is what broke it: at 52
+            characters that is ~468px of text in a ~350px screen, so it wrapped.
+            The size is fluid and the tracking only opens up from sm, where
+            there is room for it. nowrap guarantees the rest. */}
+        <p className="mt-4 px-4 text-center font-mono text-[clamp(7px,2.1vw,10px)] tracking-[0.1em] whitespace-nowrap text-muted-foreground uppercase sm:tracking-[0.3em]">
           Models · Contracts · Products · Payments · Guardrails
         </p>
       </div>
