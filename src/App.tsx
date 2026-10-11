@@ -117,7 +117,7 @@ function Loader() {
           />
         </div>
         <p className="mt-4 font-mono text-[10px] tracking-[0.3em] text-muted-foreground uppercase">
-          Models · Contracts · Guardrails
+          Models · Contracts · Products · Payments · Guardrails
         </p>
       </div>
     </motion.div>

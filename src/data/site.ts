@@ -70,6 +70,15 @@ export const site = {
     },
   ] as { label: string; href: string; domains: DomainId[] }[],
 
+  /** A short, non-technical introduction. Opens on YouTube rather than
+      embedding: an embed is ~600KB and sets cookies before anyone presses
+      play, and only a fraction of visitors will watch. */
+  introVideo: {
+    href: 'https://youtu.be/pFcODVnBe4M',
+    label: 'Meet me',
+    note: 'Prefer to watch? A three-minute introduction',
+  },
+
   socials: [
     { label: 'LinkedIn', href: 'https://www.linkedin.com/in/jainamvaria/', icon: 'linkedin' },
     { label: 'GitHub', href: 'https://github.com/jainam1810', icon: 'github' },

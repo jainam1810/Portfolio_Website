@@ -1,6 +1,6 @@
 import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
 import type { MotionValue } from 'motion/react'
-import { ArrowDown, ArrowUpRight, Eye } from 'lucide-react'
+import { ArrowDown, ArrowUpRight, Eye, Play } from 'lucide-react'
 import { useRef } from 'react'
 import { site } from '@/data/site'
 import { HERO_STRIP, domainList, domains } from '@/data/domains'
@@ -97,8 +97,31 @@ export function Hero({ ready = true }: { ready?: boolean }) {
                 labelled button opens a dialog instead: a menu would hide them
                 behind a control people are known to miss, and each CV needs a
                 line saying what it is for, which a menu row cannot carry. */}
-            <div className="flex gap-2.5">
-              {cvs.length === 1 ? <CvLink cv={cvs[0]} /> : <CvPicker cvs={cvs} />}
+            {/* The video is about the person, not a pillar, so it stays put
+                whichever domain is selected - and "Meet me" cannot be read as
+                belonging to the domain whose CV sits next to it. */}
+            <div className="flex flex-col items-start gap-2.5">
+              <div className="flex flex-wrap gap-2.5">
+                {cvs.length === 1 ? <CvLink cv={cvs[0]} /> : <CvPicker cvs={cvs} />}
+                <a
+                  href={site.introVideo.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hud-corner group flex min-w-0 flex-1 items-center gap-2 rounded-md border border-border bg-background/60 px-3 py-2.5 text-sm font-medium text-foreground transition-all duration-300 hover:border-[var(--domain)] hover:text-[var(--domain)] sm:flex-none sm:gap-2.5 sm:px-4"
+                >
+                  <Play className="size-3.5 shrink-0" />
+                  <span className="min-w-0 truncate">{site.introVideo.label}</span>
+                </a>
+              </div>
+
+              <a
+                href={site.introVideo.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-mono text-[10px] tracking-[0.12em] text-muted-foreground underline underline-offset-4 transition-colors hover:text-[var(--domain)]"
+              >
+                {site.introVideo.note}
+              </a>
             </div>
 
             <div className="flex gap-1.5">
